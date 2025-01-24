@@ -1,7 +1,7 @@
 import lvgl as lv
 import lv_utils
 import board
-from tft_config import GC9A01_lv
+from gc9a01_lv import GC9A01_lv
 from cst816s_lv import CST816S_lv
 import time
 import gc
@@ -16,7 +16,7 @@ scr = lv.obj()
 lv.screen_load(scr)
 
 button1 = lv.button(scr)
-button1.align(lv.ALIGN.CENTER, 0, -50)
+button1.align(lv.ALIGN.CENTER, 0, -20)
 label = lv.label(button1)
 label.set_text("Click Me!!!")
 
@@ -30,7 +30,7 @@ def button1_event_cb(event):
 button1.add_event_cb(button1_event_cb, lv.EVENT.CLICKED, None)
 
 c_label = lv.label(scr)
-c_label.align(lv.ALIGN.CENTER, 0, 0)
+c_label.align(lv.ALIGN.CENTER, 0, -70)
 c_label.set_text(str(t))
 
 
