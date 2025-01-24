@@ -55,13 +55,13 @@ _CST816S_Gesture_Double_Click = 0x0B
 _CST816S_Gesture_Long_Press=0x0C
 
 class CST816S:
-    def __init__(self, i2c, int_pin, rst_pin, *, address=_CST816_Address, sleep=False):
+    def __init__(self, i2c, int_pin, rst_pin, *, address=_CST816_Address, sleep=True):
         # int pin and rst pin are required
         # i2c: i2c object, machine.I2C
         # int_pin: interrupt pin, machine.Pin
         # rst_pin: reset pin, machine.Pin
         # address: i2c device address, default 0x15
-        # sleep: allow touchpad into sleep mode if no touch in 2 sec, bool, default False
+        # sleep: allow touchpad into sleep mode if no touch in 2 sec, bool, default True
         self.int_pin = int_pin
         self.rst_pin = rst_pin
         self.address = address
