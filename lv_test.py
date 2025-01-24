@@ -2,7 +2,7 @@ import lvgl as lv
 import lv_utils
 import board
 import tft_config
-import tp_config
+from cst816s_lv import CST816S_lv
 import time
 import gc
 
@@ -37,19 +37,7 @@ disp_drv.set_draw_buffers(draw_buf1, draw_buf2)
 disp_drv.set_render_mode(lv.DISPLAY_RENDER_MODE.PARTIAL)
 disp_drv.set_flush_cb(ddflush_cb)
 
-def touch_read_cb(indev_drv, data):
-    if tp.get_fingernum():
-        xpos, ypos = tp.get_point()
-        data.point.x = xpos
-        data.point.y = ypos
-        data.state = lv.INDEV_STATE.PRESSED
-    else:
-        data.state = lv.INDEV_STATE.RELEASED
-
-tp = tp_config.config()
-indev_drv = lv.indev_create()
-indev_drv.set_type(lv.INDEV_TYPE.POINTER)
-indev_drv.set_read_cb(touch_read_cb)
+tp_drv = CST816S_lv(board.i2c1, board.tp_int, board.tp_rst)
 
 scr = lv.obj()
 lv.screen_load(scr)
