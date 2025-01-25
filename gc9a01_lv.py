@@ -4,6 +4,8 @@
 import board
 import gc9a01
 import lvgl as lv
+from machine import PWM
+import time
 
 class GC9A01_lv:
     def __init__(self, spi, rst, cs, dc, bl, doublebuffer=True):
@@ -29,9 +31,13 @@ class GC9A01_lv:
         )
         self.tft_drv.init()
 
-        self.backlight = bl
-        if self.backlight is not None:
-            self.backlight.value(1)
+        self.bl_pin = bl
+        if bl is not None:
+            self.backlight = PWM(bl)
+            self.brightness = 65535
+            self.backlight.freq(5000)
+            self.backlight.duty_u16(self.brightness)
+            self.brightness_range = [500,65535]
 
         self.draw_buf1 = lv.draw_buf_create(self.width, self.height // self.factor, self.color_format, 0)
         self.draw_buf2 = lv.draw_buf_create(self.width, self.height // self.factor, self.color_format, 0) if doublebuffer else None
@@ -51,9 +57,21 @@ class GC9A01_lv:
         self.tft_drv.blit_buffer(data_view, area.x1, area.y1, w, h)
         disp_drv.flush_ready()
 
-    def set_backlight_value(self, brightness):
-        if brightness > 100:
-            brightness = 100
-        if brightness < 10:
-            brightness = 10
+    def set_brightness(self, value):
+        if self.bl_pin == None:
+            return
+        if value > self.brightness_range[1]:
+            value = self.brightness_range[1]
+        if value < self.brightness_range[0]:
+            value = self.brightness_range[0]
+        self.brightness = value
+        self.backlight.duty_u16(self.brightness)
+
+    def off(self):
+        self.backlight.duty_u16(0)
+        time.sleep_ms(1)
+        self.backlight.deinit()
+
+    def on(self):
+        self.backlight.duty_u16(self.brightness)
 
