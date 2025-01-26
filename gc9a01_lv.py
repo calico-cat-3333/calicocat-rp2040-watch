@@ -67,11 +67,21 @@ class GC9A01_lv:
         self.brightness = value
         self.backlight.duty_u16(self.brightness)
 
-    def off(self):
+    def bl_off(self):
         self.backlight.duty_u16(0)
         time.sleep_ms(1)
         self.backlight.deinit()
 
-    def on(self):
+    def bl_on(self):
         self.backlight.duty_u16(self.brightness)
+
+    def on_sleep(self):
+        # Not yet completed.
+        self.bl_off()
+        self.tft_drv.sleep_mode(True)
+
+    def on_wakeup(self):
+        # Not yet completed.
+        self.tft_drv.sleep_mode(False)
+        self.bl_on()
 
