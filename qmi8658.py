@@ -140,8 +140,8 @@ class QMI8658:
     def config(self):
         # default config from ws official example
         self.i2c_write(_QMI8658_CTRL1, 0x60)
-        self.i2c_write(_QMI8658_CTRL2, 0x25) # Accelerometer Full-scale = ±8 g, ODR Rate 224.2 Hz
-        self.accel_fs = _ACC_RANGE_8G
+        self.i2c_write(_QMI8658_CTRL2, 0x05) # Accelerometer Full-scale = ±8 g, ODR Rate 224.2 Hz
+        self.accel_fs = _ACC_RANGE_2G
         self.accel_odr = 224.2
         self.i2c_write(_QMI8658_CTRL3, 0x55) # Gyroscope Full-scale ±512 dps, ODR Rate 224.2 Hz
         self.gyro_fs = _GYR_RANGE_512DPS
@@ -222,10 +222,10 @@ class QMI8658:
                          fix_peek2peek=0x00CC,
                          fix_peek=0x0066,
                          time_up_ms=4000,
-                         time_low_ms=250,
-                         time_cnt_entry=3,
+                         time_low_ms=450,
+                         time_cnt_entry=5,
                          fix_precision=0,
-                         sig_count=4):
+                         sig_count=5):
         # must done before enable accel and gyro
         self.i2c_write(_QMI8658_CAL1_L, sample_cnt & 0xff)
         self.i2c_write(_QMI8658_CAL1_H, (sample_cnt >> 8) & 0xff)
