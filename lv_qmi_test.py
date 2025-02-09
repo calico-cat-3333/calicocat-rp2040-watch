@@ -13,7 +13,7 @@ if not lv_utils.event_loop.is_running(): event_loop=lv_utils.event_loop()
 disp_drv = GC9A01_lv(board.lcd_spi, board.lcd_rst, board.lcd_cs, board.lcd_dc, board.lcd_bl)
 tp_drv = CST816S_lv(board.i2c1, board.tp_int, board.tp_rst)
 
-qmi = QMI8658(board.i2c1)
+qmi = QMI8658(board.i2c1, int1=board.imu_int1, int2=board.imu_int2)
 qmi.reset()
 qmi.config()
 
@@ -32,7 +32,7 @@ button1.add_event_cb(button1_event_cb, lv.EVENT.CLICKED, None)
 
 c_label = lv.label(scr)
 c_label.align(lv.ALIGN.CENTER, 0, -70)
-c_label.set_text(str(t))
+c_label.set_text(str(0))
 
 
 mem_label = lv.label(scr)

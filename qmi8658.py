@@ -100,19 +100,17 @@ _GYR_RANGE_1024DPS = const(1 << 5)
 _GYR_RANGE_2048DPS = const(1 << 4)
 
 class QMI8658:
-    def __init__(self, i2c, *, int1=None, int2=None, address=_QMI8658_Address, init=None):
+    def __init__(self, i2c, *, int1=None, int2=None, use_fifo=False, address=_QMI8658_Address):
         self.i2c = i2c
+        self.int1 = int1 # motion event interrupt
+        self.int2 = int2 # data ready or fifo interrupt
+        self.use_fifo = use_fifo
         self.address = address
         time.sleep_ms(5)
 
         whoami, rev = self.chip_info()
         if whoami != 0x05:
             print('not a QMI8658')
-
-        if init == None:
-            self.config()
-        else:
-            init()
 
     def i2c_write(self, reg, data):
         self.i2c.writeto_mem(self.address, reg, bytes([data]))
@@ -125,12 +123,8 @@ class QMI8658:
     def i2c_read16(self, reg, length=1):
         # read 2 bytes as low high bytes from reg, then convert to int16 type
         data = self.i2c_read(reg, 2 * length)
-        # d = []
-        # for i in range(length):
-        #     d.append((data[(i * 2) + 1] << 8) + data[i * 2])
-        # return d
         fmt = '<' + ('h' * length)
-        return list(struct.unpack(fmt, data))
+        return struct.unpack(fmt, data)
 
     def i2c_read24(self, reg):
         # read 3 bytes as low mid high bytes from reg
@@ -138,18 +132,22 @@ class QMI8658:
         return (data[2] << 16) + (data[1] << 8) + data[0]
 
     def config(self):
-        # default config from ws official example
-        self.i2c_write(_QMI8658_CTRL1, 0x60)
-        self.i2c_write(_QMI8658_CTRL2, 0x05) # Accelerometer Full-scale = ±8 g, ODR Rate 224.2 Hz
-        self.accel_fs = _ACC_RANGE_2G
+        # default config
+        self.i2c_write(_QMI8658_CTRL1, 0x78) # enable int1 and int2
+        self.i2c_write(_QMI8658_CTRL2, 0x05) # Accelerometer Full-scale = ±2 g, ODR Rate 224.2 Hz
+        self.accel_fs_div = _ACC_RANGE_2G
         self.accel_odr = 224.2
         self.i2c_write(_QMI8658_CTRL3, 0x55) # Gyroscope Full-scale ±512 dps, ODR Rate 224.2 Hz
-        self.gyro_fs = _GYR_RANGE_512DPS
+        self.gyro_fs_div = _GYR_RANGE_512DPS
         self.gyro_odr = 224.2
         self.i2c_write(_QMI8658_CTRL4, 0x00) # No use
-        self.i2c_write(_QMI8658_CTRL5, 0x11) # Enable Accelerometer and Gyroscope Low-Pass Filter whit mode BW 2.66% of ODR (Hz)
+        self.i2c_write(_QMI8658_CTRL5, 0x11) # Enable Accelerometer and Gyroscope Low-Pass Filter whth BW: 2.66% of ODR (Hz)
         self.i2c_write(_QMI8658_CTRL6, 0x00) # No use
-        self.i2c_write(_QMI8658_CTRL8, 0x90) # Enable Pedometer, use STATUSINT.bit7 as CTRL9 handshake
+        self.i2c_write(_QMI8658_CTRL8, 0xD0) # Enable Pedometer, use STATUSINT.bit7 as CTRL9 handshake, map motion events interrupt to int1
+
+        if self.use_fifo:
+            self.ctrl9w_cmd(CTRL9_CMD_RST_FIFO)
+            self.i2c_write(_QMI8658_FIFO_CTRL, 0x01) # FIFO sample size 16, mode FIFO
 
         self.config_pedometer()
 
@@ -165,12 +163,10 @@ class QMI8658:
 
     def chip_info(self):
         # return chip id and revision id
-        data = self.i2c_read(_QMI8658_WHO_AM_I, 2)
-        return data[0], data[1]
+        return self.i2c_read(_QMI8658_WHO_AM_I)[0], self.i2c_read(_QMI8658_REVISION_ID)[0]
 
     def ctrl9_cmddone(self):
-        r = self.i2c_read(_QMI8658_STATUSINT)[0]
-        return (r & 0x80) >> 7
+        return (self.i2c_read(_QMI8658_STATUSINT)[0] & 0x80) >> 7
 
     def ctrl9_cmd(self, cmd):
         self.i2c_write(_QMI8658_CTRL9, cmd)
@@ -188,6 +184,7 @@ class QMI8658:
 
     def int16_conv(self, data):
         # 将 16 位二进制补码转换为整形
+        # unused
         if data > 32767:
             return data - 0xFFFF + 1
         return data
@@ -198,16 +195,23 @@ class QMI8658:
             return data - 0xFF + 1
         return data
 
+    def get_dataready(self):
+        return self.int2.value()
+
     def get_gyro_xyz(self):
-        xyz = self.i2c_read16(_QMI8658_GX_L, 3)
+        if (not self.use_fifo) and (not self.int2.value()):
+            return None
+        xyz = list(self.i2c_read16(_QMI8658_GX_L, 3))
         for i in range(3):
-            xyz[i] = xyz[i] / self.gyro_fs
+            xyz[i] = xyz[i] / self.gyro_fs_div
         return xyz
 
     def get_accel_xyz(self):
-        xyz = self.i2c_read16(_QMI8658_AX_L, 3)
+        if (not self.use_fifo) and (not self.int2.value()):
+            return None
+        xyz = list(self.i2c_read16(_QMI8658_AX_L, 3))
         for i in range(3):
-            xyz[i] = xyz[i] / self.accel_fs
+            xyz[i] = xyz[i] / self.accel_fs_div
         return xyz
 
     def get_timestamp(self):
@@ -257,3 +261,28 @@ class QMI8658:
 
     def clear_step(self):
         self.ctrl9w_cmd(CTRL9_CMD_RESET_PEDOMETER)
+
+    def is_fifo_full(self):
+        return self.i2c_read(_QMI8658_FIFO_STATUS)[0] >> 7
+
+    def get_fifo_sample_size(self):
+        return ((self.i2c_read(_QMI8658_FIFO_STATUS)[0] & 0x03) << 8) + self.i2c_read(_QMI8658_FIFO_SMPL_CNT)[0]
+
+    def read_fifo_raw(self):
+        sample_size = self.get_fifo_sample_size()
+        self.ctrl9w_cmd(CTRL9_CMD_REQ_FIFO)
+        data = self.i2c_read(_QMI8658_FIFO_DATA, sample_size * 2)
+        self.i2c_write(_QMI8658_FIFO_CTRL, 0x01)
+        return data, sample_size * 2
+
+    def read_fifo(self):
+        sample_size = self.get_fifo_sample_size()
+        self.ctrl9w_cmd(CTRL9_CMD_REQ_FIFO)
+        data = self.i2c_read16(_QMI8658_FIFO_DATA, self.get_fifo_sample_size())
+        self.i2c_write(_QMI8658_FIFO_CTRL, 0x01)
+        accel_data = []
+        gyro_data = []
+        for i in range(int(sample_size / 6)):
+            accel_data.append([data[0 + i * 6], data[1 + i * 6], data[2 + i * 6]])
+            gyro_data.append([data[3 + i * 6], data[4 + i * 6], data[5 + i * 6]])
+        return accel_data, gyro_data, int(sample_size / 6)
