@@ -104,7 +104,7 @@ class QMI8658:
         self.i2c = i2c
         self.int1 = int1 # motion event interrupt
         self.int2 = int2 # data ready or fifo interrupt
-        self.use_fifo = use_fifo
+        self.use_fifo = use_fifo # FIFO not work, disable by default
         self.address = address
         time.sleep_ms(5)
 
@@ -147,7 +147,8 @@ class QMI8658:
 
         if self.use_fifo:
             self.ctrl9w_cmd(CTRL9_CMD_RST_FIFO)
-            self.i2c_write(_QMI8658_FIFO_CTRL, 0x01) # FIFO sample size 16, mode FIFO
+            self.i2c_write(_QMI8658_FIFO_CTRL, 0x03) # FIFO sample size 128, mode FIFO
+            self.i2c_write(_QMI8658_FIFO_WTM_TH, 16) # 16 sample trigger fifo watermark
 
         self.config_pedometer()
 
@@ -263,7 +264,10 @@ class QMI8658:
         self.ctrl9w_cmd(CTRL9_CMD_RESET_PEDOMETER)
 
     def is_fifo_full(self):
-        return self.i2c_read(_QMI8658_FIFO_STATUS)[0] >> 7
+        return (self.i2c_read(_QMI8658_FIFO_STATUS)[0] & 0x80) >> 7
+
+    def is_fifo_wtm(self):
+        return (self.i2c_read(_QMI8658_FIFO_STATUS)[0] & 0x40) >> 6
 
     def get_fifo_sample_size(self):
         return ((self.i2c_read(_QMI8658_FIFO_STATUS)[0] & 0x03) << 8) + self.i2c_read(_QMI8658_FIFO_SMPL_CNT)[0]
@@ -272,14 +276,14 @@ class QMI8658:
         sample_size = self.get_fifo_sample_size()
         self.ctrl9w_cmd(CTRL9_CMD_REQ_FIFO)
         data = self.i2c_read(_QMI8658_FIFO_DATA, sample_size * 2)
-        self.i2c_write(_QMI8658_FIFO_CTRL, 0x01)
+        self.i2c_write(_QMI8658_FIFO_CTRL, 0x03)
         return data, sample_size * 2
 
     def read_fifo(self):
         sample_size = self.get_fifo_sample_size()
         self.ctrl9w_cmd(CTRL9_CMD_REQ_FIFO)
         data = self.i2c_read16(_QMI8658_FIFO_DATA, self.get_fifo_sample_size())
-        self.i2c_write(_QMI8658_FIFO_CTRL, 0x01)
+        self.i2c_write(_QMI8658_FIFO_CTRL, 0x03)
         accel_data = []
         gyro_data = []
         for i in range(int(sample_size / 6)):
