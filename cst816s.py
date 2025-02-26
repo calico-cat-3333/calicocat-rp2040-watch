@@ -69,7 +69,7 @@ class CST816S:
         self.reset()
         self.i2c = i2c
         if self.i2c_read(_CST816_ChipID)[0] != 0xB5:
-            RuntimeError("Did not find CST816")
+            raise RuntimeError("Did not find CST816")
         self.set_autosleep(sleep)
         self.set_mode(_CST816S_Point_Mode)
 

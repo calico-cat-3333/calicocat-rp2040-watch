@@ -85,11 +85,13 @@ CTRL9_CMD_AHB_CLOCK_GATING = const(0x12)  # Internal AHB clock gating switch
 CTRL9_CMD_ON_DEMAND_CALIBRATION = const(0xA2)  # On-Demand Calibration on gyroscope
 CTRL9_CMD_APPLY_GYRO_GAINS = const(0xAA)  # Restore the saved Gyroscope gains
 
+# Accelerometer Full Size
 _ACC_RANGE_2G = const(1 << 14)
 _ACC_RANGE_4G = const(1 << 13)
 _ACC_RANGE_8G = const(1 << 12)
 _ACC_RANGE_16G = const(1 << 11)
 
+# Gyroscope Full Size
 _GYR_RANGE_16DPS = const(1 << 11)
 _GYR_RANGE_32DPS = const(1 << 10)
 _GYR_RANGE_64DPS = const(1 << 9)
