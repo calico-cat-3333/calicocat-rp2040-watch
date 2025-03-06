@@ -13,7 +13,7 @@ _task_queue = []
 class Task:
     def __init__(self, func, period, oneshot = False):
         self.func = func # 要运行的函数
-        self.enabled = True
+        self.enabled = False
         self.period = period # 运行间隔，毫秒
         self.oneshot = oneshot # 仅运行一次
 
@@ -29,6 +29,8 @@ class Task:
             self.func()
             if not self.oneshot:
                 task_push(self, ticks_add(ticks_ms(), self.period))
+            else:
+                self.enabled = False
 
     def __gt__(self, other):
         return False # 对于具有相同目标时刻的任务，总是遵循先来后到原则
