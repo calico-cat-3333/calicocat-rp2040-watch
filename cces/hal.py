@@ -10,18 +10,57 @@ class Device:
 
 class Device_lv(Device):
     def after_lvgl_init(self):
-        pass
+        raise NotImplementedError('after_lvgl_init() not implemented')
 
 imu = None
+# imu should have:
+# get_step
+# clear_step
+# get_accel_xyz
+# get_gyro_xyz
+
 indev_list = []
-screen = None
+# lvgl input devices
+
+dispdev = None
+# lvgl display_device, should also have:
+# brightness
+
 hartrate = None
+# hartrate should have:
+
 buzzer = None
+# buzzer should have:
+# beep
+
+battery = None
+# battery should have:
+# chargeing
+# level
+# voltage
 
 def after_lvgl_init():
-    if screen == None or len(indev_list) == 0:
+    if dispdev == None or len(indev_list) == 0:
         print('Error: driver not set')
         return
-    screen.after_lvgl_init()
-    for dev in indev_list:
-        dev.after_lvgl_init()
+    dispdev.after_lvgl_init()
+    for indev in indev_list:
+        indev.after_lvgl_init()
+
+def on_sleep():
+    dispdev.on_sleep()
+    for indev in indev_list:
+        indev.on_sleep()
+    hartrate.on_sleep()
+    imu.on_sleep()
+    buzzer.on_sleep()
+    battery.on_sleep()
+
+def on_wakeup():
+    dispdev.on_wakeup()
+    for indev in indev_list:
+        indev.on_wakeup()
+    hartrate.on_wakeup()
+    imu.on_wakeup()
+    buzzer.on_wakeup()
+    battery.on_wakeup()
