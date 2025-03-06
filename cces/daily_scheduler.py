@@ -44,6 +44,6 @@ def check_loop():
 def get_all():
     return daily_tasks
 
-def start()
+def start():
     daily_scheduler_task = Task(check_loop, 30000)
     daily_scheduler_task.start()
