@@ -35,6 +35,6 @@ class CCES:
         while True:
             task = task_scheduler.get_due_task()
             if task != None:
-                task.run()
+                task()
             else:
                 time.sleep_ms(1)

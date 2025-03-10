@@ -1,49 +1,51 @@
-import heapq
+from _uasyncio import TaskQueue
+from _uasyncio import Task as _Task
 from time import ticks_ms, ticks_add, ticks_diff
+from micropython import const
 
-# 简单的任务调度器，受 kmk_firmware 项目中使用的任务调度器启发
-# 使用小根堆实现
+# 简单的任务调度器，参考了 kmk_firmware 项目中使用的任务调度器
+# 利用 _usyncio 中的 TaskQueue 配对堆实现
+# 这些内容原本是为了 uasyncio 模块服务的，所以没有良好的文档记录
 # 系统核心，任务调度有它负责
 # lvgl 事件相关的调度由 lvgl 的 event_loop 调度器负责，那个调度器使用中断完成调度，与这里不冲突。
 
 # 任务队列
-_task_queue = []
+_task_queue = TaskQueue()
+
+# 标记，表示任务主动退出
+TASKEXIT = const(11)
 
 # 任务
 class Task:
     def __init__(self, func, period, oneshot = False):
         self.func = func # 要运行的函数
+        self._task = _Task(self.run)
         self.enabled = False
         self.period = period # 运行间隔，毫秒
         self.oneshot = oneshot # 仅运行一次
 
     def start(self):
         self.enabled = True
-        task_push(self, ticks_add(ticks_ms(), self.period))
+        _task_queue.push(self._task, ticks_add(ticks_ms(), self.period))
 
     def stop(self):
         self.enabled = False
+        _task_queue.remove(self._task)
 
     def run(self):
-        if self.enabled:
-            self.func()
-            if not self.oneshot:
-                task_push(self, ticks_add(ticks_ms(), self.period))
-            else:
-                self.enabled = False
-
-    def __gt__(self, other):
-        return False # 对于具有相同目标时刻的任务，总是遵循先来后到原则
-
-# 将任务加入任务队列
-# target_tick 为预计任务开始的时刻（目标时刻）
-# 不保证在目标时刻开始执行，仅保证在目标时刻到达之前不会开始执行
-def task_push(task, target_tick):
-    heapq.heappush(_task_queue, (target_tick, task))
+        if not self.enabled:
+            return
+        r = self.func()
+        if (not self.oneshot) and r != TASKEXIT: # 如果 self.func 返回了 11 表示任务主动退出
+            _task_queue.push(self._task, ticks_add(ticks_ms(), self.period))
+        else:
+            self.enabled = False
 
 # 获取可以开始运行的任务
 def get_due_task():
-    if len(_task_queue) == 0:
+    t = _task_queue.peek()
+    if t != None and ticks_diff(ticks_ms(), t.ph_key) >= 0:
+        _task_queue.pop()
+        return t.coro
+    else:
         return None
-    if ticks_diff(ticks_ms(), _task_queue[0][0]) >= 0:
-        return heapq.heappop(_task_queue)[1]
