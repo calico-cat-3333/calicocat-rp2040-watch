@@ -23,19 +23,30 @@ class Task:
         self.enabled = False
         self.period = period # 运行间隔，毫秒
         self.oneshot = oneshot # 仅运行一次
+        self.args = ()
+        self.kwargs = {}
 
     def start(self):
         self.enabled = True
         _task_queue.push(self._task, ticks_add(ticks_ms(), self.period))
 
+    def set_args(*args, **kwargs):
+        self.args = args
+        self.kwargs = kwargs
+
+    def start_with_arg(self, *args, **kwargs):
+        self.args = args
+        self.kwargs = kwargs
+        self.start()
+
     def stop(self):
         self.enabled = False
-        _task_queue.remove(self._task)
+        # _task_queue.remove(self._task)
 
     def run(self):
         if not self.enabled:
             return
-        r = self.func()
+        r = self.func(*self.args, **self.kwargs)
         if (not self.oneshot) and r != TASKEXIT: # 如果 self.func 返回了 11 表示任务主动退出
             _task_queue.push(self._task, ticks_add(ticks_ms(), self.period))
         else:
