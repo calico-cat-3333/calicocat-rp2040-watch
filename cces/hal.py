@@ -1,6 +1,8 @@
 # 硬件抽象层
 # 对上层应用提供统一的硬件访问方式。
 
+from machine import RTC
+
 class Device:
     def on_wakeup(self):
         pass
@@ -11,6 +13,10 @@ class Device:
 class Device_lv(Device):
     def after_lvgl_init(self):
         raise NotImplementedError('after_lvgl_init() not implemented')
+
+rtc = RTC()
+# rtc for set time only
+# use rtc.datetime((y,m,d,0,h,m,s,0)) to set time
 
 imu = None
 # imu should have:
@@ -39,6 +45,12 @@ battery = None
 # level
 # voltage
 
+ble = None
+# ble uart device should have
+# uart_rxs
+# uart_tx
+
+
 def after_lvgl_init():
     if dispdev == None or len(indev_list) == 0:
         print('Error: driver not set')
@@ -55,6 +67,7 @@ def on_sleep():
     imu.on_sleep()
     buzzer.on_sleep()
     battery.on_sleep()
+    ble.on_sleep()
 
 def on_wakeup():
     dispdev.on_wakeup()
@@ -64,3 +77,4 @@ def on_wakeup():
     imu.on_wakeup()
     buzzer.on_wakeup()
     battery.on_wakeup()
+    ble.on_wakeup()
