@@ -22,13 +22,13 @@ class Task:
         self._task = _Task(self.run)
         self.enabled = False
         self.period = period # 运行间隔，毫秒
-        self.oneshot = oneshot # 仅运行一次
+        self.oneshot = oneshot # 仅在 period ms 后运行一次，否则立刻执行并按照 period ms 为周期运行
         self.args = ()
         self.kwargs = {}
 
     def start(self):
         self.enabled = True
-        _task_queue.push(self._task, ticks_add(ticks_ms(), self.period))
+        _task_queue.push(self._task, ticks_add(ticks_ms(), self.period * self.oneshot))
 
     def set_args(*args, **kwargs):
         self.args = args
