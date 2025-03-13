@@ -21,7 +21,7 @@ class GC9A01_lv(Device_lv):
             reset=rst,
             cs=cs,
             dc=dc,
-            rotation=0,
+            rotation=3, #270 degree
             options=0,
             buffer_size=0
         )

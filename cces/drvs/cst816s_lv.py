@@ -25,8 +25,9 @@ class CST816S_lv:
     def irq_touch_read_cb(self, indev_drv, data):
         if self.need_read and self.tp_drv.get_fingernum(): # 排除一些极端情况
             xpos, ypos = self.tp_drv.get_point()
-            data.point.x = xpos
-            data.point.y = ypos
+            # rotate 270 degree
+            data.point.x = 240 - ypos
+            data.point.y = xpos
             data.state = lv.INDEV_STATE.PRESSED
         else:
             data.state = lv.INDEV_STATE.RELEASED
