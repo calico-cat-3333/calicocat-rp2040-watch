@@ -27,14 +27,20 @@ class Task:
         self.kwargs = {}
 
     def start(self):
+        if self.enabled:
+            return
         self.enabled = True
         _task_queue.push(self._task, ticks_add(ticks_ms(), self.period * self.oneshot))
 
     def set_args(*args, **kwargs):
+        if self.enabled:
+            return
         self.args = args
         self.kwargs = kwargs
 
     def start_with_arg(self, *args, **kwargs):
+        if self.enabled:
+            return
         self.args = args
         self.kwargs = kwargs
         self.start()
@@ -46,7 +52,10 @@ class Task:
     def run(self):
         if not self.enabled:
             return
+        ts = ticks_ms()
         r = self.func(*self.args, **self.kwargs)
+        te = ticks_ms()
+        print('function ' + self.func.__name__ + ' timeuse:', te - ts)
         if (not self.oneshot) and r != TASKEXIT: # 如果 self.func 返回了 11 表示任务主动退出
             _task_queue.push(self._task, ticks_add(ticks_ms(), self.period))
         else:
