@@ -22,7 +22,7 @@ class WatchFaceAtivity(Activity):
         self.time_label = lv.label(self.scr)
         self.time_label.align(lv.ALIGN.CENTER, 0, 0)
         self.time_label.set_style_text_font(self.number_font, 0)
-        self.time_label.set_text('HH:MM:SS')
+        self.time_label.set_text('--:--:--')
 
         self.bat_label = lv.label(self.scr)
         self.bat_label.align(lv.ALIGN.BOTTOM_MID, 0, -10)
