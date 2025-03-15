@@ -3,17 +3,6 @@
 
 from machine import RTC
 
-class Device:
-    def on_wakeup(self):
-        pass
-
-    def on_sleep(self):
-        pass
-
-class Device_lv(Device):
-    def after_lvgl_init(self):
-        raise NotImplementedError('after_lvgl_init() not implemented')
-
 rtc = RTC()
 # rtc for set time only
 # use rtc.datetime((y,m,d,0,h,m,s,0)) to set time

@@ -1,7 +1,7 @@
 import time
 from micropython import const
 import struct
-from ..hal import Device
+from . import Device
 
 _QMI8658_Address = const(0x6B)
 
@@ -114,6 +114,9 @@ class QMI8658(Device):
         whoami, rev = self.chip_info()
         if whoami != 0x05:
             print('not a QMI8658')
+
+        self.reset()
+        self.config()
 
     def i2c_write(self, reg, data):
         self.i2c.writeto_mem(self.address, reg, bytes([data]))
