@@ -55,9 +55,12 @@ class Task:
         ts = ticks_ms()
         r = self.func(*self.args, **self.kwargs)
         te = ticks_ms()
-        print('function ' + self.func.__name__ + ' timeuse:', te - ts)
+        tu = ticks_diff(te, ts)
+        print('function ' + self.func.__name__ + ' timeuse:', tu, end=' ')
         if (not self.oneshot) and r != TASKEXIT: # 如果 self.func 返回了 11 表示任务主动退出
-            _task_queue.push(self._task, ticks_add(ticks_ms(), self.period))
+            wait = self.period - tu if self.period > tu else 0
+            print('wait', wait, 'ms then run again')
+            _task_queue.push(self._task, ticks_add(ticks_ms(), wait))
         else:
             self.enabled = False
 
