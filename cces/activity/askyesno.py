@@ -19,7 +19,6 @@ class AskYesNoActivity(Activity):
         self.text_label = lv.label(self.scr)
         self.text_label.align(lv.ALIGN.CENTER, 0, -30)
         self.text_label.set_text(self.text)
-        self.text_label.set_style_text_font(lv.font_unifont_16, 0)
 
         self.yes_btn = lv.button(self.scr)
         self.yes_btn.align(lv.ALIGN.BOTTOM_MID, 0, -65)

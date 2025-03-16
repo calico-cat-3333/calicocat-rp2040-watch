@@ -16,7 +16,6 @@ class InfoActivity(Activity):
 
         self.text_label = lv.label(self.scr)
         self.text_label.align(lv.ALIGN.CENTER, 0, -20)
-        self.text_label.set_style_text_font(lv.font_unifont_16, 0)
         self.text_label.set_text(self.text)
 
         self.ok_btn = lv.button(self.scr)
