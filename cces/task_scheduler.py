@@ -3,6 +3,8 @@ from _uasyncio import Task as _Task
 from time import ticks_ms, ticks_add, ticks_diff
 from micropython import const
 
+from .log import log
+
 # 简单的任务调度器，参考了 kmk_firmware 项目中使用的任务调度器
 # 利用 _usyncio 中的 TaskQueue 配对堆实现
 # 这些内容原本是为了 uasyncio 模块服务的，所以没有良好的文档记录
@@ -29,6 +31,7 @@ class Task:
     def start(self):
         if self.enabled:
             return
+        log('start task', self.func.__name__)
         self.enabled = True
         _task_queue.push(self._task, ticks_add(ticks_ms(), self.period * self.oneshot))
 
@@ -56,12 +59,14 @@ class Task:
         r = self.func(*self.args, **self.kwargs)
         te = ticks_ms()
         tu = ticks_diff(te, ts)
-        print('function ' + self.func.__name__ + ' timeuse:', tu, end=' ')
+        log('function ' + self.func.__name__ + ' timeuse:', tu, end=' ')
         if (not self.oneshot) and r != TASKEXIT: # 如果 self.func 返回了 11 表示任务主动退出
             wait = self.period - tu if self.period > tu else 0
-            print('wait', wait, 'ms then run again')
+            log('wait', wait, 'ms then run again')
             _task_queue.push(self._task, ticks_add(ticks_ms(), wait))
+            log('task pushed', self.func.__name__)
         else:
+            log('then exited')
             self.enabled = False
 
 # 获取可以开始运行的任务
@@ -69,6 +74,7 @@ def get_due_task():
     t = _task_queue.peek()
     if t != None and ticks_diff(ticks_ms(), t.ph_key) >= 0:
         _task_queue.pop()
+        log('pop task', t.func.__name__)
         return t.coro
     else:
         return None

@@ -50,9 +50,12 @@ class WatchFaceAtivity(Activity):
     def infookclick(self):
         print(2222)
 
+    def noclickcb(self):
+        hal.buzzer.beep()
+
     def gesture_event_handler(self, event):
         lv.indev_active().wait_release()
         gesture = lv.indev_active().get_gesture_dir()
         if gesture == lv.DIR.TOP:
-            AskYesNoActivity('MemoryFree', 'Mem Free: '+str(gc.mem_free()), self.infookclick).launch()
+            AskYesNoActivity('MemoryFree', 'Mem Free: '+str(gc.mem_free()), self.infookclick, self.noclickcb).launch()
 
