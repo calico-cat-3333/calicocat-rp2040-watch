@@ -53,7 +53,6 @@ class GC9A01_lv:
         h = area.y2 - area.y1 + 1
         size = w * h
         data_view = color_p.__dereference__(size * self.pixel_size)
-        lv.draw_sw_rgb565_swap(data_view, size)
         self.tft_drv.blit_buffer(data_view, area.x1, area.y1, w, h)
         disp_drv.flush_ready()
 

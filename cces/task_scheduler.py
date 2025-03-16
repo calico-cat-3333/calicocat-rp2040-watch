@@ -1,5 +1,5 @@
-from _uasyncio import TaskQueue
-from _uasyncio import Task as _Task
+from _asyncio import TaskQueue
+from _asyncio import Task as _Task
 from time import ticks_ms, ticks_add, ticks_diff
 from micropython import const
 
