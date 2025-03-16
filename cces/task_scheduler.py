@@ -35,7 +35,7 @@ class Task:
         self.enabled = True
         _task_queue.push(self._task, ticks_add(ticks_ms(), self.period * self.oneshot))
 
-    def set_args(*args, **kwargs):
+    def set_args(self, *args, **kwargs):
         if self.enabled:
             return
         self.args = args
@@ -53,6 +53,7 @@ class Task:
         # _task_queue.remove(self._task)
 
     def run(self):
+        print(self.func.__name__)
         if not self.enabled:
             return
         ts = ticks_ms()
@@ -61,12 +62,12 @@ class Task:
         tu = ticks_diff(te, ts)
         log('function ' + self.func.__name__ + ' timeuse:', tu, end=' ')
         if (not self.oneshot) and r != TASKEXIT: # 如果 self.func 返回了 11 表示任务主动退出
-            wait = self.period - tu if self.period > tu else 0
-            log('wait', wait, 'ms then run again')
+            wait = max(self.period - tu, 0)
+            print('wait', wait, 'ms then run again')
             _task_queue.push(self._task, ticks_add(ticks_ms(), wait))
             log('task pushed', self.func.__name__)
         else:
-            log('then exited')
+            print('then exited')
             self.enabled = False
 
 # 获取可以开始运行的任务
@@ -74,7 +75,7 @@ def get_due_task():
     t = _task_queue.peek()
     if t != None and ticks_diff(ticks_ms(), t.ph_key) >= 0:
         _task_queue.pop()
-        log('pop task', t.func.__name__)
+        log('pop task', end=' ')
         return t.coro
     else:
         return None
