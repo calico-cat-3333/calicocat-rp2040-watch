@@ -37,8 +37,8 @@ class Buzzer(Device):
             return TASKEXIT
         freq = self.freq_list.pop(0)
         if freq == 0:
-            self.duty_u16(0)
+            self.buzzer.duty_u16(0)
         else:
-            self.freq(freq)
-            self.duty_u16(self.volume)
+            self.buzzer.freq(freq)
+            self.buzzer.duty_u16(self.volume)
 
