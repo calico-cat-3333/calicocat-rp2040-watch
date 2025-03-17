@@ -1,4 +1,5 @@
 import lvgl as lv
+from ..log import log
 
 # 正在显示的 activity
 # 堆栈的形式
@@ -15,6 +16,7 @@ class Activity:
         pass
 
     def launch(self):
+        log(str(self.__class__), 'launch')
         self.scr = lv.obj()
         self.setup()
 
@@ -41,6 +43,7 @@ class Activity:
         if len(activity_stack) == 0:
             # 如果这是最后一个 activity 不能退出
             return
+        log(str(self.__class__), 'exit')
         self.before_exit()
         activity_stack.pop()
         activity_stack[-1].on_cover_exit()

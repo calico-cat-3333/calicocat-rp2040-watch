@@ -9,7 +9,7 @@ from . import daily_scheduler
 from . import lv_eventloop
 from .watchface import WatchFaceAtivity
 
-from . import log
+from .log import log
 
 
 def load_lvgl():
@@ -29,20 +29,19 @@ def load_apps():
     # todo: load apps
     pass
 
-def start(log_en = False):
-    log.enable = log_en
-    log.log('start system')
+def start():
+    log('start system')
     load_lvgl()
-    log.log('lvgl loaded')
+    log('lvgl loaded')
     load_system_service()
-    log.log('system service loaded')
+    log('system service loaded')
     load_apps()
-    log.log('apps load')
+    log('apps load')
 
     # todo: start watchface activity
     wf = WatchFaceAtivity()
     wf.launch()
-    log.log('launch watchface, start task_scheduler')
+    log('launch watchface, start task_scheduler')
 
     while True:
         task = task_scheduler.get_due_task()

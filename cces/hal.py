@@ -2,6 +2,7 @@
 # 对上层应用提供统一的硬件访问方式。
 
 from machine import RTC
+from .log import log, ERROR
 
 rtc = RTC()
 # rtc for set time only
@@ -42,7 +43,7 @@ ble = None
 
 def after_lvgl_init():
     if dispdev == None or len(indev_list) == 0:
-        print('Error: driver not set')
+        log('Error: lvgl driver not set', level=ERROR)
         return
     dispdev.after_lvgl_init()
     for indev in indev_list:
