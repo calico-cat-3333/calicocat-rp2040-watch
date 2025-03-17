@@ -18,4 +18,4 @@ def log(*args, level=INFO, exc=None, **kwargs):
     print('[' + str(ticks_ms()) + ']', levelstr[level], *args, **kwargs)
     if exc == None:
         return
-    sys.print_exception(e)
+    sys.print_exception(exc)
