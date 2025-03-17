@@ -35,7 +35,7 @@ buzzer = None
 
 battery = None
 # battery should have:
-# chargeing
+# charging
 # level
 # voltage
 

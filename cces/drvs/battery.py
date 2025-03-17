@@ -4,6 +4,7 @@ from . import Device
 
 _VFULL = 4.2
 _VEMPTY = 3.3
+_MVCHARG = 4200
 
 class Battery(Device):
     def __init__(self, bat_pin):
@@ -15,9 +16,18 @@ class Battery(Device):
 
     def micro_voltage(self):
         # 粗略计算
-        return (self.bad_adc.read_u16() * 3300 * 3) >> 16
+        return (self.bat_adc.read_u16() * 3300 * 3) >> 16
 
     def level(self):
-        return int(10 * (self.voltage() - _VEMPTY) / (_VFULL - _VEMPTY)) * 10
+        v = self.voltage()
+        if v > _VFULL:
+            return 100
+        if v < _VEMPTY:
+            return 0
+        return int(10 * (v - _VEMPTY) / (_VFULL - _VEMPTY)) * 10
 
-
+    def charging(self):
+        if self.micro_voltage() >= _MVCHARG:
+            return True
+        else:
+            return False
