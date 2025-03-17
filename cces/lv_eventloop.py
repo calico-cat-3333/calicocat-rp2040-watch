@@ -1,9 +1,10 @@
-from .task_scheduler import Task
+import time
+import lvgl as lv
+
 from machine import Timer
 from micropython import const
 
-import time
-import lvgl as lv
+from .task_scheduler import Task
 
 PERIOD = const(40)
 

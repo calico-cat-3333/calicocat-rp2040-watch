@@ -1,4 +1,5 @@
 import lvgl as lv
+
 from ..log import log
 
 # 正在显示的 activity

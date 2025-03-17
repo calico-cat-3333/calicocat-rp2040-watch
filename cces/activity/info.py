@@ -1,4 +1,5 @@
 import lvgl as lv
+
 from . import Activity
 
 class InfoActivity(Activity):

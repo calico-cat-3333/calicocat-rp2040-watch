@@ -2,6 +2,7 @@
 # 对上层应用提供统一的硬件访问方式。
 
 from machine import RTC
+
 from .log import log, ERROR
 
 rtc = RTC()

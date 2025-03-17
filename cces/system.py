@@ -8,7 +8,6 @@ from . import task_scheduler
 from . import daily_scheduler
 from . import lv_eventloop
 from .watchface import WatchFaceAtivity
-
 from .log import log
 
 

@@ -1,8 +1,10 @@
-from .cst816s import CST816S
 import lvgl as lv
 import micropython
+
 from machine import Pin
+
 from . import Device_lv
+from .cst816s import CST816S
 
 class CST816S_lv(Device_lv):
     def __init__(self, i2c, int_pin, rst_pin, use_irq=True):

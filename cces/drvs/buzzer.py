@@ -1,6 +1,7 @@
+import time
+
 from machine import PWM
 
-import time
 from . import Device
 from ..task_scheduler import Task, TASKEXIT
 

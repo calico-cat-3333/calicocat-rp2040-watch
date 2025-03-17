@@ -1,5 +1,6 @@
-from time import ticks_ms
 import sys
+
+from time import ticks_ms
 
 INFO = 0
 ERROR = 1

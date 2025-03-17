@@ -1,11 +1,10 @@
+import lvgl as lv
+import time
+import gc
+
 from .activity import Activity
 from .activity.askyesno import AskYesNoActivity
 from .task_scheduler import Task
-
-import lvgl as lv
-
-import time
-import gc
 from . import hal
 
 class WatchFaceAtivity(Activity):

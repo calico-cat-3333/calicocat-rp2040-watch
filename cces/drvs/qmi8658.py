@@ -1,6 +1,8 @@
 import time
-from micropython import const
 import struct
+
+from micropython import const
+
 from . import Device
 
 _QMI8658_Address = const(0x6B)

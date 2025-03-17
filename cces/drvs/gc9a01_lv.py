@@ -4,8 +4,10 @@
 import board
 import gc9a01
 import lvgl as lv
-from machine import PWM
 import time
+
+from machine import PWM
+
 from . import Device_lv
 
 class GC9A01_lv(Device_lv):
