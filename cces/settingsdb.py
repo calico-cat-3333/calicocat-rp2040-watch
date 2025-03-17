@@ -43,3 +43,5 @@ def save_settings():
 
 def start():
     load_settings()
+    hal.dispdev.set_brightness(get('display_brightness', 100))
+    hal.buzzer.set_volume(get('sound_volume', 100))

@@ -7,6 +7,7 @@ from . import hal
 from . import task_scheduler
 from . import daily_scheduler
 from . import lv_eventloop
+from . import settingsdb
 from .watchface import WatchFaceAtivity
 from .log import log
 
@@ -23,6 +24,7 @@ def load_lvgl():
 
 def load_system_service():
     daily_scheduler.start()
+    settingsdb.start()
 
 def load_apps():
     # todo: load apps
