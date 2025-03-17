@@ -1,0 +1,35 @@
+static const char * chinese_calendar_month_name[] = {
+                                                    };
+
+static const char * chinese_calendar_leep_month_name[] = {
+                                                         };
+
+static const char * chinese_calendar_day_name[] = {
+                                                  };
+
+static const lv_calendar_festival_t festivals_base_chinese[] = {
+    {, 12, 30},/* To determine whether it is 12.29 or 12.30. */
+};
+
+static const lv_calendar_festival_t festivals_base_gregorian[] = {
+    {"元旦", 1, 1},
+    {"情人节", 2, 14},
+    {"妇女节", 3, 8},
+    {"植树节", 3, 12},
+    {"消费节", 3, 15},
+    {"愚人节", 4, 1},
+    {"劳动节", 5, 1},
+    {"青年节", 5, 4},
+    {"儿童节", 6, 1},
+    {"建党节", 7, 1},
+    {"建军节", 8, 1},
+    {"教师节", 9, 10},
+    {"国庆节", 10, 1},
+    {"万圣节", 10, 31},
+    {"平安夜", 12, 24},
+    {"圣诞节", 12, 25},
+};
+
+一二三四五六七八九十正月腊闰初廿节春元宵端午七夕中元秋重阳除夕元旦情人妇女植树消费愚人劳动青年儿童建党军教师国庆万圣平安夜诞
+
+
