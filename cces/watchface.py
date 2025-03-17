@@ -3,35 +3,35 @@ import time
 import gc
 
 from .activity import Activity
-from .activity.askyesno import AskYesNoActivity
+from .activity import AskYesNoActivity
 from .task_scheduler import Task
 from . import hal
 
 class WatchFaceAtivity(Activity):
     def __init__(self):
-        self.update_display_task = Task(self.update_display, 1000) # update display every 10 secs
+        self.update_display_task = Task(self.update_display, 1000) # update display every 1 secs
         self.number_font = lv.binfont_create("S:number_72.bin")
 
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_handler, lv.EVENT.GESTURE, None)
         self.date_label = lv.label(self.scr)
         self.date_label.align(lv.ALIGN.CENTER, 0, -60)
-        self.date_label.set_style_text_font(lv.font_montserrat_16, 0)
+        self.date_label.set_style_text_font(lv.font_montserrat_16, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.date_label.set_text('YYYY-MM-DD')
 
         self.time_label = lv.label(self.scr)
         self.time_label.align(lv.ALIGN.CENTER, 0, 0)
-        self.time_label.set_style_text_font(self.number_font, 0)
+        self.time_label.set_style_text_font(self.number_font, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.time_label.set_text('--:--:--')
 
         self.bat_label = lv.label(self.scr)
         self.bat_label.align(lv.ALIGN.BOTTOM_MID, 0, -10)
-        self.bat_label.set_style_text_font(lv.font_montserrat_14, 0)
+        self.bat_label.set_style_text_font(lv.font_montserrat_14, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.bat_label.set_text('BBB%')
 
         self.step_label = lv.label(self.scr)
         self.step_label.align(lv.ALIGN.CENTER, -50, 60)
-        self.step_label.set_style_text_font(lv.font_montserrat_16, 0)
+        self.step_label.set_style_text_font(lv.font_montserrat_16, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.step_label.set_text('steps:--')
 
         self.update_display_task.start()
