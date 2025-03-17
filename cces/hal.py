@@ -21,7 +21,7 @@ indev_list = []
 
 dispdev = None
 # lvgl display_device, should also have:
-# brightness
+# set_brightness
 
 hartrate = None
 # hartrate should have:
@@ -29,6 +29,9 @@ hartrate = None
 buzzer = None
 # buzzer should have:
 # beep
+# play
+# stop
+# set_volume
 
 battery = None
 # battery should have:
@@ -38,7 +41,7 @@ battery = None
 
 ble = None
 # ble uart device should have
-# uart_rxs
+# uart_rx
 # uart_tx
 
 

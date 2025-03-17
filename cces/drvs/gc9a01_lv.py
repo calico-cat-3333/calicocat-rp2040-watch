@@ -32,10 +32,9 @@ class GC9A01_lv(Device_lv):
         self.bl_pin = bl
         if bl is not None:
             self.backlight = PWM(bl)
-            self.brightness = 65535
+            self.brightness = 100
             self.backlight.freq(5000)
-            self.backlight.duty_u16(self.brightness)
-            self.brightness_range = [500,65535]
+            self.backlight.duty_u16(65535)
 
     def after_lvgl_init(self):
         self.color_format = lv.COLOR_FORMAT.RGB565
@@ -62,12 +61,15 @@ class GC9A01_lv(Device_lv):
     def set_brightness(self, value):
         if self.bl_pin == None:
             return
-        if value > self.brightness_range[1]:
-            value = self.brightness_range[1]
-        if value < self.brightness_range[0]:
-            value = self.brightness_range[0]
-        self.brightness = value
-        self.backlight.duty_u16(self.brightness)
+        if value >= 100:
+            self.brightness = 100
+            self.backlight.duty_u16(65535)
+        elif value <= 0:
+            self.brightness = 1
+            self.backlight.duty_u16(655)
+        else:
+            self.brightness = value
+            self.backlight.duty_u16(self.brightness * 655)
 
     def bl_off(self):
         self.backlight.duty_u16(0)

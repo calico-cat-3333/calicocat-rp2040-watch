@@ -11,7 +11,15 @@ class Buzzer(Device):
         self.buzzer = PWM(self.buzzer_pin)
         self.beep_task = Task(self.beep_task_func, 100)
         self.freq_list = []
-        self.volume = 30000
+        self.volume = 100
+
+    def set_volume(self, volume):
+        if volume <= 0:
+            self.volume = 0
+        elif volume >= 100:
+            self.volume = 100
+        else:
+            self.volume = volume
 
     def stop_pwm(self):
         self.buzzer.duty_u16(0)
@@ -32,6 +40,9 @@ class Buzzer(Device):
             return True
         return False
 
+    def stop(self):
+        self.freq_list = []
+
     def beep_task_func(self):
         if len(self.freq_list) == 0:
             self.stop_pwm()
@@ -41,5 +52,5 @@ class Buzzer(Device):
             self.buzzer.duty_u16(0)
         else:
             self.buzzer.freq(freq)
-            self.buzzer.duty_u16(self.volume)
+            self.buzzer.duty_u16(self.volume * 300)
 
