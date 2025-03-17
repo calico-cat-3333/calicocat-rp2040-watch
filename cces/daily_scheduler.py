@@ -15,6 +15,7 @@ class DailyTask:
         self.weekdays = weekdays # run only in these weekdays
 
     def reach(self):
+        # 判断任务需要执行
         now = time.localtime()
         if (now[3], now[4]) != self.starttime:
             return False

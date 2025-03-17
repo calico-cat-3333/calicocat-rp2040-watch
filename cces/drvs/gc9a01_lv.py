@@ -59,6 +59,7 @@ class GC9A01_lv(Device_lv):
         disp_drv.flush_ready()
 
     def set_brightness(self, value):
+        # 设置背光亮度
         if self.bl_pin == None:
             return
         if value >= 100:
@@ -72,12 +73,14 @@ class GC9A01_lv(Device_lv):
             self.backlight.duty_u16(self.brightness * 655)
 
     def bl_off(self):
+        # 关闭背光
         self.backlight.duty_u16(0)
         time.sleep_ms(1)
         self.backlight.deinit()
 
     def bl_on(self):
-        self.backlight.duty_u16(self.brightness)
+        # 开启背光
+        self.backlight.set_brightness(self.brightness)
 
     def on_sleep(self):
         # Not yet completed.
