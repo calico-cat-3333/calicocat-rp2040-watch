@@ -17,6 +17,7 @@ class WatchFaceAtivity(Activity):
         self.scr.add_event_cb(self.gesture_event_handler, lv.EVENT.GESTURE, None)
         self.date_label = lv.label(self.scr)
         self.date_label.align(lv.ALIGN.CENTER, 0, -60)
+        self.date_label.set_style_text_font(lv.font_montserrat_16, 0)
         self.date_label.set_text('YYYY-MM-DD')
 
         self.time_label = lv.label(self.scr)
@@ -26,10 +27,12 @@ class WatchFaceAtivity(Activity):
 
         self.bat_label = lv.label(self.scr)
         self.bat_label.align(lv.ALIGN.BOTTOM_MID, 0, -10)
+        self.bat_label.set_style_text_font(lv.font_montserrat_14, 0)
         self.bat_label.set_text('BBB%')
 
         self.step_label = lv.label(self.scr)
         self.step_label.align(lv.ALIGN.CENTER, -50, 60)
+        self.step_label.set_style_text_font(lv.font_montserrat_16, 0)
         self.step_label.set_text('steps:--')
 
         self.update_display_task.start()
@@ -57,5 +60,4 @@ class WatchFaceAtivity(Activity):
         lv.indev_active().wait_release()
         gesture = lv.indev_active().get_gesture_dir()
         if gesture == lv.DIR.TOP:
-            AskYesNoActivity('MemoryFree', 'Mem Free: '+str(gc.mem_free()), self.infookclick, self.noclickcb).launch()
-
+            AskYesNoActivity('MemoryFree', '剩余 RAM 空间: '+str(gc.mem_free()), self.infookclick, self.noclickcb).launch()
