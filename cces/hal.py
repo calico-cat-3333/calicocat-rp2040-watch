@@ -43,7 +43,7 @@ ble = None
 
 def after_lvgl_init():
     if dispdev == None or len(indev_list) == 0:
-        log('Error: lvgl driver not set', level=ERROR)
+        log('lvgl driver not set', level=ERROR)
         return
     dispdev.after_lvgl_init()
     for indev in indev_list:
