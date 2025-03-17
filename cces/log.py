@@ -1,10 +1,10 @@
 from time import ticks_ms
 import sys
 
-INFO = 1
-ERROR = 2
-NOLOG = 0
-levelstr = ['NOLOG:',' INFO:', 'ERROR:']
+INFO = 0
+ERROR = 1
+NOLOG = 2
+levelstr = [' INFO:', 'ERROR:', 'NOLOG:']
 
 _level = ERROR
 
@@ -13,7 +13,7 @@ def setlevel(level):
     _level = level
 
 def log(*args, level=INFO, exc=None, **kwargs):
-    if  _level < level or level == NOLOG:
+    if  _level > level or level == NOLOG:
         return
     print('[' + str(ticks_ms()) + ']', levelstr[level], *args, **kwargs)
     if exc == None:
