@@ -9,12 +9,12 @@ class Pin:
 
     def value(self, val=None):
         if val == None:
-            return self.pcf.readpin(self.n)
+            return self.pcf.read_pin(self.n)
         else:
-            self.pcf.setpin(self.n, val)
+            self.pcf.set_pin(self.n, val)
 
     def toggle(self):
-        self.pcf.togglepin(self.n)
+        self.pcf.toggle_pin(self.n)
 
 class PCF8574:
     def __init__(self, i2c, address = _PCF8574_ADDRESS):
@@ -22,14 +22,14 @@ class PCF8574:
         self.address = address
         self.sbuf = bytearray([0xff])
 
-    def getpin(self, n):
+    def get_pin(self, n):
         return Pin(self, n)
 
-    def readpin(self, n):
+    def read_pin(self, n):
         buf = self._read()
         return (buf[0] & (1 << n)) >> n
 
-    def setpin(self, n, val):
+    def set_pin(self, n, val):
         # set to 0 for out low
         # set to 1 for input or out light high
         if val:
@@ -38,7 +38,7 @@ class PCF8574:
             self.sbuf[0] = self.sbuf[0] & (~(1 << n))
         self._write()
 
-    def togglepin(self, n):
+    def toggle_pin(self, n):
         self.sbuf[0] = self.sbuf[0] ^ (1 << n)
         self._write()
 
