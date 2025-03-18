@@ -38,6 +38,7 @@ battery = None
 # charging
 # level
 # voltage
+# dump
 
 ble = None
 # ble uart device should have

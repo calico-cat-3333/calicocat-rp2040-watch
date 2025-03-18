@@ -1,36 +1,60 @@
 from machine import ADC
+from micropython import const
 
 from . import Device
 
-_VFULL = 4.2
-_VEMPTY = 3.3
-_MVCHARG = 4200
+_MVFULL = const(4000)
+_MVEMPTY = const(3300)
+_MVCHARGE = const(4100)
+_MVCHARGE_DONE = const(4300)
+_ADC_DIVISOR = const(3)
+_U16FULL = int((_MVFULL * 65535) / (_ADC_DIVISOR * 3300))
+_U16EMPTY = int((_MVEMPTY * 65535) / (_ADC_DIVISOR * 3300))
+_U16CHARGE = int((_MVCHARGE * 65535) / (_ADC_DIVISOR * 3300))
+# _U16CHARGE_DONE = int((_MVCHARGE_DONE * 65535) / (_ADC_DIVISOR * 3300))
 
 class Battery(Device):
     def __init__(self, bat_pin):
         self.bat_pin = bat_pin
         self.bat_adc = ADC(self.bat_pin)
 
+    def _volt(self, u16):
+        return (u16 * 3.3 * _ADC_DIVISOR) / 65535
+
+    def _mvolt(self, u16):
+        return (u16 * 3300 * _ADC_DIVISOR) >> 16
+
+    def _ischarge(self, u16):
+        if u16 > _U16CHARGE:
+            return True
+        return False
+
+    def _level(self, u16):
+        if v > _U16CHARGE:
+            return 90
+        if v > _U16FULL:
+            return 100
+        if v < _U16EMPTY:
+            return 0
+        return int(10 * (v - _U16EMPTY) / (_U16FULL - _U16EMPTY)) * 10
+
     def voltage(self):
         # 计算电压，返回浮点数
-        return (self.bat_adc.read_u16() * 3.3 * 3) / 65535
+        return self._volt(self.bat_adc.read_u16())
 
     def micro_voltage(self):
         # 粗略计算毫伏值，返回整数
-        return (self.bat_adc.read_u16() * 3300 * 3) >> 16
+        return self._mvolt(self.bat_adc.read_u16())
 
     def level(self):
-        # 粗略估计容量，返回值范围 0-100
-        v = self.voltage()
-        if v > _VFULL:
-            return 100
-        if v < _VEMPTY:
-            return 0
-        return int(10 * (v - _VEMPTY) / (_VFULL - _VEMPTY)) * 10
+        # 返回粗略估计的电量
+        return self._level(self.bat_adc.read_u16())
 
     def charging(self):
-        # 判断是否在充电，大概不算很准
-        if self.micro_voltage() >= _MVCHARG:
-            return True
-        else:
-            return False
+        # 猜测充电状态
+        return self._ischarge(self.bat_adc.read_u16())
+
+    def dump(self):
+        # 一次性读取全部状态
+        v = self.bat_adc.read_u16()
+        return (self._volt(v), self._mvolt(v), self._level(v), self._ischarge(v), v)
