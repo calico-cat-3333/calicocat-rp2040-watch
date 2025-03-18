@@ -30,13 +30,13 @@ class Battery(Device):
         return False
 
     def _level(self, u16):
-        if v > _U16CHARGE:
+        if u16 > _U16CHARGE:
             return 90
-        if v > _U16FULL:
+        if u16 > _U16FULL:
             return 100
-        if v < _U16EMPTY:
+        if u16 < _U16EMPTY:
             return 0
-        return int(10 * (v - _U16EMPTY) / (_U16FULL - _U16EMPTY)) * 10
+        return int(10 * (u16 - _U16EMPTY) / (_U16FULL - _U16EMPTY)) * 10
 
     def voltage(self):
         # 计算电压，返回浮点数
