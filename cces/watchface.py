@@ -46,10 +46,11 @@ class WatchFaceAtivity(Activity):
         lt = time.localtime()
         self.date_label.set_text('{:0>4d}-{:0>2d}-{:0>2d}'.format(*lt[:3]))
         self.time_label.set_text('{:0>2d}:{:0>2d}:{:0>2d}'.format(*lt[3:6]))
-        if hal.battery.charging():
-            self.bat_label.set_text(lv.SYMBOL.CHARGE + str(hal.battery.micro_voltage()))
+        bat_stat = hal.battery.dump()
+        if bat_stat[3]:
+            self.bat_label.set_text(lv.SYMBOL.CHARGE + str(bat_stat[1]))
         else:
-            self.bat_label.set_text('{:>3d}%'.format(hal.battery.level()) + str(hal.battery.micro_voltage()))
+            self.bat_label.set_text('{:>3d}%'.format(bat_stat[2]) + str(bat_stat[1]))
         self.step_label.set_text('steps:{:d}'.format(hal.imu.get_step()))
 
     def infookclick(self):
