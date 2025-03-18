@@ -1,6 +1,3 @@
-"""RP2040-Touch-LCD-1.28
-"""
-
 import board
 import gc9a01
 import lvgl as lv
@@ -9,6 +6,8 @@ import time
 from machine import PWM
 
 from . import Device_lv
+
+# GC9A01 显示屏 lvgl 驱动接口
 
 class GC9A01_lv(Device_lv):
     def __init__(self, spi, rst, cs, dc, bl, doublebuffer=True):

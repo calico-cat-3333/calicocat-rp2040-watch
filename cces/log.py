@@ -2,6 +2,16 @@ import sys
 
 from time import ticks_ms
 
+# 日志系统
+# 使用方法：
+# from log import log, ERROR
+# log('msg', var, level=ERROR)
+# log('msg', var)
+# try:
+#     (do sth)
+# except Exception as e:
+#     log('msg', e, exc=e, level=ERROR)
+
 INFO = 0
 ERROR = 1
 NOLOG = 2

@@ -3,6 +3,10 @@ from micropython import const
 
 from . import Device
 
+# 电池驱动
+# 很显然，直接用 ADC 读电池电压的方法来判断电池容量和状态准度非常差
+# 但是没办法，成本限制在这了
+
 _MVFULL = const(4000)
 _MVEMPTY = const(3300)
 _MVCHARGE = const(4100)

@@ -5,6 +5,8 @@ from machine import PWM
 from . import Device
 from ..task_scheduler import Task, TASKEXIT
 
+# 蜂鸣器驱动
+
 class Buzzer(Device):
     def __init__(self, buzzer_pin):
         self.buzzer_pin = buzzer_pin

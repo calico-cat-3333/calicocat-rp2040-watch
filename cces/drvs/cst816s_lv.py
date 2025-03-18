@@ -6,6 +6,8 @@ from machine import Pin
 from . import Device_lv
 from .cst816s import CST816S
 
+# CST816S 触摸屏 lvgl 驱动接口
+
 class CST816S_lv(Device_lv):
     def __init__(self, i2c, int_pin, rst_pin, use_irq=True):
         self.int_pin = int_pin

@@ -5,6 +5,8 @@ from micropython import const
 
 from . import Device
 
+# QMI8658 IMU 驱动
+
 _QMI8658_Address = const(0x6B)
 
 # QMI8658_Register

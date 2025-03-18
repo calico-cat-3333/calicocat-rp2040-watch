@@ -1,6 +1,8 @@
 import time
 from micropython import const
 
+# CST816S 触摸屏驱动程序
+
 _CST816_Address = const(0x15)
 
 # CST816S_Register

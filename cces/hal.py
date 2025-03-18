@@ -43,7 +43,10 @@ battery = None
 ble = None
 # ble uart device should have
 # uart_rx
+# uart_rx_any
 # uart_tx
+# uart_rx_raw
+# uart_tx_raw
 
 
 def after_lvgl_init():
