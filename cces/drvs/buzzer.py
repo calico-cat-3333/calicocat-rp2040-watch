@@ -41,7 +41,7 @@ class Buzzer(Device):
     def play(self, freqs):
         # 播放一段频率列表
         if len(self.freq_list) == 0:
-            self.freq_list = freqs
+            self.freq_list.extend(freqs)
             self.beep_task.start()
             return True
         return False
