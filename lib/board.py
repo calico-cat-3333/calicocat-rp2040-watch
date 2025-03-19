@@ -13,4 +13,4 @@ tp_rst = Pin(22, Pin.OUT, value=1)
 imu_int1 = Pin(23)
 imu_int2 = Pin(24)
 
-bat_adc = ADC(Pin(29))
+bat_pin = Pin(29)

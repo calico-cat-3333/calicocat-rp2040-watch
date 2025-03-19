@@ -10,7 +10,7 @@ from . import hal
 class WatchFaceAtivity(Activity):
     def __init__(self):
         self.update_display_task = Task(self.update_display, 1000) # update display every 1 secs
-        self.number_font = lv.binfont_create("S:number_72.bin")
+        self.number_font = lv.binfont_create("S:/fonts/number_72.bin")
 
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_handler, lv.EVENT.GESTURE, None)
