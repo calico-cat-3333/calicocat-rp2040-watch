@@ -85,7 +85,7 @@ _free_time = 0
 _buzy_time = 0
 _sys_load = 0
 
-def sys_load():
+def _sys_load_func():
     global _free_time
     global _buzy_time
     global _last_tick
@@ -107,7 +107,7 @@ def start():
     # 启动调度器，并完全接管系统
     global sys_load_task
     global _free_time
-    sys_load_task = Task(sys_load, 10000) # 每 10 秒计算一次系统负载
+    sys_load_task = Task(_sys_load_func, 10000) # 每 10 秒计算一次系统负载
     sys_load_task.start()
     while True:
         task = get_due_task()
