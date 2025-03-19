@@ -11,42 +11,44 @@ rtc = RTC()
 
 imu = None
 # imu should have:
-# get_step
-# clear_step
-# get_accel_xyz
-# get_gyro_xyz
+# get_step()
+# clear_step()
+# get_accel_xyz()
+# get_gyro_xyz()
 
 indev_list = []
 # lvgl input devices
 
 dispdev = None
 # lvgl display_device, should also have:
-# set_brightness
+# set_brightness(birghtness)
 
 hartrate = None
 # hartrate should have:
 
 buzzer = None
 # buzzer should have:
-# beep
-# play
-# stop
-# set_volume
+# beep()
+# play()
+# stop()
+# set_volume(volume)
 
 battery = None
 # battery should have:
-# charging
-# level
-# voltage
-# dump
+# charging()
+# level()
+# voltage()
+# dump()
 
 ble = None
 # ble uart device should have
-# uart_rx
-# uart_rx_any
-# uart_tx
-# uart_rx_raw
-# uart_tx_raw
+# uart_rx()
+# uart_rx_any()
+# uart_tx(tx_str)
+# uart_rx_raw()
+# uart_tx_raw(tx_str_raw)
+# reset()
+# connected
 
 
 def after_lvgl_init():
