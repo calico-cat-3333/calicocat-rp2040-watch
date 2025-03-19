@@ -112,6 +112,7 @@ class E104BLE(Device):
 
     def uart_tx(self, tx_str):
         # 发送一个字符串，自动添加 '\r\n' 结尾
+        log('uart send string:', tx_str)
         if not tx_str.endswith('\r\n'):
             tx_str = tx_str + '\r\n'
         self.uart.write(tx_str)
