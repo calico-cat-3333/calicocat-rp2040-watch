@@ -15,6 +15,8 @@ imu = None
 # clear_step()
 # get_accel_xyz()
 # get_gyro_xyz()
+# reset()
+# config()
 
 indev_list = []
 # lvgl input devices
@@ -22,6 +24,7 @@ indev_list = []
 dispdev = None
 # lvgl display_device, should also have:
 # set_brightness(birghtness)
+# brightness
 
 hartrate = None
 # hartrate should have:
@@ -32,6 +35,7 @@ buzzer = None
 # play()
 # stop()
 # set_volume(volume)
+# volume
 
 battery = None
 # battery should have:
@@ -49,6 +53,7 @@ ble = None
 # uart_tx_raw(tx_str_raw)
 # reset()
 # connected
+# sleeping
 
 
 def after_lvgl_init():
