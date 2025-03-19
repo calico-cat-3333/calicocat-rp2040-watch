@@ -4,7 +4,7 @@ import micropython
 import time
 
 from . import Device
-from ..log import log, ERROR
+from ..log import log, ERROR, DEBUG
 
 # E104-BT5005A 蓝牙串口模块驱动
 # 此驱动被设计为只能被一个服务读写
@@ -70,7 +70,7 @@ class E104BLE(Device):
         while self.uart.any():
             try:
                 r = self.uart.readline()
-                log('uart rx receive:', r)
+                log('uart rx receive:', r, level=DEBUG)
                 self.rx_buf = self.rx_buf + r.decode()
             except Exception as e:
                 log('faild in uart read:', e, exc=e, level=ERROR)

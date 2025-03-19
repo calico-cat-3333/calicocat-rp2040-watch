@@ -3,7 +3,7 @@ from _asyncio import Task as _Task
 from time import ticks_ms, ticks_add, ticks_diff, sleep_ms
 from micropython import const
 
-from .log import log
+from .log import log, DEBUG
 
 '''
 简单的任务调度器，参考了 kmk_firmware 项目中使用的任务调度器
@@ -63,10 +63,10 @@ class Task:
         tu = ticks_diff(te, ts)
         if (not self.oneshot) and r != TASKEXIT: # 如果 self.func 返回了 11 表示任务主动退出
             wait = max(self.period - tu, 0)
-            log('function', self.func.__name__, 'timeuse:', tu, 'wait', wait, 'ms then run again')
+            log('function', self.func.__name__, 'timeuse:', tu, 'wait', wait, 'ms then run again', level=DEBUG)
             _task_queue.push(self._task, ticks_add(ticks_ms(), wait))
         else:
-            log('function', self.func.__name__, 'timeuse:', tu, 'then exit')
+            log('function', self.func.__name__, 'timeuse:', tu, 'then exit', level=DEBUG)
             self.enabled = False
 
 def get_due_task():
