@@ -93,7 +93,7 @@ def sys_load():
     _last_tick = ct
     _buzy_time = timecost - _free_time
     _sys_load = _buzy_time * 100 / timecost
-    log('system load in last 10 secs:', _sys_load, 'buzy:', _buzy_time, 'ms free:', _free_time, 'ms')
+    log('system load in last 10 secs:', _sys_load, '% buzy:', _buzy_time, 'ms free:', _free_time, 'ms')
     _free_time = 0
 
 def get_sys_load_info():
@@ -103,6 +103,7 @@ def get_sys_load_info():
 def start():
     # 启动调度器，并完全接管系统
     global sys_load_task
+    global _free_time
     sys_load_task = Task(sys_load, 10000) # 每 10 秒计算一次系统负载
     sys_load_task.start()
     while True:
