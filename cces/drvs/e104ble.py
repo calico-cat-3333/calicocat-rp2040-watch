@@ -66,31 +66,54 @@ class E104BLE(Device):
     def uart_rx_int_cb(self, _):
         micropython.schedule(self.uart_rx_read_to_buf_ref, 0)
 
+    def _decode(self, buf):
+        # 传入的数据有时包含 ISO-8859-1 编码的数据，此时 decode 方法不能正常工作
+        try:
+            dr = buf.decode()
+        except UnicodeError:
+            log('faild in unicode decode, try fallback decoder')
+            try:
+                dr = ''.join(chr(i) for i in buf)
+            except Exception as e:
+                log('faild in fallback decoder', exc=ex, level=ERROR)
+                return None
+        except Exception as e:
+            log('error in decode:', e, exc=e, level=ERROR)
+            return None
+        return dr
+
+    def _uart_rx_parse(self):
+        if self.uart_rx_any() > 10:
+            log('too may rx message in rx_line_buf, something must go wrong', level=ERROR)
+            self.rx_line_buf.clear()
+        if self.rx_buf == '\r\n':
+            pass
+        elif self.rx_buf[:4] == 'STA:':
+            log('ble report status update:', self.rx_buf)
+            self.status_update(self.rx_buf.rstrip())
+        elif self.rx_buf[:3] == '+OK' or self.rx_buf[:4] == '+ERR':
+            log('at command respons received:', self.rx_buf.rstrip())
+        else:
+            self.rx_line_buf.append(self.rx_buf.rstrip())
+            log('uart rx receive line:', self.rx_buf)
+        self.rx_buf = ''
+
     def uart_rx_read_to_buf(self, _):
         while self.uart.any():
             try:
                 r = self.uart.readline()
                 log('uart rx receive:', r, level=DEBUG)
-                self.rx_buf = self.rx_buf + r.decode()
             except Exception as e:
                 log('faild in uart read:', e, exc=e, level=ERROR)
                 self.rx_buf = ''
                 return
-            if self.rx_buf.endswith('\n'):
-                if self.uart_rx_any() > 10:
-                    log('too may rx message in rx_line_buf, something must go wrong', level=ERROR)
-                    self.rx_line_buf.clear()
-                if self.rx_buf == '\r\n':
-                    pass
-                elif self.rx_buf[:4] == 'STA:':
-                    log('ble report status update:', self.rx_buf)
-                    self.status_update(self.rx_buf.rstrip())
-                elif self.rx_buf[:3] == '+OK' or self.rx_buf[:4] == '+ERR':
-                    log('at command respons received:', self.rx_buf.rstrip())
-                else:
-                    self.rx_line_buf.append(self.rx_buf.rstrip())
-                    log('uart rx receive line:', self.rx_buf)
+            dr = self._decode(r)
+            if dr == None:
                 self.rx_buf = ''
+                return
+            self.rx_buf = self.rx_buf + dr
+            if self.rx_buf.endswith('\n'):
+                self._uart_rx_parse()
 
     def reset(self):
         # 重置，硬重置优先，不能用才用软重置
@@ -112,7 +135,7 @@ class E104BLE(Device):
 
     def uart_tx(self, tx_str):
         # 发送一个字符串，自动添加 '\r\n' 结尾
-        log('uart send string:', tx_str)
+        log('uart send string:', tx_str, level=DEBUG)
         if not tx_str.endswith('\r\n'):
             tx_str = tx_str + '\r\n'
         self.uart.write(tx_str)
