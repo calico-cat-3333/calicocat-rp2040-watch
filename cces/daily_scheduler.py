@@ -6,6 +6,7 @@ from .task_scheduler import Task
 # 位于后台的系统服务之一，同时提供部分计划任务相关的 API
 
 daily_tasks = []
+daily_scheduler_task = None
 
 class DailyTask:
     def __init__(self, func, starttime, weekdays=(1,2,3,4,5,6,7)):
@@ -47,5 +48,6 @@ def get_all():
     return daily_tasks
 
 def start():
+    global daily_scheduler_task
     daily_scheduler_task = Task(check_loop, 30000)
     daily_scheduler_task.start()
