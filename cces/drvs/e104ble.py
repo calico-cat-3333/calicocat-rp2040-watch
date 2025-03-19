@@ -67,7 +67,7 @@ class E104BLE(Device):
         micropython.schedule(self.uart_rx_read_to_buf_ref, 0)
 
     def _decode(self, buf):
-        # 传入的数据有时包含 ISO-8859-1 编码的数据，此时 decode 方法不能正常工作
+        # 传入的数据有时包含 ISO-8859-1 编码的数据，此时常规的 decode 方法不能正常工作
         try:
             dr = buf.decode()
         except UnicodeError:
@@ -75,27 +75,39 @@ class E104BLE(Device):
             try:
                 dr = ''.join(chr(i) for i in buf)
             except Exception as e:
-                log('faild in fallback decoder', exc=ex, level=ERROR)
+                log('faild in fallback decoder', exc=e, level=ERROR)
                 return None
         except Exception as e:
             log('error in decode:', e, exc=e, level=ERROR)
             return None
         return dr
 
-    def _uart_rx_parse(self):
+    def _rx_buf_parse(self):
+        if not self.rx_buf.endswith('\n'):
+            return
+
         if self.uart_rx_any() > 10:
             log('too may rx message in rx_line_buf, something must go wrong', level=ERROR)
             self.rx_line_buf.clear()
+
         if self.rx_buf == '\r\n':
+            # empty line
             pass
+
         elif self.rx_buf[:4] == 'STA:':
+            # status report
             log('ble report status update:', self.rx_buf)
             self.status_update(self.rx_buf.rstrip())
+
         elif self.rx_buf[:3] == '+OK' or self.rx_buf[:4] == '+ERR':
+            # at command respons
             log('at command respons received:', self.rx_buf.rstrip())
+
         else:
+            # payload
             self.rx_line_buf.append(self.rx_buf.rstrip())
             log('uart rx receive line:', self.rx_buf)
+
         self.rx_buf = ''
 
     def uart_rx_read_to_buf(self, _):
@@ -107,13 +119,14 @@ class E104BLE(Device):
                 log('faild in uart read:', e, exc=e, level=ERROR)
                 self.rx_buf = ''
                 return
+
             dr = self._decode(r)
             if dr == None:
                 self.rx_buf = ''
                 return
+
             self.rx_buf = self.rx_buf + dr
-            if self.rx_buf.endswith('\n'):
-                self._uart_rx_parse()
+            self._rx_buf_parse()
 
     def reset(self):
         # 重置，硬重置优先，不能用才用软重置
