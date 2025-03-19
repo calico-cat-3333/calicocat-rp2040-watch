@@ -48,7 +48,7 @@ class Buzzer(Device):
 
     def stop(self):
         # 停止播放
-        self.freq_list = []
+        self.freq_list.clear()
 
     def beep_task_func(self):
         if len(self.freq_list) == 0:
