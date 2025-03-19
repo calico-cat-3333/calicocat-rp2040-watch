@@ -11,12 +11,17 @@ from .log import log, ERROR
 该协议极其简单，基本是使用蓝牙串口发送 json 格式的数据
 参考：http://www.espruino.com/Gadgetbridge
 参考：https://github.com/Freeyourgadget/Gadgetbridge/blob/master/app/src/main/java/nodomain/freeyourgadget/gadgetbridge/service/devices/banglejs/BangleJSDeviceSupport.java
+参考：https://codeberg.org/Freeyourgadget/Gadgetbridge/src/branch/master/app/src/main/java/nodomain/freeyourgadget/gadgetbridge/service/devices/banglejs/BangleJSDeviceSupport.java
 参考：https://github.com/wasp-os/wasp-os/blob/master/wasp/gadgetbridge.py
 接收到的数据多数以 '\x10GB(' 开头，以 ')' 结尾，中间是 json 字符串，可以使用 json.loads 转换
 比较特殊的一个是连接之后的设置时间的命令，发送的是 Bangls.js 的原生代码，这里需要特殊处理一下
 不打算完全实现完成，只实现必要的协议，剩下的直接放弃
 发送的数据则是 json.dumps 直接生成的字符串，发送时拼接上 '\r\n' 蓝牙驱动会完成这个
 '''
+
+weather_data = {}
+music_info = {}
+music_state = {}
 
 def set_time(cmd):
     # "\x10setTime(1742316416);E.setTimeZone(8.0);(s=>s&&(s.timezone=8.0,require('Storage').write('setting.json',s)))(require('Storage').readJSON('setting.json',1))"
@@ -42,6 +47,8 @@ def find_device(enable=False):
 def do_notify(json_cmd):
     print(json_cmd)
 
+def remove_notify(notify_id):
+    pass
 
 def gadgetbridge_cmd_parse():
     if not hal.ble.uart_rx_any():
@@ -82,7 +89,38 @@ def gadgetbridge_cmd_parse():
             return
 
         if t == 'find':
+            # n: bool
             find_device(json_cmd.get('n', False))
+            return
+
+        if t == 'weather':
+            # temp,hi,lo,hum,rain,uv,code,txt,wind,wdir,loc
+            # 温度，最高温，最低温，湿度，降雨率，紫外线指数，天气代码，天气文本，风速，风向，位置文本
+            # 温度单位都是开尔文，湿度、降雨率是整形百分比，紫外线指数是浮点数？
+            # 风速浮点数单位 km/h 风向单位度，正南方为 0 顺时针方向
+            global weather_data
+            weather_data = json_cmd
+            weather_data['time'] = time.time()
+            return
+
+        if t == 'musicinfo':
+            # artist,album,track,dur,c,n
+            # 作曲家，专辑名，轨道名，时长(秒)，专辑数，轨道数
+            # 前三个都是字符串，后两个没看出有啥用，都是 -1 似乎是整形，时长为秒
+            global music_info
+            music_info = json_cmd
+            music_info['time'] = time.time()
+            return
+
+        if t == 'musicstate':
+            # state:"play/pause",position,shuffle,repeat
+            # 状态，播放位置（秒），随机，重复（都是 -1）
+            global music_state
+            music_state = json_cmd
+            music_state['time'] = time.time()
+            return
+
+        if t == '':
             return
 
     # 不符合指令格式
