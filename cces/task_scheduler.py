@@ -44,6 +44,11 @@ class Task:
         self.args = args
         self.kwargs = kwargs
 
+    def set_period(self, period):
+        if self.enabled:
+            return
+        self.period = period
+
     def start_with_arg(self, *args, **kwargs):
         if self.enabled:
             return
