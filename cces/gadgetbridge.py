@@ -64,7 +64,7 @@ def gadgetbridge_cmd_parse():
         try:
             json_cmd = json.loads(cmd[4:-1])
         except Exception as e:
-            log('faild to parse json string', cmd[4:-1], exc=e, level=ERROR)
+            log('faild to parse json string:', cmd[4:-1], exc=e, level=ERROR)
             return
 
         t = json_cmd.pop('t', None)
@@ -86,12 +86,12 @@ def gadgetbridge_cmd_parse():
             return
 
     # 不符合指令格式
-    log('not vaild cmd:', cmd, level=ERROR)
+    log('invalid cmd:', cmd, level=ERROR)
     return
 
 def send_msg(msg_type, text):
     if msg_type not in ['info', 'warn', 'error']:
-        log('not vaild msg type:', msg_type, level=ERROR)
+        log('invalid msg type:', msg_type, level=ERROR)
         return
     hal.ble.uart_tx(json.dumps({'t':msg_type, 'msg':text}))
 
