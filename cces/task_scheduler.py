@@ -78,11 +78,37 @@ def get_due_task():
     else:
         return None
 
+_last_tick = 0
+_free_time = 0
+_buzy_time = 0
+_sys_load = 0
+
+def sys_load():
+    global _free_time
+    global _buzy_time
+    global _last_tick
+    global _sys_load
+    ct = ticks_ms()
+    timecost = ticks_diff(ct, _last_tick)
+    _last_tick = ct
+    _buzy_time = timecost - _free_time
+    _sys_load = _buzy_time * 100 / timecost
+    log('system load in last 10 secs:', _sys_load, 'buzy:', _buzy_time, 'ms free:', _free_time, 'ms')
+    _free_time = 0
+
+def get_sys_load_info():
+    # 获取系统负载信息
+    return (_sys_load, _buzy_time)
+
 def start():
     # 启动调度器，并完全接管系统
+    global sys_load_task
+    sys_load_task = Task(sys_load, 10000) # 每 10 秒计算一次系统负载
+    sys_load_task.start()
     while True:
         task = get_due_task()
         if task != None:
             task()
         else:
+            _free_time = _free_time + 1
             sleep_ms(1)

@@ -46,14 +46,8 @@ def start():
     load_apps()
     log('apps load')
 
-    # todo: start watchface activity
     wf = WatchFaceAtivity()
     wf.launch()
     log('launch watchface, start task_scheduler')
 
-    while True:
-        task = task_scheduler.get_due_task()
-        if task != None:
-            task()
-        else:
-            time.sleep_ms(1)
+    task_scheduler.start()
