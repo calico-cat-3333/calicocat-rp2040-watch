@@ -2,7 +2,6 @@ import lvgl as lv
 #import lv_utils
 import fs_driver
 import time
-import gc
 
 from . import hal
 from . import task_scheduler
@@ -11,10 +10,6 @@ from . import lv_eventloop
 from . import settingsdb
 from .watchface import WatchFaceAtivity
 from .log import log
-
-def auto_gc_collect():
-    log('automatic run gc.collect every 10 sec')
-    gc.collect()
 
 def load_lvgl():
     global lv_event_loop
@@ -27,11 +22,8 @@ def load_lvgl():
     hal.after_lvgl_init()
 
 def load_system_service():
-    global autogc
     daily_scheduler.start()
     settingsdb.start()
-    autogc = task_scheduler.Task(auto_gc_collect, 10000)
-    autogc.start()
 
 def load_apps():
     # todo: load apps

@@ -1,3 +1,5 @@
+import gc
+
 from _asyncio import TaskQueue
 from _asyncio import Task as _Task
 from time import ticks_ms, ticks_add, ticks_diff, sleep_ms
@@ -95,10 +97,11 @@ def sys_load():
     _sys_load = _buzy_time * 100 / timecost
     log('system load in last 10 secs:', _sys_load, '% buzy:', _buzy_time, 'ms free:', _free_time, 'ms')
     _free_time = 0
+    gc.collect()
 
 def get_sys_load_info():
     # 获取系统负载信息
-    return (_sys_load, _buzy_time)
+    return (_sys_load, _buzy_time, gc.mem_free())
 
 def start():
     # 启动调度器，并完全接管系统
