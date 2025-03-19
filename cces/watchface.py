@@ -5,6 +5,7 @@ import gc
 from .activity import Activity
 from .activity import AskYesNoActivity
 from .task_scheduler import Task
+from . import gadgetbridge
 from . import hal
 
 class WatchFaceAtivity(Activity):
@@ -54,7 +55,7 @@ class WatchFaceAtivity(Activity):
         self.step_label.set_text('steps:{:d}'.format(hal.imu.get_step()))
 
     def infookclick(self):
-        print(2222)
+        gadgetbridge.send_msg('info', 'hello!')
 
     def noclickcb(self):
         hal.buzzer.beep()
