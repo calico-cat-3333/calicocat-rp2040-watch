@@ -3,13 +3,14 @@ import lvgl as lv
 from . import Activity
 
 class AskYesNoActivity(Activity):
-    def __init__(self, title, text, on_yes_clicked=None, on_no_clicked=None, yes_label_text='Yes', no_label_text='No'):
+    def __init__(self, title, text, on_yes_clicked=None, on_no_clicked=None, yes_label_text='Yes', no_label_text='No', exit_anim=None):
         self.title = title
         self.text = text
         self.on_yes_clicked = on_yes_clicked
         self.on_no_clicked = on_no_clicked
         self.yes_label_text = yes_label_text
         self.no_label_text = no_label_text
+        self.exit_anim = exit_anim
 
     def setup(self):
         self.title_label = lv.label(self.scr)
@@ -48,9 +49,9 @@ class AskYesNoActivity(Activity):
     def yes_btn_click_cb(self, event):
         if self.on_yes_clicked != None:
             self.on_yes_clicked()
-        self.exit()
+        self.exit(self.exit_anim)
 
     def no_btn_click_cb(self, event):
         if self.on_no_clicked != None:
             self.on_no_clicked()
-        self.exit()
+        self.exit(self.exit_anim)

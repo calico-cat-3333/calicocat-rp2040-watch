@@ -16,7 +16,7 @@ class Activity:
         # 这里完成 GUI 构建
         pass
 
-    def launch(self):
+    def launch(self, anim=None):
         log(str(self.__class__), 'launch')
         self.scr = lv.obj()
         self.setup()
@@ -25,7 +25,10 @@ class Activity:
             activity_stack[-1].on_covered()
 
         activity_stack.append(self)
-        lv.screen_load(self.scr)
+        if anim != None:
+            lv.screen_load_anim(self.scr, anim, 200, 0, False)
+        else:
+            lv.screen_load(self.scr)
 
 
     def on_covered(self):
@@ -40,7 +43,7 @@ class Activity:
         # 退出前执行
         pass
 
-    def exit(self):
+    def exit(self, anim=None):
         if len(activity_stack) == 0:
             # 如果这是最后一个 activity 不能退出
             return
@@ -48,5 +51,8 @@ class Activity:
         self.before_exit()
         activity_stack.pop()
         activity_stack[-1].on_cover_exit()
-        lv.screen_load(activity_stack[-1].scr)
-        self.scr.delete()
+        if anim != None:
+            lv.screen_load_anim(activity_stack[-1].scr, anim, 200, 0, True)
+        else:
+            lv.screen_load(activity_stack[-1].scr)
+            self.scr.delete()

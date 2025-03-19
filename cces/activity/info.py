@@ -3,11 +3,12 @@ import lvgl as lv
 from . import Activity
 
 class InfoActivity(Activity):
-    def __init__(self, title, text, on_ok_clicked=None, ok_label_text='OK'):
+    def __init__(self, title, text, on_ok_clicked=None, ok_label_text='OK', exit_anim=None):
         self.title = title
         self.text = text
         self.on_ok_clicked = on_ok_clicked
         self.ok_label_text = ok_label_text
+        self.exit_anim = exit_anim
 
     def setup(self):
         self.title_label = lv.label(self.scr)
@@ -34,4 +35,4 @@ class InfoActivity(Activity):
     def ok_btn_click_cb(self, event):
         if self.on_ok_clicked != None:
             self.on_ok_clicked()
-        self.exit()
+        self.exit(self.exit_anim)

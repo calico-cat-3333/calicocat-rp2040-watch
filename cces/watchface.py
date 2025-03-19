@@ -64,4 +64,4 @@ class WatchFaceAtivity(Activity):
         lv.indev_active().wait_release()
         gesture = lv.indev_active().get_gesture_dir()
         if gesture == lv.DIR.TOP:
-            AskYesNoActivity('MemoryFree', '剩余 RAM 空间: '+str(gc.mem_free()), self.infookclick, self.noclickcb).launch()
+             AskYesNoActivity('MemoryFree', '剩余 RAM 空间: '+str(gc.mem_free()), self.infookclick, self.noclickcb, exit_anim=lv.SCR_LOAD_ANIM.OVER_BOTTOM).launch(lv.SCR_LOAD_ANIM.OVER_TOP)
