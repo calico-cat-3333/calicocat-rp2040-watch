@@ -6,7 +6,7 @@ from micropython import const
 
 from .task_scheduler import Task
 
-PERIOD = const(40)
+PERIOD = const(20)
 
 def start():
     global lv_eventloop
