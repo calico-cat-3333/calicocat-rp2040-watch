@@ -5,6 +5,7 @@ from . import settingsdb
 from . import hal
 from .task_scheduler import Task, TASKEXIT
 from .log import log, ERROR
+from . import notification
 
 '''
 实现 Gadgetbridge/Bangle.js 通信协议
@@ -44,13 +45,18 @@ def find_device(enable=False):
     beep_repeat_task.stop()
     hal.buzzer.stop()
 
-def do_notify(json_cmd):
-    print(json_cmd)
+def send_notify(json_cmd):
+    nid = json_cmd['id']
+    ntitle = json_cmd['src']
+    if json_cmd['title'] != '':
+        ntitle = ntitle + ': ' + json_cmd['title']
+    ntext = json_cmd['body']
+    notification.send(ntitle, ntext, nid)
 
 def remove_notify(notify_id):
-    pass
+    notification.remove(notify_id)
 
-def gadgetbridge_cmd_parse():
+def gb_cmd_parse():
     if not hal.ble.uart_rx_any():
         return
     cmd = hal.ble.uart_rx()
@@ -77,11 +83,11 @@ def gadgetbridge_cmd_parse():
         t = json_cmd.pop('t', None)
 
         if t == 'notify':
-            # do_notify(json_cmd)
+            send_notify(json_cmd)
             return
 
         if t == 'notify-':
-            # remove_notify(json_cmd)
+            remove_notify(json_cmd['id'])
             return
 
         if t == 'alarm':
@@ -120,9 +126,6 @@ def gadgetbridge_cmd_parse():
             music_state['time'] = time.time()
             return
 
-        if t == '':
-            return
-
     # 不符合指令格式
     log('invalid cmd:', cmd, level=ERROR)
     return
@@ -149,7 +152,7 @@ def start():
     beep_repeat_task = Task(hal.buzzer.play, 1000)
     beep_repeat_task.set_args([4000,0,4000])
 
-    cmd_parse_task = Task(gadgetbridge_cmd_parse, 100)
+    cmd_parse_task = Task(gb_cmd_parse, 100)
     cmd_parse_task.start()
 
     status_report_task = Task(send_status, 30000)

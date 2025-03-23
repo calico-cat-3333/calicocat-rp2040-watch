@@ -7,6 +7,9 @@ from .activity import AskYesNoActivity
 from .task_scheduler import Task
 from . import gadgetbridge
 from . import hal
+from . import settingsdb
+
+from .notification import NotificationCenter
 
 class WatchFaceAtivity(Activity):
     def __init__(self):
@@ -14,7 +17,7 @@ class WatchFaceAtivity(Activity):
         self.number_font = lv.binfont_create("S:/fonts/number_72.bin")
 
     def setup(self):
-        self.scr.add_event_cb(self.gesture_event_handler, lv.EVENT.GESTURE, None)
+        self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
         self.date_label = lv.label(self.scr)
         self.date_label.align(lv.ALIGN.CENTER, 0, -60)
         self.date_label.set_style_text_font(lv.font_montserrat_16, lv.PART.MAIN | lv.STATE.DEFAULT)
@@ -54,14 +57,18 @@ class WatchFaceAtivity(Activity):
             self.bat_label.set_text('{:>3d}%'.format(bat_stat[2]) + str(bat_stat[1]))
         self.step_label.set_text('steps:{:d}'.format(hal.imu.get_step()))
 
-    def infookclick(self):
-        gadgetbridge.send_msg('info', 'hello!')
+    def yesclick(self):
+        settingsdb.put('do_not_disturb', True)
+        gadgetbridge.send_msg('info', 'DND Enable!')
 
     def noclickcb(self):
+        settingsdb.put('do_not_disturb', False)
         hal.buzzer.beep()
 
-    def gesture_event_handler(self, event):
+    def gesture_event_cb(self, event):
         lv.indev_active().wait_release()
         gesture = lv.indev_active().get_gesture_dir()
         if gesture == lv.DIR.TOP:
-             AskYesNoActivity('MemoryFree', '剩余 RAM 空间: '+str(gc.mem_free()), self.infookclick, self.noclickcb, exit_anim=lv.SCR_LOAD_ANIM.OVER_BOTTOM).launch(lv.SCR_LOAD_ANIM.OVER_TOP)
+             AskYesNoActivity('MemoryFree', '启用请勿打扰?\n剩余 RAM 空间: '+str(gc.mem_free()), self.yesclick, self.noclickcb, exit_anim=lv.SCR_LOAD_ANIM.OVER_BOTTOM).launch(lv.SCR_LOAD_ANIM.OVER_TOP)
+        if gesture == lv.DIR.BOTTOM:
+            NotificationCenter().launch(lv.SCR_LOAD_ANIM.OVER_BOTTOM)
