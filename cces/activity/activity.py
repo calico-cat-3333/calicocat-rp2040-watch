@@ -5,7 +5,7 @@ from ..log import log
 # 正在显示的 activity
 # 堆栈的形式
 # 栈底元素是系统启动之后的第一个 activity 通常是表盘，他将永远不会退出
-activity_stack = []
+_activity_stack = []
 
 class Activity:
     def __init__(self):
@@ -21,10 +21,10 @@ class Activity:
         self.scr = lv.obj()
         self.setup()
 
-        if len(activity_stack) != 0:
-            activity_stack[-1].on_covered()
+        if len(_activity_stack) != 0:
+            _activity_stack[-1].on_covered()
 
-        activity_stack.append(self)
+        _activity_stack.append(self)
         if anim != None:
             lv.screen_load_anim(self.scr, anim, 200, 0, False)
         else:
@@ -44,15 +44,18 @@ class Activity:
         pass
 
     def exit(self, anim=None):
-        if len(activity_stack) == 0:
+        if len(_activity_stack) == 0:
             # 如果这是最后一个 activity 不能退出
             return
         log(str(self.__class__), 'exit')
         self.before_exit()
-        activity_stack.pop()
-        activity_stack[-1].on_cover_exit()
+        _activity_stack.pop()
+        _activity_stack[-1].on_cover_exit()
         if anim != None:
-            lv.screen_load_anim(activity_stack[-1].scr, anim, 200, 0, True)
+            lv.screen_load_anim(_activity_stack[-1].scr, anim, 200, 0, True)
         else:
-            lv.screen_load(activity_stack[-1].scr)
+            lv.screen_load(_activity_stack[-1].scr)
             self.scr.delete()
+
+def current_activity():
+    return _activity_stack[-1]
