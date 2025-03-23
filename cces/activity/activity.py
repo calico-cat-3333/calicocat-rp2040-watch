@@ -58,4 +58,13 @@ class Activity:
             self.scr.delete()
 
 def current_activity():
-    return _activity_stack[-1]
+    # get current activity, None if no any activity
+    if len(_activity_stack) != 0:
+        return _activity_stack[-1]
+    return None
+
+def refresh_current_activity():
+    # send LV_EVENT_REFRESH to current activity
+    if len(_activity_stack) == 0:
+        return
+    _activity_stack[-1].scr.evnet_send(lv.EVENT.REFRESH, None)
