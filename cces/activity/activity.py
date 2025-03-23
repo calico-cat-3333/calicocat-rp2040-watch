@@ -67,4 +67,4 @@ def refresh_current_activity():
     # send LV_EVENT_REFRESH to current activity
     if len(_activity_stack) == 0:
         return
-    _activity_stack[-1].scr.send_evnet(lv.EVENT.REFRESH, None)
+    _activity_stack[-1].scr.send_event(lv.EVENT.REFRESH, None)
