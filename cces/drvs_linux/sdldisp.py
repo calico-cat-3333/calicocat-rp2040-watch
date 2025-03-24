@@ -3,13 +3,16 @@ from . import Device_lv
 from ..log import log
 
 class SDLdisp(Device_lv):
-    def __init__(self, width, height):
+    def __init__(self, width, height, zoom=1):
         self.width = width
         self.height = height
         self.brightness = 100
+        self.zoom = zoom
 
     def after_lvgl_init(self):
-        lv.sdl_window_create(self.width, self.height)
+        self.disp = lv.sdl_window_create(self.width, self.height)
+        lv.sdl_window_set_resizeable(self.disp, False)
+        lv.sdl_window_set_zoom(self.disp, self.zoom)
         log("Running the SDL lvgl version")
 
     def on_wakeup(self):
