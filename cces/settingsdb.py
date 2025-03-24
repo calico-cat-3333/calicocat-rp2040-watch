@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 from .log import log, ERROR
 from .utils import path_exist, is_file
@@ -9,6 +10,9 @@ from . import hal
 
 _settings = {}
 SETTINGS_FILE = '/settings.json'
+if sys.platform != 'rp2':
+    SETTINGS_FILE = 'settings.json'
+
 
 def load_settings():
     # 从文件加载设置

@@ -102,7 +102,7 @@ def gb_cmd_parse():
         if t == 'weather':
             # temp,hi,lo,hum,rain,uv,code,txt,wind,wdir,loc
             # 温度，最高温，最低温，湿度，降雨率，紫外线指数，天气代码，天气文本，风速，风向，位置文本
-            # 温度单位都是开尔文，湿度、降雨率是整形百分比，紫外线指数是浮点数？
+            # 温度单位都是开尔文，湿度、降雨率是整形百分比，紫外线指数是数字
             # 风速浮点数单位 km/h 风向单位度，正南方为 0 顺时针方向
             global weather_data
             weather_data = json_cmd
