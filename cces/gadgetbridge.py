@@ -32,9 +32,8 @@ def set_time(cmd):
     cmds = cmd.split(';')
     utctime = int(cmds[0][9:-1])
     timezone = float(cmds[1][14:-1])
-    localtime = time.localtime(int(utctime + (timezone * 3600)))
-    hal.rtc.datetime((localtime[0], localtime[1], localtime[2], 0, localtime[3], localtime[4], localtime[5], 0))
-    log('set time to', localtime[:6])
+    hal.rtc.set_time_unix(int(utctime + (timezone * 3600)))
+    log('set time to', time.localtime())
     settingsdb.put('timezone', timezone)
     settingsdb.save_settings()
 
