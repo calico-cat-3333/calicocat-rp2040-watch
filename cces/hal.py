@@ -1,13 +1,12 @@
 # 硬件抽象层
 # 对上层应用提供统一的硬件访问方式。
 
-from machine import RTC
-
 from .log import log, ERROR
 
-rtc = RTC()
-# rtc for set time only
-# use rtc.datetime((y,m,d,0,h,m,s,0)) to set time
+rtc = None
+# rtc for set time only, should have:
+# set_time_unix() set time use unix timestamp
+# set_time(y,m,d,h,m,s)
 
 imu = None
 # imu should have:
