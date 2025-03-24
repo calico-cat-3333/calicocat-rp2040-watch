@@ -100,7 +100,7 @@ def _sys_load_func():
     _last_tick = ct
     _buzy_time = timecost - _free_time
     _sys_load = _buzy_time * 100 / timecost
-    log('system load in last 10 secs:', _sys_load, '% buzy:', _buzy_time, 'ms free:', _free_time, 'ms')
+    log('system load in last 10 secs:', _sys_load, '% busy:', _buzy_time, 'ms free:', _free_time, 'ms')
     _free_time = 0
     gc.collect()
 
