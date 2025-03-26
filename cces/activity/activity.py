@@ -49,6 +49,11 @@ class Activity:
             return
         log(str(self.__class__), 'exit')
         self.before_exit()
+        if self != _activity_stack[-1]:
+            # 处理被覆盖的后台 Activity 退出
+            _activity_stack.remove(self)
+            self.scr.delete()
+            return
         _activity_stack.pop()
         _activity_stack[-1].on_cover_exit()
         if anim != None:

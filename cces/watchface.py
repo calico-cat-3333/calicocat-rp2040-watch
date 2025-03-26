@@ -60,6 +60,7 @@ class WatchFaceAtivity(Activity):
     def yesclick(self):
         settingsdb.put('do_not_disturb', True)
         gadgetbridge.send_msg('info', 'DND Enable!')
+        AskYesNoActivity('haha','test').launch()
 
     def noclickcb(self):
         settingsdb.put('do_not_disturb', False)
