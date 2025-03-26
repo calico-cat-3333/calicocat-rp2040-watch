@@ -8,6 +8,7 @@ from .task_scheduler import Task
 from . import gadgetbridge
 from . import hal
 from . import settingsdb
+from .appmgr import Launcher
 
 from .notification import NotificationCenter
 
@@ -73,3 +74,5 @@ class WatchFaceAtivity(Activity):
              AskYesNoActivity('MemoryFree', '启用请勿打扰?\n剩余 RAM 空间: '+str(gc.mem_free()), self.yesclick, self.noclickcb, exit_anim=lv.SCR_LOAD_ANIM.OVER_BOTTOM).launch(lv.SCR_LOAD_ANIM.OVER_TOP)
         if gesture == lv.DIR.BOTTOM:
             NotificationCenter().launch(lv.SCR_LOAD_ANIM.OVER_BOTTOM)
+        if gesture == lv.DIR.LEFT:
+            Launcher().launch(lv.SCR_LOAD_ANIM.OVER_LEFT)

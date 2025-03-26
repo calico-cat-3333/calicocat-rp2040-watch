@@ -2,6 +2,7 @@ import lvgl as lv
 #import lv_utils
 import fs_driver
 import time
+import gc
 
 from . import hal
 from . import task_scheduler
@@ -9,6 +10,7 @@ from . import daily_scheduler
 from . import lv_eventloop
 from . import settingsdb
 from . import gadgetbridge
+from . import appmgr
 from .watchface import WatchFaceAtivity
 from .log import log
 
@@ -27,18 +29,16 @@ def load_system_service():
     settingsdb.start()
     gadgetbridge.start()
 
-def load_apps():
-    # todo: load apps
-    pass
-
 def start():
     log('start system')
     load_lvgl()
     log('lvgl loaded')
     load_system_service()
     log('system service loaded')
-    load_apps()
-    log('apps load')
+    appmgr.load_apps()
+    log('apps loaded')
+
+    gc.collect()
 
     wf = WatchFaceAtivity()
     wf.launch()
