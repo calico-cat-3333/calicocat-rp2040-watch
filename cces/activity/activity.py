@@ -1,3 +1,4 @@
+import gc
 import lvgl as lv
 
 from ..log import log
@@ -53,6 +54,7 @@ class Activity:
             # 处理被覆盖的后台 Activity 退出
             _activity_stack.remove(self)
             self.scr.delete()
+            gc.collect()
             return
         _activity_stack.pop()
         _activity_stack[-1].on_cover_exit()
@@ -61,6 +63,7 @@ class Activity:
         else:
             lv.screen_load(_activity_stack[-1].scr)
             self.scr.delete()
+        gc.collect()
 
 def current_activity():
     # get current activity, None if no any activity
