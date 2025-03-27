@@ -6,9 +6,6 @@ from . import hal
 from . import settingsdb
 
 class NotificationCenter(Activity): # 通知中心
-    def __init__(self):
-        pass
-
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
         self.scr.add_event_cb(self.refresh_event_cb, lv.EVENT.REFRESH, None)

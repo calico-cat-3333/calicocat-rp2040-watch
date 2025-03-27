@@ -100,9 +100,9 @@ def _sys_load_func():
     _last_tick = ct
     _buzy_time = timecost - _free_time
     _sys_load = _buzy_time * 100 / timecost
+    gc.collect()
     log('system load in last 10 secs:', _sys_load, '% busy:', _buzy_time, 'ms free:', _free_time, 'ms, mem_free: ', gc.mem_free(), 'B')
     _free_time = 0
-    gc.collect()
 
 def get_sys_load_info():
     # 获取系统负载信息
