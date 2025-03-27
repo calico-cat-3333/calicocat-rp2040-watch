@@ -13,7 +13,6 @@ class BLE(Device):
         self.rx_line_buf = []
         self.rx_buf = ''
 
-        self.connected = None
         self.sleeping = None
 
     def at_reset(self):
@@ -22,18 +21,12 @@ class BLE(Device):
     def at_mode(self, v=None):
         pass
 
-    def status_update(self, status):
-        if status == 'STA:connected':
-            self.connected = True
-            return
-        if status == 'STA:disconnected':
-            self.connected = False
-            return
-        if status == 'STA:wakeup':
-            self.sleeping = False
-            return
-        if status == 'STA:sleep':
-            self.sleeping = True
+    def connected(self):
+        return False
+
+    def sleep(self, mode=None):
+        if mode == None:
+            return False
 
     def uart_rx_int_cb(self, _):
         micropython.schedule(self.uart_rx_read_to_buf_ref, 0)
@@ -129,7 +122,3 @@ class BLE(Device):
         # 向蓝牙模块写入原始数据
         log('uart send raw data:', tx_raw)
         #self.uart.write(tx_raw)
-
-    def uart_rx_raw(self):
-        # 从蓝牙模块读取原始数据，绝对用不到，因为有中断
-        pass
