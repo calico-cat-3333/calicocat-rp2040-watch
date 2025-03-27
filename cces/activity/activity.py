@@ -9,7 +9,7 @@ from ..log import log
 # 栈底元素是系统启动之后的第一个 activity 通常是表盘，他将永远不会退出
 _activity_stack = []
 
-_ANIM_ENABLE = const(False)
+_ANIM_ENABLE = const(True)
 
 class Activity:
     def __init__(self):
