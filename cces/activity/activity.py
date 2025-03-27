@@ -1,5 +1,6 @@
 import gc
 import lvgl as lv
+from micropython import const
 
 from ..log import log
 
@@ -7,6 +8,8 @@ from ..log import log
 # 堆栈的形式
 # 栈底元素是系统启动之后的第一个 activity 通常是表盘，他将永远不会退出
 _activity_stack = []
+
+_ANIM_ENABLE = const(False)
 
 class Activity:
     def __init__(self):
@@ -26,7 +29,7 @@ class Activity:
             _activity_stack[-1].on_covered()
 
         _activity_stack.append(self)
-        if anim != None:
+        if _ANIM_ENABLE and anim != None:
             lv.screen_load_anim(self.scr, anim, 200, 0, False)
         else:
             lv.screen_load(self.scr)
@@ -58,7 +61,7 @@ class Activity:
             return
         _activity_stack.pop()
         _activity_stack[-1].on_cover_exit()
-        if anim != None:
+        if _ANIM_ENABLE and anim != None:
             lv.screen_load_anim(_activity_stack[-1].scr, anim, 200, 0, True)
         else:
             lv.screen_load(_activity_stack[-1].scr)
