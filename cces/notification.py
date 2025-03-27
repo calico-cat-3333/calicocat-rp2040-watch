@@ -99,6 +99,7 @@ class NotificationCenter(Activity): # 通知中心
         self.notify_title.set_text(title)
         self.notify_text.set_text(text)
         self.notify_text.set_cursor_pos(0)
+        self.notify_text.scroll_to_y(0, False)
         self.notify_number.set_text(str(self.current_notify + 1) + '/' + str(len(_notify_id_list)))
 
     def notify_next_cb(self, *args):
@@ -130,8 +131,9 @@ _notify_id_max = 0
 def _new_nid():
     # 生成一个新的通知 id
     # 特殊之处： gadgetbridge 程序产生的通知的 id 为正数，其他为负数，因为 gadgetbridge 使用自己的通知 id
+    global _notify_id_max
     _notify_id_max = _notify_id_max - 1
-    return _notify_id_list
+    return _notify_id_max
 
 def send(title, text, nid = None):
     # send a Notification
