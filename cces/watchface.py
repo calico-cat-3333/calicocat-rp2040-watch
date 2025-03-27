@@ -61,7 +61,6 @@ class WatchFaceAtivity(Activity):
     def yesclick(self):
         settingsdb.put('do_not_disturb', True)
         gadgetbridge.send_msg('info', 'DND Enable!')
-        AskYesNoActivity('haha','test').launch()
 
     def noclickcb(self):
         settingsdb.put('do_not_disturb', False)
@@ -71,7 +70,7 @@ class WatchFaceAtivity(Activity):
         lv.indev_active().wait_release()
         gesture = lv.indev_active().get_gesture_dir()
         if gesture == lv.DIR.TOP:
-             AskYesNoActivity('MemoryFree', '启用请勿打扰?\n剩余 RAM 空间: '+str(gc.mem_free()), self.yesclick, self.noclickcb, exit_anim=lv.SCR_LOAD_ANIM.OVER_BOTTOM).launch(lv.SCR_LOAD_ANIM.OVER_TOP)
+             AskYesNoActivity('DND', '启用请勿打扰?', self.yesclick, self.noclickcb, exit_anim=lv.SCR_LOAD_ANIM.OVER_BOTTOM).launch(lv.SCR_LOAD_ANIM.OVER_TOP)
         if gesture == lv.DIR.BOTTOM:
             NotificationCenter().launch(lv.SCR_LOAD_ANIM.OVER_BOTTOM)
         if gesture == lv.DIR.LEFT:
