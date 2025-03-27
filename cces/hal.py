@@ -51,7 +51,8 @@ ble = None
 # uart_rx_raw()
 # uart_tx_raw(tx_str_raw)
 # reset()
-# connected
+# connected()
+# sleep(mode)
 # sleeping
 
 

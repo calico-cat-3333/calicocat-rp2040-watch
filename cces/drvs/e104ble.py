@@ -28,7 +28,7 @@ class E104BLE(Device):
         self.rst_pin = self.pcf8574.get_pin(5)
         self.wkp_pin.value(0)
 
-        self.connected = None
+        self.at_recv_connected = None
         self.sleeping = None
 
     def at_reset(self):
@@ -37,7 +37,7 @@ class E104BLE(Device):
             self.at_mode(True)
             time.sleep_ms(300)
         self.uart_tx_raw('AT+RESET')
-        self.connected = False
+        self.at_recv_connected = None
         self.sleeping = False
         time.sleep_ms(300)
         if not f:
@@ -52,16 +52,29 @@ class E104BLE(Device):
 
     def status_update(self, status):
         if status == 'STA:connected':
-            self.connected = True
+            self.at_recv_connected = True
             return
         if status == 'STA:disconnected':
-            self.connected = False
+            self.at_recv_connected = False
             return
         if status == 'STA:wakeup':
             self.sleeping = False
             return
         if status == 'STA:sleep':
             self.sleeping = True
+
+    def connected(self):
+        return not self.link_pin.value()
+
+    def sleep(self, mode=None):
+        if mode == None:
+            return not self.wkp_pin.value()
+        self.wkp_pin.value(mode)
+
+    def disconnect(self):
+        self.disc_pin.value(0)
+        time.sleep_ms(40)
+        self.disc_pin.value(1)
 
     def uart_rx_int_cb(self, _):
         micropython.schedule(self.uart_rx_read_to_buf_ref, 0)
@@ -148,7 +161,7 @@ class E104BLE(Device):
 
     def uart_tx(self, tx_str):
         # 发送一个字符串，自动添加 '\r\n' 结尾
-        if not self.connected:
+        if not self.connected():
             return False
         log('uart send string:', tx_str, level=DEBUG)
         if not tx_str.endswith('\r\n'):
@@ -157,7 +170,7 @@ class E104BLE(Device):
 
     def uart_tx_raw(self, tx_raw):
         # 向蓝牙模块写入原始数据
-        if not self.connected:
+        if not self.connected():
             return False
         self.uart.write(tx_raw)
 
