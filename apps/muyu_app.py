@@ -4,6 +4,16 @@ from cces.appmgr import AppMeta
 from cces.activity import Activity
 from cces import hal
 
+muyu_img = lv.image_dsc_t({
+    'header': {
+        'cf': lv.COLOR_FORMAT.A1,
+        'w': 20,
+        'h': 20,
+    },
+    'data_size': 60,
+    'data': b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\xff\x80\x03\xff\xc0\x07\xff\xc0\x0f\xff\xe0\x0f\xff\xe0\x0f\xdf\xe0\x1f\x80\x00\x7f\xdf\xe0\xff\xff\xe0\xff\xff\xe0\x7f\xff\xc0\x1f\xff\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+})
+
 class MainActivity(Activity):
     def setup(self):
         self.knock_btn = lv.button(self.scr)
@@ -13,7 +23,8 @@ class MainActivity(Activity):
         self.knock_btn.set_style_bg_color(lv.color_hex(0xFFFFFF), lv.PART.MAIN | lv.STATE.DEFAULT)
         self.muyu_img = lv.image(self.knock_btn)
         self.muyu_img.align(lv.ALIGN.CENTER, 0, 0)
-        self.muyu_img.set_src('S:muyu.png')
+        self.muyu_img.set_src(muyu_img)
+        self.muyu_img.set_antialias(False)
         self.muyu_img.set_scale(1024)
 
         self.gongde_label = lv.label(self.scr)
@@ -37,4 +48,4 @@ class MainActivity(Activity):
     def exit_btn_cb(self, _):
         self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
 
-appmeta = AppMeta('电子木鱼', 'S:muyu.png', MainActivity)
+appmeta = AppMeta('电子木鱼', muyu_img, MainActivity)
