@@ -16,6 +16,7 @@ class InfoActivity(Activity):
         self.title_label.set_width(160)
         self.title_label.set_long_mode(lv.label.LONG_MODE.SCROLL_CIRCULAR)
         self.title_label.set_style_text_font(lv.font_montserrat_24, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.title_label.set_style_text_align(lv.TEXT_ALIGN.CENTER, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.title_label.set_text(self.title)
 
         self.text_label = lv.label(self.scr)
