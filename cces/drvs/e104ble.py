@@ -148,6 +148,8 @@ class E104BLE(Device):
 
     def uart_tx(self, tx_str):
         # 发送一个字符串，自动添加 '\r\n' 结尾
+        if not self.connected:
+            return False
         log('uart send string:', tx_str, level=DEBUG)
         if not tx_str.endswith('\r\n'):
             tx_str = tx_str + '\r\n'
@@ -155,6 +157,8 @@ class E104BLE(Device):
 
     def uart_tx_raw(self, tx_raw):
         # 向蓝牙模块写入原始数据
+        if not self.connected:
+            return False
         self.uart.write(tx_raw)
 
     def uart_rx_raw(self):
