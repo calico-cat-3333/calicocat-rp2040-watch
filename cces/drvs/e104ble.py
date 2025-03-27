@@ -31,7 +31,7 @@ class E104BLE(Device):
         self.at_recv_connected = None
         self.sleeping = None
 
-    def at_reset(self):
+    def reset(self):
         f = self.at_mode()
         if not f:
             self.at_mode(True)
@@ -141,10 +141,6 @@ class E104BLE(Device):
             self.rx_buf = self.rx_buf + dr
             self._rx_buf_parse()
 
-    def reset(self):
-        # 重置，硬重置优先，不能用才用软重置
-        self.at_reset()
-
     def uart_rx_buf_clear(self):
         self.rx_buf = ''
         self.rx_line_buf.clear()
@@ -173,7 +169,3 @@ class E104BLE(Device):
         if not self.connected():
             return False
         self.uart.write(tx_raw)
-
-    def uart_rx_raw(self):
-        # 从蓝牙模块读取原始数据，绝对用不到，因为有中断
-        return self.uart.read()

@@ -48,7 +48,6 @@ ble = None
 # uart_rx()
 # uart_rx_any()
 # uart_tx(tx_str)
-# uart_rx_raw()
 # uart_tx_raw(tx_str_raw)
 # reset()
 # connected()
