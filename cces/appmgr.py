@@ -41,6 +41,9 @@ class Launcher(Activity):
             btn = self.applist.add_button(app.icon, app.name)
             btn.add_event_cb(app.start, lv.EVENT.CLICKED, None)
             btn.set_style_pad_ver(15, lv.PART.MAIN | lv.STATE.DEFAULT)
+            img = btn.get_child(0)
+            img.set_width(20)
+            img.set_inner_align(lv.image.ALIGN.CENTER)
 
         self.exit_btn = lv.button(self.scr)
         self.exit_btn.align(lv.ALIGN.LEFT_MID, 0, 0)

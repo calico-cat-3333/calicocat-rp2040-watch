@@ -28,6 +28,9 @@ class MainActivity(Activity):
             btn = self.dlst.add_button(lv.SYMBOL.FILE, f[0])
             btn.add_event_cb(f[1], lv.EVENT.CLICKED, None)
             btn.set_style_pad_ver(15, lv.PART.MAIN | lv.STATE.DEFAULT)
+            img = btn.get_child(0)
+            img.set_width(20)
+            img.set_inner_align(lv.image.ALIGN.CENTER)
 
         self.exit_btn = lv.button(self.scr)
         self.exit_btn.align(lv.ALIGN.LEFT_MID, 0, 0)
