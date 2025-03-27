@@ -44,12 +44,13 @@ class Launcher(Activity):
 
         self.exit_btn = lv.button(self.scr)
         self.exit_btn.align(lv.ALIGN.LEFT_MID, 0, 0)
+        self.exit_btn.set_size(40, 240)
+        self.exit_btn.set_style_radius(0, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.exit_btn.add_event_cb(self.exit_btn_cb, lv.EVENT.CLICKED, None)
         self.exit_btn_label = lv.label(self.exit_btn)
         self.exit_btn_label.set_text(lv.SYMBOL.LEFT)
         self.exit_btn_label.align(lv.ALIGN.RIGHT_MID, 0, 0)
         self.exit_btn_label.set_style_text_font(lv.font_montserrat_24, 0)
-        self.exit_btn.set_size(40, 240)
-        self.exit_btn.add_event_cb(self.exit_btn_cb, lv.EVENT.CLICKED, None)
 
     def exit_btn_cb(self, event):
         self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
