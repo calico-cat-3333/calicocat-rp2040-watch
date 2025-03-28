@@ -33,7 +33,7 @@ class SliderActivity(Activity):
         self.value_label.set_text(str(self.number_default) + self.unit)
 
         self.slider = lv.slider(self.scr)
-        self.slider.set_size(150, 20)
+        self.slider.set_size(170, 20)
         self.slider.align(lv.ALIGN.CENTER, 0, 0)
         self.slider.set_range(self.number_min, self.number_max)
         self.slider.set_value(self.number_default, False)
