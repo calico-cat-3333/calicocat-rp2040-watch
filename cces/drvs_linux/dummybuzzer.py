@@ -3,6 +3,7 @@ import os
 
 from . import Device
 from ..task_scheduler import Task, TASKEXIT
+from ..log import log
 
 # 假装这里有蜂鸣器
 
@@ -20,6 +21,7 @@ class Buzzer(Device):
             self.volume = 100
         else:
             self.volume = volume
+        log('buzzer: set volume:', self.volume)
 
     def beep(self, freq=4000):
         # 滴一声，可选参数为频率
