@@ -62,7 +62,7 @@ class Launcher(Activity):
         lv.indev_active().wait_release()
         gesture = lv.indev_active().get_gesture_dir()
         if gesture == lv.DIR.RIGHT:
-             self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
+            self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
 
     def list_obj_click(self, event, app):
         app.start()
