@@ -3,14 +3,14 @@ import lvgl as lv
 from . import Activity
 
 class NumberInputActivity(Activity):
-    def __init__(self, title, nmin=-0xffffff, nmax=0xffffff, ok_callback=None, ndefault=None, isfloat=False, exit_anim=None):
-        # ok_callback 需要接受一个参数，该参数为输入的数字
+    def __init__(self, title, nmin=-0xffffff, nmax=0xffffff, on_ok_clicked=None, ndefault=None, isfloat=False, exit_anim=None):
+        # on_ok_clicked 需要接受一个参数，该参数为输入的数字
         self.number_min = nmin
         self.number_max = nmax
         self.isfloat = isfloat
         self.title = title
         self.number_default = ndefault
-        self.ok_callback = ok_callback
+        self.on_ok_clicked = on_ok_clicked
         self.exit_anim = exit_anim
 
     def setup(self):
@@ -68,8 +68,8 @@ class NumberInputActivity(Activity):
             return
 
         if number >= self.number_min and number <= self.number_max:
-            if self.ok_callback != None:
-                self.ok_callback(number)
+            if self.on_ok_clicked != None:
+                self.on_ok_clicked(number)
             self.exit(self.exit_anim)
         else:
             if self.number_default != None:
