@@ -2,7 +2,7 @@ import lvgl as lv
 import sys
 
 from cces.appmgr import AppMeta
-from cces.activity import Activity, InfoActivity, AskYesNoActivity, NumberInputActivity
+from cces.activity import Activity, InfoActivity, AskYesNoActivity, NumberInputActivity, SliderActivity
 from cces import hal
 from cces import notification
 from cces.log import log
@@ -17,6 +17,7 @@ class MainActivity(Activity):
         self.fl.append(('info', self.info_example))
         self.fl.append(('askyesno', self.askyesno_example))
         self.fl.append(('input number', self.input_number_example))
+        self.fl.append(('slider', self.slider_example))
 
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
@@ -75,5 +76,16 @@ class MainActivity(Activity):
         def getnumb(numb):
             log(numb)
         NumberInputActivity('title', -10, 10, getnumb).launch()
+
+    def slider_example(self, _):
+        def ok_cb(numb):
+            log('ok', numb)
+        def vc_cb(n):
+            log('value change', n)
+        def sr_cb(n):
+            log('slider released', n)
+        def no_cb(n):
+            log('no', n)
+        SliderActivity('title', 0, 100, 0, '%', ok_cb, no_cb, sr_cb, vc_cb).launch()
 
 appmeta = AppMeta('测试器', lv.SYMBOL.FILE, MainActivity)
