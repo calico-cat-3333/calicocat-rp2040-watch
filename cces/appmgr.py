@@ -39,7 +39,7 @@ class Launcher(Activity):
 
         for app in app_list:
             btn = self.applist.add_button(app.icon, app.name)
-            btn.add_event_cb(app.start, lv.EVENT.CLICKED, None)
+            btn.add_event_cb(lambda event, self=self, app=app: self.list_obj_click(event, app), lv.EVENT.CLICKED, None)
             btn.set_style_pad_ver(15, lv.PART.MAIN | lv.STATE.DEFAULT)
             img = btn.get_child(0)
             img.set_width(20)
@@ -63,6 +63,10 @@ class Launcher(Activity):
         gesture = lv.indev_active().get_gesture_dir()
         if gesture == lv.DIR.RIGHT:
              self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
+
+    def list_obj_click(self, event, app):
+        app.start()
+        self.exit()
 
 def load_apps():
     if len(app_list) != 0:
