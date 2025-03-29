@@ -24,6 +24,7 @@ class MainActivity(Activity):
         self.dlst = lv.list(self.scr)
         self.dlst.set_size(200, 220)
         self.dlst.align(lv.ALIGN.CENTER, 20, 0)
+        self.dlst.set_style_border_side(lv.BORDER_SIDE.NONE, lv.PART.MAIN | lv.STATE.DEFAULT)
 
         for f in self.fl:
             btn = self.dlst.add_button(lv.SYMBOL.FILE, f[0])

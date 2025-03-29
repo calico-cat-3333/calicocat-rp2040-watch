@@ -36,6 +36,7 @@ class Launcher(Activity):
         self.applist = lv.list(self.scr)
         self.applist.set_size(200, 220)
         self.applist.align(lv.ALIGN.CENTER, 20, 0)
+        self.applist.set_style_border_side(lv.BORDER_SIDE.NONE, lv.PART.MAIN | lv.STATE.DEFAULT)
 
         for app in app_list:
             btn = self.applist.add_button(app.icon, app.name)

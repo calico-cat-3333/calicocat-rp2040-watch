@@ -12,7 +12,7 @@ from cces import settingsdb
 class MainActivity(Activity):
     def __init__(self):
         # 设置项目名称，图标，类型（i(nput number), s(witch), None） callback, 附加参数
-        # 除 None 类型外，附加参数第一个一定是设置项目键，第二个是默认值，剩余内容可自定义, 此项会在 callback 中作为第二个参数，此项目的目的是复用代码
+        # 除 None 类型外，附加参数第一个一定是设置项目键，第二个是默认值，剩余内容可自定义, 此项会在 callback 中作为第二个参数，此项的目的是复用代码
         self.objlist = ['设置',
                         ('请勿打扰', lv.SYMBOL.BELL, 's', self.set_bool_obj, ('do_not_disturb', False, None)),
                         ('亮度(%)', lv.SYMBOL.IMAGE, 'i', self.set_slider_obj, ('display_brightness', 100, hal.dispdev.set_brightness, 'Brightness', '%', 1, 100, None, hal.dispdev.set_brightness)),
@@ -30,6 +30,7 @@ class MainActivity(Activity):
         self.settings_list = lv.list(self.scr)
         self.settings_list.set_size(200, 220)
         self.settings_list.align(lv.ALIGN.CENTER, 20, 0)
+        self.settings_list.set_style_border_side(lv.BORDER_SIDE.NONE, lv.PART.MAIN | lv.STATE.DEFAULT)
 
         for obj in self.objlist:
             if isinstance(obj, str):
@@ -81,7 +82,7 @@ class MainActivity(Activity):
         lv.indev_active().wait_release()
         gesture = lv.indev_active().get_gesture_dir()
         if gesture == lv.DIR.RIGHT:
-             self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
+            self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
 
     def set_bool_obj(self, event, attr):
         # attr[2] 是一个 callback 接受一个 bool 作为参数，数字是 switch 的现在状态，该项可以为 None
