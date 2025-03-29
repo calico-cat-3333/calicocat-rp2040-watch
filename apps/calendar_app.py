@@ -15,7 +15,8 @@ class MainActivity(Activity):
         self.cal = lv.calendar(self.scr)
         self.cal.align(lv.ALIGN.CENTER, 0, 5)
         self.cal.set_size(210, 200)
-        self.cal.set_style_text_font(lv.font_chinese_calendar,0)
+        self.cal.set_style_text_font(lv.font_chinese_calendar, 0)
+        self.cal.set_style_border_side(lv.BORDER_SIDE.NONE, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.cal.set_chinese_mode(True)
         self.update_display(True)
 
