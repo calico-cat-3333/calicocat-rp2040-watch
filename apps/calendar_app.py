@@ -17,7 +17,7 @@ class MainActivity(Activity):
         self.cal.set_size(210, 200)
         self.cal.set_style_text_font(lv.font_chinese_calendar,0)
         self.cal.set_chinese_mode(True)
-        self.update_display()
+        self.update_display(True)
 
     def gesture_event_cb(self, event):
         lv.indev_active().wait_release()
