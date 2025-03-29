@@ -1,14 +1,14 @@
 import time
 import lvgl as lv
 
-from .activity import Activity, current_activity, refresh_current_activity
+from .activity import Activity, REFRESHON, refresh_activity_on
 from . import hal
 from . import settingsdb
 
 class NotificationCenter(Activity): # 通知中心
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
-        self.scr.add_event_cb(self.refresh_event_cb, lv.EVENT.REFRESH, None)
+        self.refresh_on = self.refresh_on | REFRESHON.NOTIFICATION
         self.scr.remove_flag(lv.obj.FLAG.SCROLLABLE)
 
         self.notify_remove = lv.button(self.scr)
@@ -144,13 +144,12 @@ def send(title, text, nid = None):
     _notify_storage[nid] = notify
     if not settingsdb.get('do_not_disturb', False):
         hal.buzzer.beep()
-    if isinstance(current_activity(), NotificationCenter):
-        refresh_current_activity()
+    refresh_activity_on(REFRESHON.NOTIFICATION)
     return nid
 
 def remove(nid, need_refresh=True):
     if nid in _notify_id_list:
         _notify_id_list.remove(nid)
         _notify_storage.pop(nid)
-        if need_refresh and isinstance(current_activity(), NotificationCenter):
-            refresh_current_activity()
+        if need_refresh:
+            refresh_activity_on(REFRESHON.NOTIFICATION)

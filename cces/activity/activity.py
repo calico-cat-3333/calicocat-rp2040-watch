@@ -11,6 +11,14 @@ _activity_stack = []
 
 _ANIM_ENABLE = const(True)
 
+class REFRESHON:
+    NONE = 0
+    NOTIFICATION = 1
+    ZERO_CLOCK = 1 << 1
+    GB_MUSIC_UPDATE = 1 << 2
+    GB_WEATHER_UPDATE = 1 << 3
+
+
 class Activity:
     def __init__(self):
         # 构造函数，在这里可以传递部分变量
@@ -23,7 +31,11 @@ class Activity:
     def launch(self, anim=None):
         log(str(self.__class__), 'launch')
         self.scr = lv.obj()
+        self.refresh_on = REFRESHON.NONE
         self.setup()
+
+        if self.refresh_on != REFRESHON.NONE:
+            self.scr.add_event_cb(self.refresh_event_cb, lv.EVENT.REFRESH, None)
 
         if len(_activity_stack) != 0:
             _activity_stack[-1].on_covered()
@@ -45,6 +57,10 @@ class Activity:
 
     def before_exit(self):
         # 退出前执行
+        pass
+
+    def refresh_event_cb(self, event):
+        # 刷新回调
         pass
 
     def exit(self, anim=None):
@@ -79,3 +95,9 @@ def refresh_current_activity():
     if len(_activity_stack) == 0:
         return
     _activity_stack[-1].scr.send_event(lv.EVENT.REFRESH, None)
+
+def refresh_activity_on(cond):
+    if len(_activity_stack) == 0:
+        return
+    if _activity_stack[-1].refresh_on & cond == cond:
+        _activity_stack[-1].scr.send_event(lv.EVENT.REFRESH, None)
