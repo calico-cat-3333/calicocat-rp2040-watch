@@ -99,7 +99,7 @@ class E104BLE(Device):
         if not self.rx_buf.endswith('\n'):
             return
 
-        if self.uart_rx_any() > 10:
+        if self.uart_rx_any() > 30:
             log('too may rx message in rx_line_buf, something must go wrong', level=ERROR)
             self.rx_line_buf.clear()
 
