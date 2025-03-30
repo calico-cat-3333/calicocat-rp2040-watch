@@ -14,6 +14,7 @@ class E104BLE(Device):
     def __init__(self, rx, tx, pcf8574_i2c):
         self.rx_pin = rx
         self.tx_pin = tx
+        self.lrt = 0
         self.uart = UART(0, rx=rx, tx=tx, baudrate=115200)
         self.uart_rx_read_to_buf_ref = self.uart_rx_read_to_buf
         self.uart.irq(handler=self.uart_rx_int_cb, trigger=UART.IRQ_RXIDLE)
@@ -124,6 +125,10 @@ class E104BLE(Device):
         self.rx_buf = ''
 
     def uart_rx_read_to_buf(self, _):
+        ct = time.time()
+        if ct - self.lrt > 1:
+            self.rx_buf = ''
+        self.lrt = ct
         while self.uart.any():
             try:
                 r = self.uart.readline()
