@@ -25,7 +25,7 @@ class AppMeta:
         app_list.append(self)
 
     def start(self, *args):
-        self.main_activity().launch()
+        self.main_activity().launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
 
 class Launcher(Activity):
     def __init__(self):
@@ -40,7 +40,7 @@ class Launcher(Activity):
 
         for app in app_list:
             btn = self.applist.add_button(app.icon, app.name)
-            btn.add_event_cb(lambda event, self=self, app=app: self.list_obj_click(event, app), lv.EVENT.CLICKED, None)
+            btn.add_event_cb(lambda event, app=app: self.list_obj_click(event, app), lv.EVENT.CLICKED, None)
             btn.set_style_pad_ver(15, lv.PART.MAIN | lv.STATE.DEFAULT)
             img = btn.get_child(0)
             img.set_width(20)

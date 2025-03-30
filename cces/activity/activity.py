@@ -15,8 +15,8 @@ class REFRESHON:
     NONE = 0
     NOTIFICATION = 1
     ZERO_CLOCK = 1 << 1
-    GB_MUSIC_UPDATE = 1 << 2
-    GB_WEATHER_UPDATE = 1 << 3
+    GB_MUSIC = 1 << 2
+    GB_WEATHER = 1 << 3
 
 
 class Activity:
@@ -72,7 +72,9 @@ class Activity:
         if self != _activity_stack[-1]:
             # 处理被覆盖的后台 Activity 退出
             _activity_stack.remove(self)
-            self.scr.delete()
+            # 延迟 1s 因为这个被覆盖退出主要用在带动画加载新 Activity 后旧 Activity 立刻退出
+            # 所以这里延迟删除，防止动画没播完导致非法访问内存
+            self.scr.delete_delayed(1000)
             gc.collect()
             return
         _activity_stack.pop()
