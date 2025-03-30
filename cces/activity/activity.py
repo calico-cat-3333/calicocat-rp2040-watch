@@ -14,9 +14,10 @@ _ANIM_ENABLE = const(True)
 class REFRESHON:
     NONE = 0
     NOTIFICATION = 1
-    ZERO_CLOCK = 1 << 1
-    GB_MUSIC = 1 << 2
-    GB_WEATHER = 1 << 3
+    BLE_CONNECTION = 1 << 1
+    ZERO_CLOCK = 1 << 2
+    GB_MUSIC = 1 << 3
+    GB_WEATHER = 1 << 4
 
 
 class Activity:

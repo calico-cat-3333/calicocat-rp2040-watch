@@ -3,3 +3,4 @@ from .askyesno import AskYesNoActivity
 from .info import InfoActivity
 from .numberinput import NumberInputActivity
 from .slider import SliderActivity
+from . import styles
