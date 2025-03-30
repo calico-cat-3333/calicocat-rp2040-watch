@@ -76,7 +76,7 @@ class MainActivity(Activity):
     def input_number_example(self, _):
         def getnumb(numb):
             log(numb)
-        NumberInputActivity('title', -10, 10, getnumb).launch()
+        NumberInputActivity('title', -10, 10, getnumb, 5).launch()
 
     def slider_example(self, _):
         def ok_cb(numb):

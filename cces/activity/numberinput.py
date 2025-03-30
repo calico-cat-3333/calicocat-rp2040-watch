@@ -58,6 +58,7 @@ class NumberInputActivity(Activity):
         self.number_area.align(lv.ALIGN.TOP_MID, 0, 45)
         self.number_area.add_event_cb(self.kb_ok_cb, lv.EVENT.READY, None)
         self.number_area.add_event_cb(self.kb_cancel_cb, lv.EVENT.CANCEL, None)
+        self.number_area.add_state(lv.STATE.FOCUSED)
 
         self.keyboard.set_textarea(self.number_area)
 
