@@ -39,17 +39,17 @@ class NotificationCenter(Activity): # 通知中心
         self.notify_title.align(lv.ALIGN.BOTTOM_MID, 0, 0)
         self.notify_title.set_style_text_align(lv.TEXT_ALIGN.CENTER, lv.PART.MAIN | lv.STATE.DEFAULT)
 
-        self.notify_priv = lv.button(self.scr)
-        self.notify_priv.set_size(240, 50)
-        self.notify_priv.align(lv.ALIGN.BOTTOM_MID, 0, 0)
-        self.notify_priv.set_style_radius(0, lv.PART.MAIN | lv.STATE.DEFAULT)
-        self.notify_priv.set_style_bg_color(lv.color_hex(0xFFFFFF), lv.PART.MAIN | lv.STATE.DEFAULT)
-        self.notify_priv.set_style_shadow_width(0, lv.PART.MAIN | lv.STATE.DEFAULT)
-        self.notify_priv.set_style_shadow_spread(0, lv.PART.MAIN | lv.STATE.DEFAULT)
-        self.notify_priv.set_style_text_color(lv.color_hex(0x000000), lv.PART.MAIN | lv.STATE.DEFAULT)
-        self.notify_priv.add_event_cb(self.notify_priv_cb, lv.EVENT.CLICKED, None)
+        self.notify_prev = lv.button(self.scr)
+        self.notify_prev.set_size(240, 50)
+        self.notify_prev.align(lv.ALIGN.BOTTOM_MID, 0, 0)
+        self.notify_prev.set_style_radius(0, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_prev.set_style_bg_color(lv.color_hex(0xFFFFFF), lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_prev.set_style_shadow_width(0, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_prev.set_style_shadow_spread(0, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_prev.set_style_text_color(lv.color_hex(0x000000), lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_prev.add_event_cb(self.notify_prev_cb, lv.EVENT.CLICKED, None)
 
-        self.notify_number = lv.label(self.notify_priv)
+        self.notify_number = lv.label(self.notify_prev)
         self.notify_number.set_text("--/--")
         self.notify_number.align(lv.ALIGN.TOP_MID, 0, 0)
 
@@ -70,7 +70,7 @@ class NotificationCenter(Activity): # 通知中心
         lv.indev_active().wait_release()
         gesture = lv.indev_active().get_gesture_dir()
         if gesture == lv.DIR.TOP:
-            self.notify_priv_cb()
+            self.notify_prev_cb()
         if gesture == lv.DIR.BOTTOM:
             self.notify_next_cb()
         if gesture == lv.DIR.LEFT:
@@ -104,7 +104,7 @@ class NotificationCenter(Activity): # 通知中心
             self.current_notify = self.current_notify - 1
             self.update_display()
 
-    def notify_priv_cb(self, *args):
+    def notify_prev_cb(self, *args):
         if self.current_notify < len(_notify_id_list) - 1:
             self.current_notify = self.current_notify + 1
             self.update_display()
