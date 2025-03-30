@@ -6,6 +6,7 @@ from . import hal
 from .task_scheduler import Task, TASKEXIT
 from .log import log, ERROR
 from . import notification
+from .activity import refresh_activity_on, REFRESHON
 
 '''
 实现 Gadgetbridge/Bangle.js 通信协议
@@ -115,6 +116,7 @@ def gb_cmd_parse():
             global music_info
             music_info = json_cmd
             music_info['time'] = time.time()
+            refresh_activity_on(REFRESHON.GB_MUSIC)
             return
 
         if t == 'musicstate':
@@ -123,6 +125,7 @@ def gb_cmd_parse():
             global music_state
             music_state = json_cmd
             music_state['time'] = time.time()
+            refresh_activity_on(REFRESHON.GB_MUSIC)
             return
 
     # 不符合指令格式
@@ -134,6 +137,12 @@ def send_msg(msg_type, text):
         log('invalid msg type:', msg_type, level=ERROR)
         return
     hal.ble.uart_tx(json.dumps({'t':msg_type, 'msg':text}))
+
+def music_ctrl(cmd):
+    if cmd not in ['play', 'pause', 'next', 'previous', 'volumeup', 'volumedown']:
+        log('invalid music ctrl cmd:', cmd, level=ERROR)
+        return
+    hal.ble.uart_tx(json.dumps({'t':'music', 'n':cmd}))
 
 def send_status():
     if not hal.ble.connected():
