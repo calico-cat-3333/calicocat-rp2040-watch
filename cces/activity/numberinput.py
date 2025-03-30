@@ -31,26 +31,26 @@ class NumberInputActivity(Activity):
 
         self.keyboard = lv.keyboard(self.scr)
         self.custom_map = [
-            "1", "2", "3", lv.SYMBOL.BACKSPACE, "\n",
-            "4", "5", "6", lv.SYMBOL.OK, "\n",
-            "7", "8", "9", lv.SYMBOL.CLOSE, "\n",
-            "+/-", "0", ".", ""
+            '1', '2', '3', '0', lv.SYMBOL.BACKSPACE, '\n',
+            '4', '5', '6', '.', '+/-', '\n',
+            '7', '8', '9', lv.SYMBOL.LEFT, lv.SYMBOL.RIGHT, '\n',
+            ' ', lv.SYMBOL.OK, lv.SYMBOL.CLOSE, ' ', ''
         ]
 
         self.ctrl_map = [
-            1, 1, 1, 1,
-            1, 1, 1, 1 | lv.buttonmatrix.CTRL.NO_REPEAT,
-            1, 1, 1, 1 | lv.buttonmatrix.CTRL.NO_REPEAT,
-            1, 2, 1,
+            2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2,
+            1 | lv.buttonmatrix.CTRL.HIDDEN, 4 | lv.buttonmatrix.CTRL.NO_REPEAT, 4 | lv.buttonmatrix.CTRL.NO_REPEAT, 1 | lv.buttonmatrix.CTRL.HIDDEN,
         ]
 
         self.keyboard.set_map(self.keyboard.MODE.USER_1, self.custom_map, self.ctrl_map)
         self.keyboard.set_mode(self.keyboard.MODE.USER_1)
-        self.keyboard.set_size(160, 130)
-        self.keyboard.align(lv.ALIGN.CENTER, 0, 30)
+        self.keyboard.set_size(200, 140)
+        self.keyboard.align(lv.ALIGN.CENTER, 0, 35)
 
         self.number_area = lv.textarea(self.scr)
-        self.number_area.set_width(170)
+        self.number_area.set_width(190)
         self.number_area.set_height(lv.SIZE_CONTENT)
         self.number_area.set_one_line(True)
         if self.number_default != None:
