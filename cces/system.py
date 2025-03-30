@@ -13,6 +13,7 @@ from . import gadgetbridge
 from . import appmgr
 from .watchface import WatchFaceAtivity
 from .log import log
+from .activity import styles
 
 def load_lvgl():
     global lv_event_loop
@@ -28,6 +29,7 @@ def load_system_service():
     daily_scheduler.start()
     settingsdb.start()
     gadgetbridge.start()
+    styles.start()
 
 def start():
     log('start system')
