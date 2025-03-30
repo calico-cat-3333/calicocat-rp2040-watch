@@ -3,20 +3,35 @@ import lvgl as lv
 from . import Activity
 
 class SliderActivity(Activity):
-    def __init__(self, title, nmin=0, nmax=100, ndefault=0, unit='', on_yes_clicked=None, on_no_clicked=None, on_slider_release=None, on_value_change=None, yes_label_text='Yes', no_label_text='No', exit_anim=None):
+    def __init__(self,
+                 title,
+                 number_min = 0,
+                 number_max = 100,
+                 number_default = 0,
+                 unit = '',
+                 on_yes_clicked = None,
+                 on_no_clicked = None,
+                 on_slider_release = None,
+                 on_value_change = None,
+                 step = 1,
+                 yes_label_text = 'Yes',
+                 no_label_text = 'No',
+                 exit_anim = None
+                 ):
         # on_yes_clicked, on_slider_release, on_value_change 需要接受一个参数，该参数为滑块的当前值
         # on_no_clicked 需要接受一个参数，该参数为传入的默认值
         self.title = title
+        self.number_min = number_min
+        self.number_max = number_max
+        self.number_default = number_default
         self.unit = unit
-        self.number_min = nmin
-        self.number_max = nmax
-        self.number_default = ndefault
         self.on_yes_clicked = on_yes_clicked
         self.on_no_clicked = on_no_clicked
         self.on_slider_release = on_slider_release
         self.on_value_change = on_value_change
         self.yes_label_text = yes_label_text
         self.no_label_text = no_label_text
+        self.step = step
         self.exit_anim = exit_anim
 
     def setup(self):
@@ -63,6 +78,9 @@ class SliderActivity(Activity):
 
     def slider_value_change_cb(self, event):
         nval = self.slider.get_value()
+        if self.step != 1:
+            nval = round(nval / self.step) * self.step
+            self.slider.set_value(nval, False)
         self.value_label.set_text(str(nval) + self.unit)
         if self.on_value_change != None:
             self.on_value_change(nval)

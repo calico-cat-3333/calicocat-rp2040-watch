@@ -15,8 +15,8 @@ class MainActivity(Activity):
         # 除 None 类型外，附加参数第一个一定是设置项目键，第二个是默认值，剩余内容可自定义, 此项会在 callback 中作为第二个参数，此项的目的是复用代码
         self.objlist = ['设置',
                         ('请勿打扰', lv.SYMBOL.BELL, 's', self.set_bool_obj, ('do_not_disturb', False, None)),
-                        ('亮度(%)', lv.SYMBOL.IMAGE, 'i', self.set_slider_obj, ('display_brightness', 100, hal.dispdev.set_brightness, 'Brightness', '%', 1, 100, None, hal.dispdev.set_brightness)),
-                        ('音量(%)', lv.SYMBOL.VOLUME_MAX, 'i', self.set_slider_obj, ('sound_volume', 100, hal.buzzer.set_volume, 'Volume', '%', 0, 100, lambda _: hal.buzzer.beep(), hal.buzzer.set_volume)),
+                        ('亮度(%)', lv.SYMBOL.IMAGE, 'i', self.set_slider_obj, ('display_brightness', 100, hal.dispdev.set_brightness, 'Brightness', '%', 1, 100, None, hal.dispdev.set_brightness, 5)),
+                        ('音量(%)', lv.SYMBOL.VOLUME_MAX, 'i', self.set_slider_obj, ('sound_volume', 100, hal.buzzer.set_volume, 'Volume', '%', 0, 100, lambda _: hal.buzzer.beep(), hal.buzzer.set_volume, 5)),
                         '关于我',
                         ('身高(cm)', lv.SYMBOL.HOME, 'i', self.set_input_number_obj, ('user_height', 0, None, '身高(cm):', 1, 300)),
                         ('体重(kg)', lv.SYMBOL.DOWNLOAD, 'i', self.set_input_number_obj, ('user_weight', 0, None, '体重(kg):', 1, 300)),
@@ -99,13 +99,25 @@ class MainActivity(Activity):
         # attr[5-6] 是 SliderActivity 的最小值和最大值
         # attr[7] 是 SliderActivity 的 on_slider_release callback，该项可以为 None
         # attr[8] 是 SliderActivity 的 on_value_change callback，该项可以为 None
+        # attr[9] 是步进值
         current_label = event.get_target_obj().get_child(2)
         def set_value(value):
             settingsdb.put(attr[0], value)
             current_label.set_text(str(value))
             if attr[2] != None:
                 attr[2](value)
-        SliderActivity(attr[3], attr[5], attr[6], settingsdb.get(attr[0], attr[1]), attr[4], set_value, set_value, attr[7], attr[8], exit_anim=lv.SCR_LOAD_ANIM.OVER_RIGHT).launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
+        SliderActivity(title = attr[3],
+                       number_min = attr[5],
+                       number_max = attr[6],
+                       number_default = settingsdb.get(attr[0], attr[1]),
+                       unit = attr[4],
+                       on_yes_clicked = set_value,
+                       on_no_clicked = set_value,
+                       on_slider_release = attr[7],
+                       on_value_change = attr[8],
+                       step = attr[9],
+                       exit_anim = lv.SCR_LOAD_ANIM.OVER_RIGHT
+                       ).launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
 
     def set_input_number_obj(self, event, attr):
         # attr[2] 是一个 callback 接受一个数字作为参数，数字是输入的值，该项可以为 None
@@ -117,7 +129,12 @@ class MainActivity(Activity):
             current_label.set_text(str(value))
             if attr[2] != None:
                 attr[2](value)
-        NumberInputActivity(attr[3], attr[4], attr[5], set_value, exit_anim=lv.SCR_LOAD_ANIM.OVER_RIGHT).launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
+        NumberInputActivity(title = attr[3],
+                            number_min = attr[4],
+                            number_max = attr[5],
+                            on_ok_clicked = set_value,
+                            exit_anim = lv.SCR_LOAD_ANIM.OVER_RIGHT
+                            ).launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
 
     def machine_reset(self, event, attr):
         def do_reset():
@@ -125,6 +142,10 @@ class MainActivity(Activity):
                 machine.reset()
             except:
                 machine.soft_reset()
-        AskYesNoActivity('Reset', '重启设备', do_reset, exit_anim=lv.SCR_LOAD_ANIM.OVER_RIGHT).launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
+        AskYesNoActivity(title = 'Reset',
+                         text = '重启设备',
+                         on_yes_clicked = do_reset,
+                         exit_anim = lv.SCR_LOAD_ANIM.OVER_RIGHT
+                         ).launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
 
 appmeta = AppMeta('设置', lv.SYMBOL.SETTINGS, MainActivity)

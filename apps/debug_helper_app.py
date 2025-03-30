@@ -87,6 +87,6 @@ class MainActivity(Activity):
             log('slider released', n)
         def no_cb(n):
             log('no', n)
-        SliderActivity('title', 0, 100, 0, '%', ok_cb, no_cb, sr_cb, vc_cb).launch()
+        SliderActivity('title', 0, 100, 0, '%', ok_cb, no_cb, sr_cb, vc_cb, 5).launch()
 
 appmeta = AppMeta('测试器', lv.SYMBOL.FILE, MainActivity)

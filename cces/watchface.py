@@ -71,7 +71,14 @@ class WatchFaceAtivity(Activity):
         gesture = lv.indev_active().get_gesture_dir()
         if gesture == lv.DIR.TOP:
             state = '勿扰已启用\n' if settingsdb.get('do_not_disturb', False) else '勿扰已禁用\n'
-            AskYesNoActivity('DND', state + '启用请勿打扰?', self.yesclick, self.noclickcb, 'ON', 'OFF',  exit_anim=lv.SCR_LOAD_ANIM.OVER_BOTTOM).launch(lv.SCR_LOAD_ANIM.OVER_TOP)
+            AskYesNoActivity(title = 'DND',
+                             text = state + '启用请勿打扰?',
+                             on_yes_clicked = self.yesclick,
+                             on_no_clicked = self.noclickcb,
+                             yes_label_text = 'ON',
+                             no_label_text = 'OFF',
+                             exit_anim = lv.SCR_LOAD_ANIM.OVER_BOTTOM
+                             ).launch(lv.SCR_LOAD_ANIM.OVER_TOP)
         if gesture == lv.DIR.BOTTOM:
             NotificationCenter().launch(lv.SCR_LOAD_ANIM.OVER_BOTTOM)
         if gesture == lv.DIR.LEFT:

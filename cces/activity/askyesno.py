@@ -3,7 +3,15 @@ import lvgl as lv
 from . import Activity
 
 class AskYesNoActivity(Activity):
-    def __init__(self, title, text, on_yes_clicked=None, on_no_clicked=None, yes_label_text='Yes', no_label_text='No', exit_anim=None):
+    def __init__(self,
+                 title,
+                 text,
+                 on_yes_clicked = None,
+                 on_no_clicked = None,
+                 yes_label_text = 'Yes',
+                 no_label_text = 'No',
+                 exit_anim = None
+                 ):
         self.title = title
         self.text = text
         self.on_yes_clicked = on_yes_clicked

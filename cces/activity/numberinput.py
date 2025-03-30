@@ -3,14 +3,22 @@ import lvgl as lv
 from . import Activity
 
 class NumberInputActivity(Activity):
-    def __init__(self, title, nmin=-0xffffff, nmax=0xffffff, on_ok_clicked=None, ndefault=None, isfloat=False, exit_anim=None):
+    def __init__(self,
+                 title,
+                 number_min = -0xffffff,
+                 number_max = 0xffffff,
+                 on_ok_clicked = None,
+                 ndefault = None,
+                 isfloat = False,
+                 exit_anim = None
+                 ):
         # on_ok_clicked 需要接受一个参数，该参数为输入的数字
-        self.number_min = nmin
-        self.number_max = nmax
-        self.isfloat = isfloat
         self.title = title
-        self.number_default = ndefault
+        self.number_min = number_min
+        self.number_max = number_max
         self.on_ok_clicked = on_ok_clicked
+        self.number_default = ndefault
+        self.isfloat = isfloat
         self.exit_anim = exit_anim
 
     def setup(self):
