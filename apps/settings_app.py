@@ -22,7 +22,8 @@ class MainActivity(Activity):
                         ('体重(kg)', lv.SYMBOL.DOWNLOAD, 'i', self.set_input_number_obj, ('user_weight', 0, None, '体重(kg):', 1, 300)),
                         ('步长(cm)', lv.SYMBOL.PAUSE, 'i', self.set_input_number_obj, ('user_step_length', 50, None, '步长(cm):', 1, 200)),
                         '高级',
-                        ('重置', lv.SYMBOL.REFRESH, None, self.machine_reset, None),
+                        ('重启', lv.SYMBOL.POWER, None, self.machine_reset, None),
+                        ('重置', lv.SYMBOL.REFRESH, None, self.machine_restore, None),
                         ]
 
     def setup(self):
@@ -145,6 +146,20 @@ class MainActivity(Activity):
         AskYesNoActivity(title = 'Reset',
                          text = '重启设备',
                          on_yes_clicked = do_reset,
+                         exit_anim = lv.SCR_LOAD_ANIM.OVER_RIGHT
+                         ).launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
+
+    def machine_restore(self, event, attr):
+        def do_restore():
+            settingsdb._settings.clear()
+            settingsdb.save_settings()
+            try:
+                machine.reset()
+            except:
+                machine.soft_reset()
+        AskYesNoActivity(title = 'Restore',
+                         text = '恢复出厂设置',
+                         on_yes_clicked = do_restore,
                          exit_anim = lv.SCR_LOAD_ANIM.OVER_RIGHT
                          ).launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
 
