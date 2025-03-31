@@ -2,7 +2,7 @@ import lvgl as lv
 import time
 import gc
 
-from .activity import Activity
+from .activity import Activity, REFRESHON
 from .activity import AskYesNoActivity
 from .task_scheduler import Task
 from . import gadgetbridge
@@ -19,6 +19,7 @@ class WatchFaceAtivity(Activity):
 
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
+        self.refresh_on = REFRESHON.BLE_CONNECTION
         self.date_label = lv.label(self.scr)
         self.date_label.align(lv.ALIGN.CENTER, 0, -60)
         self.date_label.set_style_text_font(lv.font_montserrat_16, lv.PART.MAIN | lv.STATE.DEFAULT)
@@ -38,6 +39,12 @@ class WatchFaceAtivity(Activity):
         self.step_label.align(lv.ALIGN.CENTER, -50, 60)
         self.step_label.set_style_text_font(lv.font_montserrat_16, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.step_label.set_text('steps:--')
+
+        self.ble_label = lv.label(self.scr)
+        self.ble_label.align(lv.ALIGN.CENTER, 85, -60)
+        self.ble_label.set_text(lv.SYMBOL.BLUETOOTH)
+        if not hal.ble.connected():
+            self.ble_label.set_style_text_color(lv.color_hex(0xBBBBBB), lv.PART.MAIN | lv.STATE.DEFAULT)
 
         self.update_display_task.start()
 
@@ -65,6 +72,12 @@ class WatchFaceAtivity(Activity):
     def noclickcb(self):
         settingsdb.put('do_not_disturb', False)
         hal.buzzer.beep()
+
+    def refresh_event_cb(self, event):
+        if hal.ble.connected():
+            self.ble_label.set_style_text_color(lv.color_hex(0x000000), lv.PART.MAIN | lv.STATE.DEFAULT)
+        else:
+            self.ble_label.set_style_text_color(lv.color_hex(0xBBBBBB), lv.PART.MAIN | lv.STATE.DEFAULT)
 
     def gesture_event_cb(self, event):
         lv.indev_active().wait_release()
