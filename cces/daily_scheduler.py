@@ -41,6 +41,14 @@ class DailyTask:
         self.enabled = False
         daily_tasks.remove(self.task)
 
+    def set_starttime(self, starttime):
+        r = self.enabled
+        if r:
+            self.stop()
+        self.starttime = starttime
+        if r:
+            self.start()
+
     def remove(self):
         log('remove dailytask', self.func.__name__)
         self.stop()
