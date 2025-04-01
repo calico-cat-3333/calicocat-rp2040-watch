@@ -14,18 +14,24 @@ app_list = []
 
 # 如果一个 .py 文件或文件夹是一个 app，则必须包含类似 appmeta = AppMeta('appname', lv.SYMBOL.WIFI, MainActivity) 的内容并保证在 import 此文件时该语句可以执行，.py 文件或文件夹必须以 _app 为结尾 如 muyu_app.py musicctrl_app
 class AppMeta:
-    def __init__(self, name, icon, main_activity):
+    def __init__(self, name, icon, main_activity, on_system_start_cb=None):
         # name：应用名称字符串
         # icon：应用图标，可以是 lv.SYMOBL.xxx 或者 lv.img_dsc_t (理论上说，任何 lv.image.set_scr() 函数可以接受的参数都可以) 大小暂定 20x20 px
         # main_activity：应用主页 Acitvit 类，注意是类，不是实例
+        # on_system_start_cb：函数回调，在系统启动时执行，可以用于初始化全局任务等等
         self.name = name
         self.icon = icon
         self.main_activity = main_activity
+        self.on_system_start_cb = on_system_start_cb
         log('app', self.name, 'load.')
         app_list.append(self)
 
     def start(self, *args):
         self.main_activity().launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
+
+    def on_system_start(self):
+        if self.on_system_start_cb != None:
+            self.on_system_start_cb()
 
 class Launcher(Activity):
     def __init__(self):
@@ -92,3 +98,6 @@ def load_apps():
         except Exception as e:
             log('faild in loading', appname, e, level=ERROR, exc=e)
             continue
+
+    for app in app_list:
+        app.on_system_start()
