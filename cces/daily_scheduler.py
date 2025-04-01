@@ -17,16 +17,15 @@ daily_tasks_list = []
 daily_scheduler_task = None
 
 class DailyTask:
-    def __init__(self, func, starttime, weekdays=0b1111111, tag=None, enabled=True, oneshot=False):
-        # weekdays : only on monday: 0b0000001
+    def __init__(self, func, starttime, weekdays=0b1111111, tag=None, enabled=True):
+        # weekdays : example only on monday: 0b0000001, if zero set oneshot
         # tag: string, default None
         # func 最好是全局的函数，不要是类函数
         self.func = func
         self.task = _Task(self.run)
         self.starttime = starttime # (hour, min)
-        self.weekdays = weekdays # run only in these weekdays
+        self.weekdays = weekdays
         self.enabled = enabled # all daily task enable by default
-        self.oneshot = oneshot
         self.tag = tag
         daily_tasks_list.append(self)
         self.start()
@@ -51,9 +50,9 @@ class DailyTask:
         log('dailytask', self.func.__name__, 'run start')
         wmask = 1 << time.localtime()[6]
         self.targettime = self.targettime + (24 * 60 * 60)
-        if self.weekdays & wmask == wmask:
+        if self.weekdays == 0 or self.weekdays & wmask == wmask:
             self.func()
-        if self.oneshot:
+        if self.weekdays == 0:
             self.enabled = False
             return
         daily_tasks.push(self.task, self.targettime)
@@ -76,7 +75,7 @@ def list_by_tag(tag=''):
 def get_list():
     return daily_tasks_list
 
-def sys_dailytask_zero():
+def sys_dailytask_zeroclock():
     hal.imu.clear_step()
     refresh_activity_on(REFRESHON.ZERO_CLOCK)
 
@@ -85,5 +84,5 @@ def start():
     daily_scheduler_task = Task(check_loop, 10000)
     daily_scheduler_task.start()
 
-    global sys_dailytask_zerooc
-    sys_dailytask_zerooc = DailyTask(sys_dailytask_zero, (0,0), tag='sys')
+    global dailytask_zeroclock
+    sys_dailytask_zerooc = DailyTask(sys_dailytask_zeroclock, (0,0), tag='sys')
