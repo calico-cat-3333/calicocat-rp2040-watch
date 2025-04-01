@@ -6,6 +6,9 @@ from _asyncio import TaskQueue
 from _asyncio import Task as _Task
 from .log import log
 
+from . import hal
+from .activity import refresh_activity_on, REFRESHON
+
 # 每日定时任务
 # 位于后台的系统服务之一，同时提供部分计划任务相关的 API
 
@@ -29,18 +32,18 @@ class DailyTask:
         self.start()
 
     def start(self):
-        time = time.localtime()
-        self.targettime = time.mktime((time[0], time[1], time[2], self.starttime[0], self.starttime[1], 0, 0, 0))
+        ct = time.localtime()
+        self.targettime = time.mktime((ct[0], ct[1], ct[2], self.starttime[0], self.starttime[1], 0, 0, 0))
         daily_tasks.push(self.task, self.targettime)
-        log('daiyltask', self.func.__name__, 'start, will run at', self.starttime, 'everyday')
+        log('start dailytask', self.func.__name__, ', will run at', self.starttime, 'everyday')
 
     def stop(self):
-        log('dailytask', self.func.__name__, 'stop')
+        log('stop dailytask', self.func.__name__)
         self.enabled = False
         daily_tasks.remove(self.task)
 
     def remove(self):
-        log('dailytask', self.func.__name__, 'remove from list')
+        log('remove dailytask', self.func.__name__)
         self.stop()
         daily_tasks_list.remove(self)
 
@@ -73,7 +76,14 @@ def list_by_tag(tag=''):
 def get_list():
     return daily_tasks_list
 
+def sys_dailytask_zero():
+    hal.imu.clear_step()
+    refresh_activity_on(REFRESHON.ZERO_CLOCK)
+
 def start():
     global daily_scheduler_task
     daily_scheduler_task = Task(check_loop, 10000)
     daily_scheduler_task.start()
+
+    global sys_dailytask_zerooc
+    sys_dailytask_zerooc = DailyTask(sys_dailytask_zero, (0,0), tag='sys')
