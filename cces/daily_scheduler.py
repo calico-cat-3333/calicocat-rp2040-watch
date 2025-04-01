@@ -31,6 +31,8 @@ class DailyTask:
         self.start()
 
     def start(self):
+        if self.enabled:
+            return
         ct = time.localtime()
         self.targettime = time.mktime((ct[0], ct[1], ct[2], self.starttime[0], self.starttime[1], 0, 0, 0))
         daily_tasks.push(self.task, self.targettime)
@@ -41,11 +43,12 @@ class DailyTask:
         self.enabled = False
         daily_tasks.remove(self.task)
 
-    def set_starttime(self, starttime):
+    def set_starttime(self, starttime, weekdays):
         r = self.enabled
         if r:
             self.stop()
         self.starttime = starttime
+        self.weekdays = weekdays
         if r:
             self.start()
 
@@ -69,7 +72,7 @@ def check_loop():
     ct = time.time()
     while True:
         t = daily_tasks.peek()
-        if t != None and t.ph_key > ct:
+        if t != None and t.ph_key < ct:
             daily_tasks.pop()
             t.coro()
         else:
@@ -93,4 +96,4 @@ def start():
     daily_scheduler_task.start()
 
     global dailytask_zeroclock
-    sys_dailytask_zerooc = DailyTask(sys_dailytask_zeroclock, (0,0), tag='sys')
+    sys_dailytask_zerooc = DailyTask(sys_dailytask_zeroclock, (0, 0), tag='sys')
