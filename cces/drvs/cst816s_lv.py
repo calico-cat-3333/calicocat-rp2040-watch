@@ -49,10 +49,10 @@ class CST816S_lv(Device_lv):
             data.state = lv.INDEV_STATE.RELEASED
 
     # 当系统睡眠或唤醒时执行
-    def on_sleep():
+    def on_sleep(self):
         # Disable irq
         self.int_pin.irq(handler=None, trigger=Pin.IRQ_FALLING)
 
-    def on_wakeup():
+    def on_wakeup(self):
         # Enable irq
         self.int_pin.irq(handler=self.tp_int_cb, trigger=Pin.IRQ_FALLING)
