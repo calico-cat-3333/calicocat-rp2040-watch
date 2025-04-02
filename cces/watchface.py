@@ -72,6 +72,7 @@ class WatchFaceAtivity(Activity):
 
     def noclickcb(self):
         settingsdb.put('do_not_disturb', False)
+        gadgetbridge.send_msg('info', 'DND Disable!')
         hal.buzzer.beep()
 
     def refresh_event_cb(self, event):

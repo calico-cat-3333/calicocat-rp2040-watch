@@ -3,21 +3,21 @@ import sys
 
 from cces.appmgr import AppMeta
 from cces.activity import Activity, InfoActivity, AskYesNoActivity, NumberInputActivity, SliderActivity
-from cces import hal
+from cces import hal, gadgetbridge
 from cces import notification
 from cces.log import log
 
 class MainActivity(Activity):
     def __init__(self):
-        self.fl = []
-        self.fl.append(('notify send', self.send_notify))
+        self.fl = [('notify send', self.send_notify),
+                   ('notify remove', self.remove_notify),
+                   ('info', self.info_example),
+                   ('askyesno', self.askyesno_example),
+                   ('input number', self.input_number_example),
+                   ('slider', self.slider_example),
+                   ('GB Info', self.gbinfo),
+                   ]
         self.nid = None
-
-        self.fl.append(('notify remove', self.remove_notify))
-        self.fl.append(('info', self.info_example))
-        self.fl.append(('askyesno', self.askyesno_example))
-        self.fl.append(('input number', self.input_number_example))
-        self.fl.append(('slider', self.slider_example))
 
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
@@ -93,5 +93,8 @@ class MainActivity(Activity):
         def no_cb(n):
             log('no', n)
         SliderActivity('title', 0, 100, 0, '%', ok_cb, no_cb, sr_cb, vc_cb, 5).launch()
+
+    def gbinfo(self, _):
+        gadgetbridge.send_msg('info', 'test info')
 
 appmeta = AppMeta('测试器', lv.SYMBOL.FILE, MainActivity)
