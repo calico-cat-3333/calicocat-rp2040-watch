@@ -79,7 +79,7 @@ class GC9A01_lv(Device_lv):
 
     def bl_on(self):
         # 开启背光
-        self.backlight.set_brightness(self.brightness)
+        self.set_brightness(self.brightness)
 
     def on_sleep(self):
         # Not yet completed.
