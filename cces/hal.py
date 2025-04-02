@@ -2,6 +2,7 @@
 # 对上层应用提供统一的硬件访问方式。
 
 from .log import log, ERROR
+import gc
 
 rtc = None
 # rtc for set time only, should have:
@@ -82,3 +83,4 @@ def on_wakeup():
     buzzer.on_wakeup()
     battery.on_wakeup()
     ble.on_wakeup()
+    gc.collect()
