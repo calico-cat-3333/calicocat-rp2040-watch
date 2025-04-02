@@ -28,6 +28,7 @@ class MainActivity(Activity):
 
         for f in self.fl:
             btn = self.dlst.add_button(lv.SYMBOL.FILE, f[0])
+            btn.set_flex_align(lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.SPACE_EVENLY)
             btn.add_event_cb(f[1], lv.EVENT.CLICKED, None)
             btn.set_style_pad_ver(15, lv.PART.MAIN | lv.STATE.DEFAULT)
             img = btn.get_child(0)

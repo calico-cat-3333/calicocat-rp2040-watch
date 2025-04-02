@@ -39,6 +39,7 @@ class MainActivity(Activity):
                 text.set_style_pad_ver(10, lv.PART.MAIN | lv.STATE.DEFAULT)
                 continue
             btn = self.settings_list.add_button(obj[1], obj[0])
+            btn.set_flex_align(lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.SPACE_EVENLY)
             btn.set_style_pad_ver(15, lv.PART.MAIN | lv.STATE.DEFAULT)
             img = btn.get_child(0)
             img.set_width(20)

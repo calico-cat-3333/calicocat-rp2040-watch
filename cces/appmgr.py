@@ -46,6 +46,7 @@ class Launcher(Activity):
 
         for app in app_list:
             btn = self.applist.add_button(app.icon, app.name)
+            btn.set_flex_align(lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.SPACE_EVENLY)
             btn.add_event_cb(lambda event, app=app: self.list_obj_click(event, app), lv.EVENT.CLICKED, None)
             btn.set_style_pad_ver(15, lv.PART.MAIN | lv.STATE.DEFAULT)
             img = btn.get_child(0)
