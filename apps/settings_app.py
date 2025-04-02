@@ -13,7 +13,7 @@ class MainActivity(Activity):
     def __init__(self):
         # 设置项目名称，图标，类型（i(nput number), s(witch), None） callback, 附加参数
         # 除 None 类型外，附加参数第一个一定是设置项目键，第二个是默认值，剩余内容可自定义, 此项会在 callback 中作为第二个参数，此项的目的是复用代码
-        self.objlist = ['设置',
+        self.objlist = [lv.SYMBOL.SETTINGS + ' 设置',
                         ('请勿打扰', lv.SYMBOL.BELL, 's', self.set_bool_obj, ('do_not_disturb', False, None)),
                         ('亮度(%)', lv.SYMBOL.IMAGE, 'i', self.set_slider_obj, ('display_brightness', 100, hal.dispdev.set_brightness, 'Brightness', '%', 1, 100, None, hal.dispdev.set_brightness, 5)),
                         ('音量(%)', lv.SYMBOL.VOLUME_MAX, 'i', self.set_slider_obj, ('sound_volume', 100, hal.buzzer.set_volume, 'Volume', '%', 0, 100, lambda _: hal.buzzer.beep(), hal.buzzer.set_volume, 5)),
@@ -40,7 +40,8 @@ class MainActivity(Activity):
                 continue
             btn = self.settings_list.add_button(obj[1], obj[0])
             btn.set_flex_align(lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.SPACE_EVENLY)
-            btn.set_style_pad_ver(15, lv.PART.MAIN | lv.STATE.DEFAULT)
+            #btn.set_style_pad_ver(15, lv.PART.MAIN | lv.STATE.DEFAULT)
+            btn.set_height(50)
             img = btn.get_child(0)
             img.set_width(20)
             img.set_inner_align(lv.image.ALIGN.CENTER)
@@ -48,7 +49,7 @@ class MainActivity(Activity):
             if obj[2] == 's':
                 switch = lv.switch(btn)
                 switch.align(lv.ALIGN.RIGHT_MID, 0, 0)
-                switch.set_size(40, 20)
+                switch.set_size(45, 25)
                 if settingsdb.get(obj[4][0], obj[4][1]):
                     switch.add_state(lv.STATE.CHECKED)
                 switch.add_event_cb(lambda event, obj=obj: obj[3](event, obj[4]), lv.EVENT.VALUE_CHANGED, None)
