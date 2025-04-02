@@ -11,12 +11,6 @@ from cces.log import log
 
 alarms_pair_list = []
 
-def load_alarms():
-    alarms_list = settingsdb.get('alarm_clocks', [])
-    for alarm in alarms_list:
-        dt = DailyTask(alarm_clock_alarm, (alarm['h'], alarm['m']), tag='alarm_clock', weekdays=alarm['rep'], enabled=bool(alarm.get('on', 1)))
-        alarms_pair_list.append((alarm, dt))
-
 def alarm_clock_alarm():
     beep_repeat_task.start()
     InfoActivity('Alarm', '时间到！', beep_repeat_task.stop).launch()
@@ -26,7 +20,10 @@ def on_system_start():
     beep_repeat_task = Task(hal.buzzer.play, 1000)
     beep_repeat_task.set_args([4000,0,4000])
 
-    load_alarms()
+    alarms_list = settingsdb.get('alarm_clocks', [])
+    for alarm in alarms_list:
+        dt = DailyTask(alarm_clock_alarm, (alarm['h'], alarm['m']), tag='alarm_clock', weekdays=alarm['rep'], enabled=bool(alarm.get('on', 1)))
+        alarms_pair_list.append((alarm, dt))
 
 class SetAlarm(Activity):
     def __init__(self, alarm_pair):
