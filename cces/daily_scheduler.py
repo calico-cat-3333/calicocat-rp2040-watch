@@ -25,16 +25,20 @@ class DailyTask:
         self.task = _Task(self.run)
         self.starttime = starttime # (hour, min)
         self.weekdays = weekdays
-        self.enabled = enabled # all daily task enable by default
         self.tag = tag
         daily_tasks_list.append(self)
-        self.start()
+        self.enabled = False
+        if enabled:
+            self.start()
+        self.enabled = enabled # all daily task enable by default
 
     def start(self):
         if self.enabled:
             return
         ct = time.localtime()
         self.targettime = time.mktime((ct[0], ct[1], ct[2], self.starttime[0], self.starttime[1], 0, 0, 0))
+        if time.time() - self.targettime > 60: # 任务已超时
+            self.targettime = self.targettime + 86400 # (24 * 60 * 60)
         daily_tasks.push(self.task, self.targettime)
         log('start dailytask', self.func.__name__, ', will run at', self.starttime, 'everyday')
 
@@ -60,7 +64,7 @@ class DailyTask:
     def run(self):
         log('dailytask', self.func.__name__, 'run start')
         wmask = 1 << time.localtime()[6]
-        self.targettime = self.targettime + (24 * 60 * 60)
+        self.targettime = self.targettime + 86400 # (24 * 60 * 60)
         if self.weekdays == 0 or self.weekdays & wmask == wmask:
             self.func()
         if self.weekdays == 0:
