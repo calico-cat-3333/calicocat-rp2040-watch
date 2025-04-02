@@ -36,6 +36,7 @@ def try_wakeup():
         hal.on_wakeup()
 
 def prevent_sleep(v=None):
+    # 阻止系统睡眠
     global allow_sleep
     if v == None:
         return not allow_sleep

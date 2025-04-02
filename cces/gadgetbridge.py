@@ -92,6 +92,9 @@ def gb_cmd_parse():
 
         if t == 'alarm':
             # set_alarm(json_cmd)
+            # 为避免数据不同步，直接忽略来自 gadgetbridge 的闹钟设置，闹钟设置完全在手表上完成
+            # 或手表完全不具有设置闹钟的能力，完全使用来自 gadgetbridge 的闹钟配置
+            # 或者设置为手机上的设置会完全覆盖手表
             return
 
         if t == 'find':
@@ -107,6 +110,7 @@ def gb_cmd_parse():
             global weather_data
             weather_data = json_cmd
             weather_data['time'] = time.time()
+            refresh_activity_on(REFRESHON.GB_WEATHER)
             return
 
         if t == 'musicinfo':
@@ -116,7 +120,7 @@ def gb_cmd_parse():
             global music_info
             music_info = json_cmd
             music_info['time'] = time.time()
-            refresh_activity_on(REFRESHON.GB_MUSIC)
+            #refresh_activity_on(REFRESHON.GB_MUSIC)
             return
 
         if t == 'musicstate':
@@ -128,27 +132,34 @@ def gb_cmd_parse():
             refresh_activity_on(REFRESHON.GB_MUSIC)
             return
 
+        if t == 'call':
+            return
+
     # 不符合指令格式
     log('invalid cmd:', cmd, level=ERROR)
     return
 
 def send_msg(msg_type, text):
+    # 发送信息，类型为 info/warn/error, text 为字符串
     if msg_type not in ['info', 'warn', 'error']:
         log('invalid msg type:', msg_type, level=ERROR)
         return
     hal.ble.uart_tx(json.dumps({'t':msg_type, 'msg':text}))
 
 def music_ctrl(cmd):
+    # 发送音乐控制命令
     if cmd not in ['play', 'pause', 'next', 'previous', 'volumeup', 'volumedown']:
         log('invalid music ctrl cmd:', cmd, level=ERROR)
         return
     hal.ble.uart_tx(json.dumps({'t':'music', 'n':cmd}))
 
 def send_status():
+    refresh_activity_on(REFRESHON.BLE_CONNECTION)
     if not hal.ble.connected():
         return TASKEXIT
     bat_stat = hal.battery.dump()
     hal.ble.uart_tx(json.dumps({'t':'status', 'bat':round(bat_stat[2], 2), 'volt':bat_stat[0], 'chg':int(bat_stat[3])}))
+
 
 def start():
     global beep_repeat_task
