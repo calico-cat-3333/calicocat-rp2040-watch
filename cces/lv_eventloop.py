@@ -18,7 +18,7 @@ timer_id = 0
 if sys.platform == 'rp2':
     timer_id = -1
 
-PERIOD = const(20)
+PERIOD = const(40)
 
 def start():
     global lv_eventloop
