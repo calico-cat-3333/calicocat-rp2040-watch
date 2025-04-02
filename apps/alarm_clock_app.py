@@ -4,16 +4,22 @@ import gc
 
 from cces.appmgr import AppMeta
 from cces.activity import Activity, InfoActivity
-from cces import hal, settingsdb
+from cces import hal, settingsdb, powermanager
 from cces.daily_scheduler import DailyTask, list_by_tag
 from cces.task_scheduler import Task
 from cces.log import log
 
 alarms_pair_list = []
 
+def alarm_clock_stop():
+    beep_repeat_task.stop()
+    powermanager.prevent_sleep(False)
+
 def alarm_clock_alarm():
+    powermanager.try_wakeup()
     beep_repeat_task.start()
-    InfoActivity('Alarm', '时间到！', beep_repeat_task.stop).launch()
+    powermanager.prevent_sleep(True)
+    InfoActivity('Alarm', '时间到！', alarm_clock_stop).launch()
 
 def on_system_start():
     global beep_repeat_task
