@@ -1,7 +1,7 @@
-
+from .device import Device
 # 假装这里有 IMU
 
-class IMU:
+class IMU(Device):
     def __init__(self):
         pass
 

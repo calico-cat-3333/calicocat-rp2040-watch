@@ -10,9 +10,9 @@ class SDLdisp(Device_lv):
         self.zoom = zoom
 
     def after_lvgl_init(self):
-        self.disp = lv.sdl_window_create(self.width, self.height)
-        lv.sdl_window_set_resizeable(self.disp, False)
-        lv.sdl_window_set_zoom(self.disp, self.zoom)
+        self.disp_drv = lv.sdl_window_create(self.width, self.height)
+        lv.sdl_window_set_resizeable(self.disp_drv, False)
+        lv.sdl_window_set_zoom(self.disp_drv, self.zoom)
         log("Running the SDL lvgl version")
 
     def on_wakeup(self):
