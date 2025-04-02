@@ -35,6 +35,7 @@ class DailyTask:
     def start(self):
         if self.enabled:
             return
+        self.enabled = True
         ct = time.localtime()
         self.targettime = time.mktime((ct[0], ct[1], ct[2], self.starttime[0], self.starttime[1], 0, 0, 0))
         if time.time() - self.targettime > 60: # 任务已超时
