@@ -1,5 +1,5 @@
 from cces import system
-from cces.drvs import e104ble, battery, buzzer, rtc
+from cces.drvs import e104ble, battery, buzzer, rtc, gpio_button
 from cces.drvs import cst816s_lv, gc9a01_lv, qmi8658, Device
 from cces import hal
 from cces import log
@@ -11,6 +11,7 @@ log.setlevel(log.INFO)
 
 hal.dispdev = gc9a01_lv.GC9A01_lv(board.lcd_spi, board.lcd_rst, board.lcd_cs, board.lcd_dc, board.lcd_bl)
 hal.indev_list.append(cst816s_lv.CST816S_lv(board.i2c1, board.tp_int, board.tp_rst))
+hal.indev_list.append(gpio_button.GPIOButton(extboard.btn))
 
 hal.rtc = rtc.RTC()
 hal.buzzer = buzzer.Buzzer(extboard.buzzer_pin)
