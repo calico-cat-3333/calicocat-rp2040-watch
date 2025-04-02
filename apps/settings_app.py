@@ -13,8 +13,7 @@ class MainActivity(Activity):
     def __init__(self):
         # 设置项目名称，图标，类型（i(nput number), s(witch), None） callback, 附加参数
         # 除 None 类型外，附加参数第一个一定是设置项目键，第二个是默认值，剩余内容可自定义, 此项会在 callback 中作为第二个参数，此项的目的是复用代码
-        self.objlist = [lv.SYMBOL.SETTINGS + ' 设置',
-                        ('请勿打扰', lv.SYMBOL.BELL, 's', self.set_bool_obj, ('do_not_disturb', False, None)),
+        self.objlist = [('请勿打扰', lv.SYMBOL.BELL, 's', self.set_bool_obj, ('do_not_disturb', False, None)),
                         ('亮度(%)', lv.SYMBOL.IMAGE, 'i', self.set_slider_obj, ('display_brightness', 100, hal.dispdev.set_brightness, 'Brightness', '%', 1, 100, None, hal.dispdev.set_brightness, 5)),
                         ('音量(%)', lv.SYMBOL.VOLUME_MAX, 'i', self.set_slider_obj, ('sound_volume', 100, hal.buzzer.set_volume, 'Volume', '%', 0, 100, lambda _: hal.buzzer.beep(), hal.buzzer.set_volume, 5)),
                         '关于我',
@@ -29,9 +28,12 @@ class MainActivity(Activity):
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
         self.settings_list = lv.list(self.scr)
-        self.settings_list.set_size(200, 220)
+        self.settings_list.set_size(200, 240)
         self.settings_list.align(lv.ALIGN.CENTER, 20, 0)
         self.settings_list.set_style_border_side(lv.BORDER_SIDE.NONE, lv.PART.MAIN | lv.STATE.DEFAULT)
+        title = self.settings_list.add_text(lv.SYMBOL.SETTINGS + ' 设置',)
+        title.set_style_pad_bottom(10, lv.PART.MAIN | lv.STATE.DEFAULT)
+        title.set_style_pad_top(20, lv.PART.MAIN | lv.STATE.DEFAULT)
 
         for obj in self.objlist:
             if isinstance(obj, str):

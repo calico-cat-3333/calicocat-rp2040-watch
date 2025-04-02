@@ -62,6 +62,8 @@ class SetAlarm(Activity):
         self.dayselect.set_ctrl_map(self.ctrl_map)
         self.dayselect.set_size(200, 100)
         self.dayselect.add_event_cb(self.dayselect_cb, lv.EVENT.VALUE_CHANGED, None)
+        self.dayselect.set_style_border_side(lv.BORDER_SIDE.NONE, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.dayselect.set_style_bg_color(lv.color_hex(0xF5F5F5), lv.PART.MAIN | lv.STATE.DEFAULT)
         w = self.alarm_pair[0]['rep']
         for i in range(0, 7):
             if w & (1 << i):
@@ -128,7 +130,7 @@ class MainActivity(Activity):
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
         self.set_alarm_list = lv.list(self.scr)
-        self.set_alarm_list.set_size(200, 220)
+        self.set_alarm_list.set_size(200, 240)
         self.set_alarm_list.align(lv.ALIGN.CENTER, 20, 0)
         self.set_alarm_list.set_style_border_side(lv.BORDER_SIDE.NONE, lv.PART.MAIN | lv.STATE.DEFAULT)
 
@@ -146,7 +148,8 @@ class MainActivity(Activity):
 
     def update_display(self):
         title = self.set_alarm_list.add_text('闹钟')
-        title.set_style_pad_ver(10, lv.PART.MAIN | lv.STATE.DEFAULT)
+        title.set_style_pad_bottom(10, lv.PART.MAIN | lv.STATE.DEFAULT)
+        title.set_style_pad_top(20, lv.PART.MAIN | lv.STATE.DEFAULT)
 
         for alarm_pair in alarms_pair_list:
             btn = self.set_alarm_list.add_button(None, '{:0>2d}:{:0>2d}\n'.format(alarm_pair[0]['h'], alarm_pair[0]['m']) + self.get_weekdays_str(alarm_pair[0]['rep']))

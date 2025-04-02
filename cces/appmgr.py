@@ -40,12 +40,13 @@ class Launcher(Activity):
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
         self.applist = lv.list(self.scr)
-        self.applist.set_size(200, 220)
+        self.applist.set_size(200, 240)
         self.applist.align(lv.ALIGN.CENTER, 20, 0)
         self.applist.set_style_border_side(lv.BORDER_SIDE.NONE, lv.PART.MAIN | lv.STATE.DEFAULT)
 
         title = self.applist.add_text('应用')
-        title.set_style_pad_ver(10, lv.PART.MAIN | lv.STATE.DEFAULT)
+        title.set_style_pad_bottom(10, lv.PART.MAIN | lv.STATE.DEFAULT)
+        title.set_style_pad_top(20, lv.PART.MAIN | lv.STATE.DEFAULT)
         for app in app_list:
             btn = self.applist.add_button(app.icon, app.name)
             btn.set_flex_align(lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.SPACE_EVENLY)

@@ -22,9 +22,12 @@ class MainActivity(Activity):
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
         self.dlst = lv.list(self.scr)
-        self.dlst.set_size(200, 220)
+        self.dlst.set_size(200, 240)
         self.dlst.align(lv.ALIGN.CENTER, 20, 0)
         self.dlst.set_style_border_side(lv.BORDER_SIDE.NONE, lv.PART.MAIN | lv.STATE.DEFAULT)
+        title = self.dlst.add_text('Tester')
+        title.set_style_pad_bottom(10, lv.PART.MAIN | lv.STATE.DEFAULT)
+        title.set_style_pad_top(20, lv.PART.MAIN | lv.STATE.DEFAULT)
 
         for f in self.fl:
             btn = self.dlst.add_button(lv.SYMBOL.FILE, f[0])
