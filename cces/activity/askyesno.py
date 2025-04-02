@@ -21,6 +21,7 @@ class AskYesNoActivity(Activity):
         self.exit_anim = exit_anim
 
     def setup(self):
+        self.sidekey_exit = False
         self.title_label = lv.label(self.scr)
         self.title_label.align(lv.ALIGN.TOP_MID, 0, 30)
         self.title_label.set_width(160)

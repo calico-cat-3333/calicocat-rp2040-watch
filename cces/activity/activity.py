@@ -33,10 +33,16 @@ class Activity:
         log(str(self.__class__), 'launch')
         self.scr = lv.obj()
         self.refresh_on = REFRESHON.NONE
+        self.sidekey_exit = True
         self.setup()
 
         if self.refresh_on != REFRESHON.NONE:
             self.scr.add_event_cb(self.refresh_event_cb, lv.EVENT.REFRESH, None)
+
+        lv.group_get_default().add_obj(self.scr)
+        lv.group_focus_obj(self.scr)
+        if self.sidekey_exit:
+            self.scr.add_event_cb(self.side_key_cb, lv.EVENT.KEY, None)
 
         if len(_activity_stack) != 0:
             _activity_stack[-1].on_covered()
@@ -64,12 +70,18 @@ class Activity:
         # 刷新回调
         pass
 
+    def side_key_cb(self, event):
+        key_pressed =  lv.indev_active().get_key()
+        if key_pressed == lv.KEY.ESC:
+            self.exit()
+
     def exit(self, anim=None):
-        if len(_activity_stack) == 0:
+        if len(_activity_stack) == 1:
             # 如果这是最后一个 activity 不能退出
             return
         log(str(self.__class__), 'exit')
         self.before_exit()
+        lv.group_remove_obj(self.scr)
         if self != _activity_stack[-1]:
             # 处理被覆盖的后台 Activity 退出
             _activity_stack.remove(self)

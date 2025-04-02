@@ -22,6 +22,7 @@ class NumberInputActivity(Activity):
         self.exit_anim = exit_anim
 
     def setup(self):
+        self.sidekey_exit = False
         self.title_label = lv.label(self.scr)
         self.title_label.set_long_mode(lv.label.LONG_MODE.SCROLL_CIRCULAR)
         self.title_label.set_text(self.title)

@@ -38,6 +38,7 @@ class SetAlarm(Activity):
         self.ctrl_map = [2 | lv.buttonmatrix.CTRL.CHECKABLE] * 4 + [ 1 | lv.buttonmatrix.CTRL.HIDDEN] + [2 | lv.buttonmatrix.CTRL.CHECKABLE] * 3 + [ 1 | lv.buttonmatrix.CTRL.HIDDEN]
 
     def setup(self):
+        self.sidekey_exit = False
         self.colon = lv.label(self.scr)
         self.colon.set_text(":")
         self.colon.align(lv.ALIGN.TOP_MID, 0, 50)

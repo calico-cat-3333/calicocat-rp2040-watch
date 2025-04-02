@@ -20,6 +20,7 @@ class WatchFaceAtivity(Activity):
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
         self.refresh_on = REFRESHON.BLE_CONNECTION
+        self.sidekey_exit = False
         self.date_label = lv.label(self.scr)
         self.date_label.align(lv.ALIGN.CENTER, 0, -60)
         self.date_label.set_style_text_font(lv.font_montserrat_16, lv.PART.MAIN | lv.STATE.DEFAULT)
