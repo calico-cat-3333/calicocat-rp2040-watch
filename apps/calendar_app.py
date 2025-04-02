@@ -8,6 +8,7 @@ class MainActivity(Activity):
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
         self.refresh_on = self.refresh_on | REFRESHON.ZERO_CLOCK
+        self.scr.set_style_bg_color(lv.color_hex(0xFFFFFF), lv.PART.MAIN | lv.STATE.DEFAULT)
 
         self.header_label = lv.label(self.scr)
         self.header_label.align(lv.ALIGN.TOP_MID, 0, 5)
