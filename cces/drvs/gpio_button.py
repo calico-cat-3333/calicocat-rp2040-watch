@@ -1,11 +1,11 @@
+import micropython
 import lvgl as lv
 from machine import Pin
 
 from . import Device_lv
 from .. import powermanager
-import micropython
 
-# 这不是标准的 lvgl 输入设备，但是他需要使用 lvgl 输入设备的 api 以实现包括检测系统状态等功能
+# 这不是标准的 lvgl 输入设备，在 lvgl 输入设备的基础上扩展了从睡眠中唤醒的功能
 class GPIOButton(Device_lv):
     def __init__(self, pin):
         self.pin = pin
