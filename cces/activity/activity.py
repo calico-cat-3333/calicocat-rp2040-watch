@@ -75,7 +75,10 @@ class Activity:
             _activity_stack.remove(self)
             # 延迟 1s 因为这个被覆盖退出主要用在带动画加载新 Activity 后旧 Activity 立刻退出
             # 所以这里延迟删除，防止动画没播完导致非法访问内存
-            self.scr.delete_delayed(1000)
+            if _ANIM_ENABLE:
+                self.scr.delete_delayed(1000)
+            else:
+                self.scr.delete()
             gc.collect()
             return
         _activity_stack.pop()
