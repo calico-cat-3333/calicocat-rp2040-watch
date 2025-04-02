@@ -15,6 +15,7 @@ class MainActivity(Activity):
         # 除 None 类型外，附加参数第一个一定是设置项目键，第二个是默认值，剩余内容可自定义, 此项会在 callback 中作为第二个参数，此项的目的是复用代码
         self.objlist = [('请勿打扰', lv.SYMBOL.BELL, 's', self.set_bool_obj, ('do_not_disturb', False, None)),
                         ('亮度(%)', lv.SYMBOL.IMAGE, 'i', self.set_slider_obj, ('display_brightness', 100, hal.dispdev.set_brightness, 'Brightness', '%', 1, 100, None, hal.dispdev.set_brightness, 5)),
+                        ('熄屏(s)', lv.SYMBOL.IMAGE, 'i', self.set_slider_obj, ('screenoff_timeout', 100, None, 'ScreenOff', 's', 10, 120, None, None, 10)),
                         ('音量(%)', lv.SYMBOL.VOLUME_MAX, 'i', self.set_slider_obj, ('sound_volume', 100, hal.buzzer.set_volume, 'Volume', '%', 0, 100, lambda _: hal.buzzer.beep(), hal.buzzer.set_volume, 5)),
                         '关于我',
                         ('身高(cm)', lv.SYMBOL.HOME, 'i', self.set_input_number_obj, ('user_height', 0, None, '身高(cm):', 1, 300)),
