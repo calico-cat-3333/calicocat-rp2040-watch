@@ -51,7 +51,7 @@ class Buzzer(Device):
             return TASKEXIT
         freq = self.freq_list.pop(0)
         if freq == 0:
-            cmd = cmd + str(freq)
+            cmd = cmd + str(freq) + '"'
         else:
             cmd = cmd + str(freq) + ' volume: ' + str(self.volume) + '"'
         os.system(cmd)
