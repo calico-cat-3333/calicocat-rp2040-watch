@@ -44,11 +44,14 @@ def uartwrx():
     if uart.any():
         print(uart.read())
 
-print('setup E104-BT5005A ble module for cces useage')
+print('setup e10e ble module')
 
 at_mode(True)
 uartwrx()
 at_test()
+uartwrx()
+uarttx('AT+PARI=1')
+print('enable parity')
 uartwrx()
 uarttx('AT+LOGMSG=1')
 uartwrx()
@@ -59,6 +62,6 @@ uarttx('at+uuidchara1=3')
 uartwrx()
 uarttx('at+uuidchara2=2')
 uartwrx()
-print('set uuid to NUS')
+print('set uuid')
 at_reset()
 

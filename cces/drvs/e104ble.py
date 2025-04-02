@@ -15,7 +15,7 @@ class E104BLE(Device):
         self.rx_pin = rx
         self.tx_pin = tx
         self.lrt = 0
-        self.uart = UART(0, rx=rx, tx=tx, baudrate=115200)
+        self.uart = UART(0, rx=rx, tx=tx, baudrate=115200, parity=0)
         self.uart_rx_read_to_buf_ref = self.uart_rx_read_to_buf
         self.uart.irq(handler=self.uart_rx_int_cb, trigger=UART.IRQ_RXIDLE)
         self.rx_line_buf = []
