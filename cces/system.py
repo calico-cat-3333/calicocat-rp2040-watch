@@ -14,7 +14,7 @@ from . import appmgr
 from . import powermanager
 from .watchface import WatchFaceAtivity
 from .log import log
-from .activity import styles
+from .activity import styles, fonts
 
 def load_lvgl():
     global lv_event_loop
@@ -31,6 +31,7 @@ def load_system_service():
     settingsdb.start()
     gadgetbridge.start()
     styles.start()
+    fonts.start()
     powermanager.start()
 
 def start():

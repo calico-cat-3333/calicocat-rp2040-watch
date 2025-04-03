@@ -2,7 +2,7 @@ import lvgl as lv
 import time
 import gc
 
-from .activity import Activity, REFRESHON
+from .activity import Activity, REFRESHON, fonts
 from .activity import AskYesNoActivity
 from .task_scheduler import Task
 from . import gadgetbridge
@@ -15,7 +15,6 @@ from .notification import NotificationCenter
 class WatchFaceAtivity(Activity):
     def __init__(self):
         self.update_display_task = Task(self.update_display, 1000) # update display every 1 secs
-        self.number_font = lv.binfont_create("S:fonts/number_72.bin")
 
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
@@ -28,7 +27,7 @@ class WatchFaceAtivity(Activity):
 
         self.time_label = lv.label(self.scr)
         self.time_label.align(lv.ALIGN.CENTER, 0, 0)
-        self.time_label.set_style_text_font(self.number_font, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.time_label.set_style_text_font(fonts.number_72, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.time_label.set_text('--:--:--')
 
         self.bat_label = lv.label(self.scr)
@@ -38,8 +37,8 @@ class WatchFaceAtivity(Activity):
 
         self.step_label = lv.label(self.scr)
         self.step_label.align(lv.ALIGN.CENTER, -50, 60)
-        self.step_label.set_style_text_font(lv.font_montserrat_16, lv.PART.MAIN | lv.STATE.DEFAULT)
-        self.step_label.set_text('steps:--')
+        self.step_label.set_style_text_font(fonts.extra_symbols, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.step_label.set_text(fonts.SYMBOL.WALK + ' --')
 
         self.ble_label = lv.label(self.scr)
         self.ble_label.align(lv.ALIGN.CENTER, 85, -60)
@@ -64,7 +63,7 @@ class WatchFaceAtivity(Activity):
             self.bat_label.set_text(lv.SYMBOL.CHARGE + str(bat_stat[1]))
         else:
             self.bat_label.set_text('{:>3d}%'.format(bat_stat[2]) + str(bat_stat[1]))
-        self.step_label.set_text('steps:{:d}'.format(hal.imu.get_step()))
+        self.step_label.set_text(fonts.SYMBOL.WALK + ' {:d}'.format(hal.imu.get_step()))
 
     def yesclick(self):
         settingsdb.put('do_not_disturb', True)
