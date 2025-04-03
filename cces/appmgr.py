@@ -27,6 +27,7 @@ class AppMeta:
         app_list.append(self)
 
     def start(self, *args):
+        log('app:', self.name, 'launch')
         self.main_activity().launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
 
     def on_system_start(self):

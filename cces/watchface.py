@@ -38,7 +38,7 @@ class WatchFaceAtivity(Activity):
         self.step_label = lv.label(self.scr)
         self.step_label.align(lv.ALIGN.CENTER, -50, 60)
         self.step_label.set_style_text_font(lv.font_extra_symbols, lv.PART.MAIN | lv.STATE.DEFAULT)
-        self.step_label.set_text(fonts.SYMBOL.WALK + ' --')
+        self.step_label.set_text(fonts.SYMBOL.WALK + ' -- -- KM')
 
         self.ble_label = lv.label(self.scr)
         self.ble_label.align(lv.ALIGN.CENTER, 85, -60)
@@ -63,7 +63,9 @@ class WatchFaceAtivity(Activity):
             self.bat_label.set_text(lv.SYMBOL.CHARGE + str(bat_stat[1]))
         else:
             self.bat_label.set_text('{:>3d}%'.format(bat_stat[2]) + str(bat_stat[1]))
-        self.step_label.set_text(fonts.SYMBOL.WALK + ' {:d}'.format(hal.imu.get_step()))
+        steps = hal.imu.get_step()
+        length = (settingsdb.get('step_length', 50) * steps) / 100000
+        self.step_label.set_text(fonts.SYMBOL.WALK + ' {:d}  {:.2f} KM'.format(steps, length))
 
     def yesclick(self):
         settingsdb.put('do_not_disturb', True)
