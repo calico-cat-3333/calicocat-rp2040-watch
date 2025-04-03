@@ -175,8 +175,8 @@ class MainActivity(Activity):
         try:
             osinfo = os.uname().release
         except:
-            osinfo = 'UNKNOWN'
-        info_text = 'CCES 智能手表系统\nCalicocat 制作\nmicropython 版本：\n    ' + osinfo + '\n平台：' + sys.platform
+            osinfo = '未知'
+        info_text = 'CCES 智能手表系统\nCalicocat 制作\nmicropython 版本：' + osinfo + '\n平台：' + sys.platform
         InfoActivity(title = 'ABOUT',
                      text = info_text,
                      exit_anim = lv.SCR_LOAD_ANIM.OVER_RIGHT

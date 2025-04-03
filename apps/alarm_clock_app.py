@@ -3,7 +3,7 @@ import sys
 import gc
 
 from cces.appmgr import AppMeta
-from cces.activity import Activity, InfoActivity
+from cces.activity import Activity, InfoActivity, fonts
 from cces import hal, settingsdb, powermanager
 from cces.daily_scheduler import DailyTask, list_by_tag
 from cces.task_scheduler import Task
@@ -227,4 +227,4 @@ class MainActivity(Activity):
         if gesture == lv.DIR.RIGHT:
              self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
 
-appmeta = AppMeta('闹钟', lv.SYMBOL.BELL, MainActivity, on_system_start)
+appmeta = AppMeta('闹钟', fonts.SYMBOL.CLOCK, MainActivity, on_system_start)
