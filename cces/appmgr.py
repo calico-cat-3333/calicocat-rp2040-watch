@@ -43,6 +43,7 @@ class Launcher(Activity):
         self.applist.set_size(200, 240)
         self.applist.align(lv.ALIGN.CENTER, 20, 0)
         self.applist.set_style_border_side(lv.BORDER_SIDE.NONE, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.applist.set_style_text_font(lv.font_extra_symbols, lv.PART.MAIN | lv.STATE.DEFAULT)
 
         title = self.applist.add_text('应用')
         title.set_style_pad_bottom(10, lv.PART.MAIN | lv.STATE.DEFAULT)

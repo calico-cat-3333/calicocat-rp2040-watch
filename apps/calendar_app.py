@@ -2,7 +2,7 @@ import lvgl as lv
 import time
 
 from cces.appmgr import AppMeta
-from cces.activity import Activity, REFRESHON
+from cces.activity import Activity, REFRESHON, fonts
 
 class MainActivity(Activity):
     def setup(self):
@@ -48,4 +48,4 @@ class MainActivity(Activity):
     def refresh_event_cb(self, event):
         self.update_display()
 
-appmeta = AppMeta('日历', lv.SYMBOL.PASTE, MainActivity)
+appmeta = AppMeta('日历', fonts.SYMBOL.CALENDAR, MainActivity)

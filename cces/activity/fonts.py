@@ -32,14 +32,3 @@ class SYMBOL:
     CLOUD_BOLT = '' # cloud bolt
     TORNADO = '🌪'
     STOPWATCH = '' # stopwatch
-
-number_72 = None
-extra_symbols = None
-
-def start():
-    global extra_symbols
-    global number_72
-
-    extra_symbols = lv.binfont_create('S:fonts/extra_symbols.bin')
-    extra_symbols.fallback = lv.font_unifont_zh_16
-    number_72 = lv.binfont_create('S:fonts/number_72.bin')

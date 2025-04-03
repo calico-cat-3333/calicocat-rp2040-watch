@@ -27,7 +27,7 @@ class WatchFaceAtivity(Activity):
 
         self.time_label = lv.label(self.scr)
         self.time_label.align(lv.ALIGN.CENTER, 0, 0)
-        self.time_label.set_style_text_font(fonts.number_72, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.time_label.set_style_text_font(lv.font_number72, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.time_label.set_text('--:--:--')
 
         self.bat_label = lv.label(self.scr)
@@ -37,7 +37,7 @@ class WatchFaceAtivity(Activity):
 
         self.step_label = lv.label(self.scr)
         self.step_label.align(lv.ALIGN.CENTER, -50, 60)
-        self.step_label.set_style_text_font(fonts.extra_symbols, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.step_label.set_style_text_font(lv.font_extra_symbols, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.step_label.set_text(fonts.SYMBOL.WALK + ' --')
 
         self.ble_label = lv.label(self.scr)
