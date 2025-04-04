@@ -193,13 +193,6 @@ class QMI8658(Device):
             time.sleep_ms(1)
         self.ctrl9_ack()
 
-    def int16_conv(self, data):
-        # 将 16 位二进制补码转换为整形
-        # unused
-        if data > 32767:
-            return data - 0xFFFF + 1
-        return data
-
     def int8_conv(self, data):
         # 将 8 位二进制补码转换为整形
         if data > 127:
@@ -272,31 +265,3 @@ class QMI8658(Device):
 
     def clear_step(self):
         self.ctrl9w_cmd(CTRL9_CMD_RESET_PEDOMETER)
-
-    def is_fifo_full(self):
-        return (self.i2c_read(_QMI8658_FIFO_STATUS)[0] & 0x80) >> 7
-
-    def is_fifo_wtm(self):
-        return (self.i2c_read(_QMI8658_FIFO_STATUS)[0] & 0x40) >> 6
-
-    def get_fifo_sample_size(self):
-        return ((self.i2c_read(_QMI8658_FIFO_STATUS)[0] & 0x03) << 8) + self.i2c_read(_QMI8658_FIFO_SMPL_CNT)[0]
-
-    def read_fifo_raw(self):
-        sample_size = self.get_fifo_sample_size()
-        self.ctrl9w_cmd(CTRL9_CMD_REQ_FIFO)
-        data = self.i2c_read(_QMI8658_FIFO_DATA, sample_size * 2)
-        self.i2c_write(_QMI8658_FIFO_CTRL, 0x03)
-        return data, sample_size * 2
-
-    def read_fifo(self):
-        sample_size = self.get_fifo_sample_size()
-        self.ctrl9w_cmd(CTRL9_CMD_REQ_FIFO)
-        data = self.i2c_read16(_QMI8658_FIFO_DATA, self.get_fifo_sample_size())
-        self.i2c_write(_QMI8658_FIFO_CTRL, 0x03)
-        accel_data = []
-        gyro_data = []
-        for i in range(int(sample_size / 6)):
-            accel_data.append([data[0 + i * 6], data[1 + i * 6], data[2 + i * 6]])
-            gyro_data.append([data[3 + i * 6], data[4 + i * 6], data[5 + i * 6]])
-        return accel_data, gyro_data, int(sample_size / 6)
