@@ -6,8 +6,9 @@ import struct
 from micropython import const
 from collections import deque
 
-from cces.task_scheduler import Task
-from cces.log import log
+from ..task_scheduler import Task
+from ..log import log
+from .device import Device
 
 # 心率传感器驱动，内建定长缓冲区，自带滑动窗口平滑算法和心率血氧计算算法
 
@@ -40,7 +41,7 @@ _RESULT_TIMEOUT = const(300) # 测量结果有效期
 _WINDOW_SIZE = const(5) # 滑动窗口大小
 _BUFFER_SIZE = const(50)
 
-class MAX30102:
+class MAX30102(Device):
     def __init__(self, i2c, address=_MAX3010X_I2C_ADDRESS):
         self.i2c = i2c
         self.address = address
@@ -199,7 +200,7 @@ class MAX30102:
             return -1
         if min(self.ir_buf) < 6000: # 通常意味着未佩戴
             return -1
-    # 计算 DC 分量（信号均值）
+        # 计算 DC 分量（信号均值）
         dc_red = sum(self.red_buf) / len(self.red_buf)
         dc_ir = sum(self.ir_buf) / len(self.ir_buf)
         # 计算 AC 分量（信号最大最小值之差）

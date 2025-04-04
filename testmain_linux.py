@@ -1,6 +1,6 @@
 from cces import system
 from drvs_linux import dummyble, dummybattery, dummybuzzer, dummyimu, dummyrtc
-from drvs_linux import sdldisp, sdlindev, Device
+from drvs_linux import sdldisp, sdlindev, Device, dummyhr
 from cces import hal
 from cces import log
 
@@ -12,7 +12,7 @@ hal.indev_list.append(sdlindev.SDLindev())
 hal.rtc = dummyrtc.RTC()
 hal.buzzer = dummybuzzer.Buzzer()
 hal.imu = dummyimu.IMU()
-hal.hartrate = Device()
+hal.hartrate = dummyhr.HRM()
 hal.battery = dummybattery.Battery()
 hal.ble = dummyble.BLE()
 
