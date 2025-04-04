@@ -36,7 +36,7 @@ class WatchFaceAtivity(Activity):
         self.bat_label.set_text('BBB%')
 
         self.step_label = lv.label(self.scr)
-        self.step_label.align(lv.ALIGN.CENTER, -50, 60)
+        self.step_label.align(lv.ALIGN.LEFT_MID, 50, 60)
         self.step_label.set_style_text_font(lv.font_extra_symbols, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.step_label.set_text(fonts.SYMBOL.WALK + ' -- -- KM')
 
