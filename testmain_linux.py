@@ -1,6 +1,6 @@
 from cces import system
-from cces.drvs_linux import dummyble, dummybattery, dummybuzzer, dummyimu, dummyrtc
-from cces.drvs_linux import sdldisp, sdlindev, Device
+from drvs_linux import dummyble, dummybattery, dummybuzzer, dummyimu, dummyrtc
+from drvs_linux import sdldisp, sdlindev, Device
 from cces import hal
 from cces import log
 

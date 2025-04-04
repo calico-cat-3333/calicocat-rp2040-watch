@@ -2,8 +2,8 @@ import time
 import os
 
 from . import Device
-from ..task_scheduler import Task, TASKEXIT
-from ..log import log
+from cces.task_scheduler import Task, TASKEXIT
+from cces.log import log
 
 # 假装这里有蜂鸣器
 

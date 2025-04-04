@@ -2,7 +2,7 @@ import micropython
 import time
 
 from . import Device
-from ..log import log, ERROR, DEBUG
+from cces.log import log, ERROR, DEBUG
 
 # 假装这里有蓝牙
 _rpath = 'ble.txt'

@@ -1,6 +1,6 @@
 import lvgl as lv
 from . import Device_lv
-from ..log import log
+from cces.log import log
 
 class SDLindev(Device_lv):
     def __init__(self):
