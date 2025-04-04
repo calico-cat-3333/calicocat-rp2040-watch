@@ -6,6 +6,7 @@ from cces.task_scheduler import Task
 import time
 import math
 import struct
+from random import randint
 
 from micropython import const
 from collections import deque
@@ -81,6 +82,8 @@ class HRM(Device):
     def fifo_smoothread(self):
         # 使用滑动窗口平均化处理后再放入 buf
         log('fifo smoothread')
+        self.dhr = randint(60, 120)
+        self.dspo2 = randint(80, 100)
 
     def buf_any(self):
         return len(self.red_buf)
@@ -99,8 +102,6 @@ class HRM(Device):
         self.buf_clear()
         self.sw_clear()
         self.read_task.start()
-        self.dhr = 80
-        self.dspo2 = 98
 
     def stop_measure(self):
         self.read_task.stop()
