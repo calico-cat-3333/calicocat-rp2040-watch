@@ -5,7 +5,7 @@ import time
 
 from machine import PWM
 
-from . import Device_lv
+from cces.drvs import Device_lv
 
 # GC9A01 显示屏 lvgl 驱动接口
 

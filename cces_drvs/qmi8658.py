@@ -3,7 +3,7 @@ import struct
 
 from micropython import const
 
-from . import Device
+from cces.drvs import Device
 
 # QMI8658 IMU 驱动
 

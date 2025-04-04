@@ -1,0 +1,5 @@
+package('cces_drvs')
+module('board.py', base_path='lib')
+module('extboard.py', base_path='lib')
+module('pcf8574.py', base_path='lib')
+module('cst816s.py', base_path='lib')

@@ -6,9 +6,9 @@ import struct
 from micropython import const
 from collections import deque
 
-from ..task_scheduler import Task
-from ..log import log
-from .device import Device
+from cces.task_scheduler import Task
+from cces.log import log
+from cces.drvs import Device
 
 # 心率传感器驱动，内建定长缓冲区，自带滑动窗口平滑算法和心率血氧计算算法
 

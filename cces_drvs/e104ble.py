@@ -3,8 +3,8 @@ from pcf8574 import PCF8574
 import micropython
 import time
 
-from . import Device
-from ..log import log, ERROR, DEBUG
+from cces.drvs import Device
+from cces.log import log, ERROR, DEBUG
 
 # E104-BT5005A 蓝牙串口模块驱动
 # 此驱动被设计为只能被一个服务读写

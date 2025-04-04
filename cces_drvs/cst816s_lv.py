@@ -3,7 +3,7 @@ import micropython
 
 from machine import Pin
 
-from . import Device_lv
+from cces.drvs import Device_lv
 from cst816s import CST816S
 
 # CST816S 触摸屏 lvgl 驱动接口
