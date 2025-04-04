@@ -1,6 +1,6 @@
 from cces import system
-from cces.drvs import e104ble, battery, buzzer, rtc, gpio_button
-from cces.drvs import cst816s_lv, gc9a01_lv, qmi8658, Device
+from cces.drvs import battery, buzzer, rtc, gpio_button, Device
+from cces.drvs import cst816s_lv, gc9a01_lv, qmi8658, e104ble
 from cces import hal
 from cces import log
 
