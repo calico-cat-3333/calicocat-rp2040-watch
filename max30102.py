@@ -182,22 +182,38 @@ class MAX30102:
     def calculate_hr(self):
         if self.buf_any() < _BUFFER_SIZE:
             return -1
-        threshold = min(self.ir_buf) + (max(self.ir_buf) - min(self.ir_buf)) * 0.2
-        if threshold < 6000: # 通常意味着未佩戴
+        if min(self.ir_buf) < 6000: # 通常意味着未佩戴
             return -1
         peaks = []
-        for i in range(1, len(self.ir_buf)-1):
-            if self.ir_buf[i] > threshold and self.ir_buf[i] > self.ir_buf[i-1] and self.ir_buf[i] > self.ir_buf[i+1]:
+        for i in range(1, len(self.ir_buf) - 2):
+            if self.ir_buf[i] > self.ir_buf[i - 1] and self.ir_buf[i] >= self.ir_buf[i + 1] and self.ir_buf[i + 1] > self.ir_buf[i + 2]:
                 peaks.append(i)
         if len(peaks) < 2:
             return -1
-        intervals = [peaks[i+1] - peaks[i] for i in range(len(peaks)-1)]
+        intervals = [peaks[i + 1] - peaks[i] for i in range(len(peaks) - 1)]
         hr_bpm = (60 * len(intervals) * self.data_rate) / sum(intervals)
         return int(hr_bpm)
 
     def calculate_spo2(self):
         if self.buf_any() < _BUFFER_SIZE:
             return -1
+        if min(self.ir_buf) < 6000: # 通常意味着未佩戴
+            return -1
+    # 计算 DC 分量（信号均值）
+        dc_red = sum(self.red_buf) / len(self.red_buf)
+        dc_ir = sum(self.ir_buf) / len(self.ir_buf)
+        # 计算 AC 分量（信号最大最小值之差）
+        ac_red = max(self.red_buf) - min(self.red_buf)
+        ac_ir = max(self.ir_buf) - min(self.ir_buf)
+        if ac_ir == 0 or dc_ir == 0 or ac_red == 0 or dc_red == 0:
+            return -1  # 防止除零错误
+        # 计算 R 值
+        R = (ac_red / dc_red) / (ac_ir / dc_ir)
+        # 计算 SpO₂
+        spo2 = 110 - 25 * R
+        # 限制 SpO₂ 范围（一般 90% - 100%）
+        spo2 = max(70, min(100, spo2))
+        return int(spo2)  # 返回整数值
 
     def start_measure(self):
         self.wakeup()
