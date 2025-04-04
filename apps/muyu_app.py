@@ -16,6 +16,7 @@ muyu_img = lv.image_dsc_t({
 
 class MainActivity(Activity):
     def setup(self):
+        self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
         self.knock_btn = lv.button(self.scr)
         self.knock_btn.set_size(100, 100)
         self.knock_btn.align(lv.ALIGN.CENTER, 0, 0)
@@ -47,5 +48,11 @@ class MainActivity(Activity):
 
     def exit_btn_cb(self, _):
         self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
+
+    def gesture_event_cb(self, event):
+        lv.indev_active().wait_release()
+        gesture = lv.indev_active().get_gesture_dir()
+        if gesture == lv.DIR.RIGHT:
+            self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
 
 appmeta = AppMeta('电子木鱼', muyu_img, MainActivity)
