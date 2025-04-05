@@ -124,8 +124,7 @@ class NotificationCenter(Activity): # 通知中心
             self.current_notify = self.current_notify - 1
         elif self.current_notify == -1:
             self.current_notify = -1
-            _notify_id_list.clear()
-            _notify_storage.clear()
+            clear_all(False)
         self.update_display()
 
 _notify_storage = {}
@@ -160,3 +159,9 @@ def remove(nid, need_refresh=True):
         _notify_storage.pop(nid)
         if need_refresh:
             refresh_activity_on(REFRESHON.NOTIFICATION)
+
+def clear_all(need_refresh=True):
+    _notify_id_list.clear()
+    _notify_storage.clear()
+    if need_refresh:
+        refresh_activity_on(REFRESHON.NOTIFICATION)
