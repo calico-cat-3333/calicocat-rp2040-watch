@@ -26,10 +26,13 @@ class NotificationCenter(Activity): # 通知中心
         self.notify_next.set_size(240, 50)
         self.notify_next.align(lv.ALIGN.TOP_MID, 0, 0)
         self.notify_next.set_style_radius(0, lv.PART.MAIN | lv.STATE.DEFAULT)
-        self.notify_next.set_style_bg_color(lv.color_hex(0xFFFFFF), lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_next.set_style_bg_color(lv.color_hex(0xF5F5F5), lv.PART.MAIN | lv.STATE.DEFAULT)
         self.notify_next.set_style_shadow_width(0, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.notify_next.set_style_shadow_spread(0, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.notify_next.set_style_text_color(lv.color_hex(0x000000), lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_next.set_style_border_side(lv.BORDER_SIDE.BOTTOM, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_next.set_style_border_width(2, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_next.set_style_border_color(lv.color_hex(0xDDDDDD), lv.PART.MAIN | lv.STATE.DEFAULT)
         self.notify_next.add_event_cb(self.notify_next_cb, lv.EVENT.CLICKED, None)
 
         self.notify_title = lv.label(self.notify_next)
@@ -43,10 +46,13 @@ class NotificationCenter(Activity): # 通知中心
         self.notify_prev.set_size(240, 50)
         self.notify_prev.align(lv.ALIGN.BOTTOM_MID, 0, 0)
         self.notify_prev.set_style_radius(0, lv.PART.MAIN | lv.STATE.DEFAULT)
-        self.notify_prev.set_style_bg_color(lv.color_hex(0xFFFFFF), lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_prev.set_style_bg_color(lv.color_hex(0xF5F5F5), lv.PART.MAIN | lv.STATE.DEFAULT)
         self.notify_prev.set_style_shadow_width(0, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.notify_prev.set_style_shadow_spread(0, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.notify_prev.set_style_text_color(lv.color_hex(0x000000), lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_prev.set_style_border_side(lv.BORDER_SIDE.TOP, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_prev.set_style_border_width(2, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_prev.set_style_border_color(lv.color_hex(0xDDDDDD), lv.PART.MAIN | lv.STATE.DEFAULT)
         self.notify_prev.add_event_cb(self.notify_prev_cb, lv.EVENT.CLICKED, None)
 
         self.notify_number = lv.label(self.notify_prev)
@@ -62,6 +68,7 @@ class NotificationCenter(Activity): # 通知中心
         self.notify_text.set_cursor_pos(0)
         self.notify_text.set_style_radius(0, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.notify_text.set_style_border_side(lv.BORDER_SIDE.NONE, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_text.set_style_bg_color(lv.color_hex(0xF5F5F5), lv.PART.MAIN | lv.STATE.DEFAULT)
 
         self.current_notify = len(_notify_id_list) - 1
         self.update_display()
