@@ -21,7 +21,7 @@ class Buzzer(Device):
             self.volume = 100
         else:
             self.volume = volume
-        log('buzzer: set volume:', self.volume)
+        log('dummybuzzer: set volume:', self.volume)
 
     def beep(self, freq=4000):
         # 滴一声，可选参数为频率
@@ -54,5 +54,6 @@ class Buzzer(Device):
             cmd = cmd + str(freq) + '"'
         else:
             cmd = cmd + str(freq) + ' volume: ' + str(self.volume) + '"'
+        log('dummybuzzer: beep at freq:', freq, 'volume:', self.volume)
         os.system(cmd)
 

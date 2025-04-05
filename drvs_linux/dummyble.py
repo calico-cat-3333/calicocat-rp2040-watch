@@ -7,11 +7,9 @@ from . import Device
 from cces.log import log, ERROR, DEBUG
 
 # 假装这里有蓝牙
-_rpath = 'ble.txt'
 
 class BLE(Device):
     def __init__(self):
-        #self.uart = open(_rpath, 'rw')
         self.rx_line_buf = []
         self.rx_buf = ''
 
@@ -26,7 +24,6 @@ class BLE(Device):
             return False
 
     def reset(self):
-        # 重置，硬重置优先，不能用才用软重置
         log('dummyble: reset')
 
     def uart_rx_buf_clear(self):

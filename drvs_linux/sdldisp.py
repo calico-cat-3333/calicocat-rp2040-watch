@@ -28,4 +28,4 @@ class SDLdisp(Device_lv):
             self.brightness = 1
         else:
             self.brightness = value
-        log('screen: set brightness:', self.brightness)
+        log('sdl dispdev: set brightness:', self.brightness)

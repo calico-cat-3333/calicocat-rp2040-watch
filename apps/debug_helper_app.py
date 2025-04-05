@@ -18,8 +18,10 @@ class MainActivity(Activity):
                    ('GB Info', self.gbinfo),
                    ]
         self.nid = None
-        fll = [('tog ble', self.dummyble_tog),
+        fll = ['Linux Simu',
                ('bat val', self.set_dummy_bat_value),
+               ('set step', self.set_dummy_setp_value),
+               ('tog ble', self.dummyble_tog),
                ('GB weather', self.send_dummy_weather),
                ('GB Music', self.send_dummy_music),
                ]
@@ -37,6 +39,9 @@ class MainActivity(Activity):
         title.set_style_pad_top(20, lv.PART.MAIN | lv.STATE.DEFAULT)
 
         for f in self.fl:
+            if isinstance(f, str):
+                self.dlst.add_text(f)
+                continue
             btn = self.dlst.add_button(lv.SYMBOL.FILE, f[0])
             btn.set_flex_align(lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.SPACE_EVENLY)
             btn.add_event_cb(f[1], lv.EVENT.CLICKED, None)
@@ -119,5 +124,11 @@ class MainActivity(Activity):
             hal.battery.fake_adc_value = v
             log('set fake adc value:', v)
         NumberInputActivity('Dummy bat', 21845, 30000, setv, 25000).launch()
+
+    def set_dummy_setp_value(self, _):
+        def setv(v):
+            hal.imu.dummy_step = v
+            log('set fake step value:', v)
+        NumberInputActivity('Dummy step', 0, 30000, setv, 33).launch()
 
 appmeta = AppMeta('测试器', lv.SYMBOL.FILE, MainActivity)

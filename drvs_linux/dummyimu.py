@@ -3,7 +3,7 @@ from .device import Device
 
 class IMU(Device):
     def __init__(self):
-        pass
+        self.dummy_step = 33
 
     def reset(self):
         pass
@@ -18,7 +18,7 @@ class IMU(Device):
         return [0,0,0]
 
     def get_step(self):
-        return 33
+        return self.dummy_step
 
     def clear_step(self):
-        pass
+        self.dummy_step = 0
