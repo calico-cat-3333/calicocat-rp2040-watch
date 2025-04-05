@@ -16,11 +16,11 @@ class MainActivity(Activity):
                        ]
         else:
             self.fl = [('bat val', self.set_dummy_bat_value),
-                    ('set step', self.set_dummy_setp_value),
-                    ('tog ble', self.dummyble_tog),
-                    ('GB weather', self.send_dummy_weather),
-                    ('GB Music', self.send_dummy_music),
-                    ]
+                       ('set step', self.set_dummy_setp_value),
+                       ('tog ble', self.dummyble_tog),
+                       ('GB weather', self.send_dummy_weather),
+                       ('GB Music', self.send_dummy_music),
+                       ]
 
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
