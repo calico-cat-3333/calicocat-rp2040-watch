@@ -18,12 +18,6 @@ class BLE(Device):
         self.sleeping = None
         self.dummy_state = False
 
-    def at_reset(self):
-        pass
-
-    def at_mode(self, v=None):
-        pass
-
     def connected(self):
         return self.dummy_state
 
@@ -31,74 +25,9 @@ class BLE(Device):
         if mode == None:
             return False
 
-    def uart_rx_int_cb(self, _):
-        micropython.schedule(self.uart_rx_read_to_buf_ref, 0)
-
-    def _decode(self, buf):
-        # 传入的数据有时包含 ISO-8859-1 编码的数据，此时常规的 decode 方法不能正常工作
-        try:
-            dr = buf.decode()
-        except UnicodeError:
-            log('faild in unicode decode, try fallback decoder')
-            try:
-                dr = ''.join(chr(i) for i in buf)
-            except Exception as e:
-                log('faild in fallback decoder', exc=e, level=ERROR)
-                return None
-        except Exception as e:
-            log('error in decode:', e, exc=e, level=ERROR)
-            return None
-        return dr
-
-    def _rx_buf_parse(self):
-        if not self.rx_buf.endswith('\n'):
-            return
-
-        if self.uart_rx_any() > 10:
-            log('too may rx message in rx_line_buf, something must go wrong', level=ERROR)
-            self.rx_line_buf.clear()
-
-        if self.rx_buf == '\r\n':
-            # empty line
-            pass
-
-        elif self.rx_buf[:4] == 'STA:':
-            # status report
-            log('ble report status update:', self.rx_buf)
-            self.status_update(self.rx_buf.rstrip())
-
-        elif self.rx_buf[:3] == '+OK' or self.rx_buf[:4] == '+ERR':
-            # at command respons
-            log('at command respons received:', self.rx_buf.rstrip())
-
-        else:
-            # payload
-            self.rx_line_buf.append(self.rx_buf.rstrip())
-            log('uart rx receive line:', self.rx_buf)
-
-        self.rx_buf = ''
-
-    def uart_rx_read_to_buf(self, _):
-        while self.uart.any():
-            try:
-                #r = self.uart.readline()
-                log('uart rx receive:', r, level=DEBUG)
-            except Exception as e:
-                log('faild in uart read:', e, exc=e, level=ERROR)
-                self.rx_buf = ''
-                return
-
-            dr = self._decode(r)
-            if dr == None:
-                self.rx_buf = ''
-                return
-
-            self.rx_buf = self.rx_buf + dr
-            self._rx_buf_parse()
-
     def reset(self):
         # 重置，硬重置优先，不能用才用软重置
-        self.at_reset()
+        log('dummyble: reset')
 
     def uart_rx_buf_clear(self):
         self.rx_buf = ''
@@ -132,6 +61,8 @@ class BLE(Device):
         log('uart send raw data:', tx_raw)
         #self.uart.write(tx_raw)
 
+# only on dummy driver
+
     def dummy_gb_respons(self, a):
         if not self.connected():
             return
@@ -154,5 +85,6 @@ class BLE(Device):
     def dummyconnect(self, s):
         self.dummy_state = s
         if s:
-            self.rx_line_buf.append('')
+            self.rx_line_buf.append('\x10GB({"t":"is_gps_active"})')
+            self.rx_line_buf.append('\x10GB({"t":"is_gps_active"})')
             self.rx_line_buf.append("\x10setTime(1742316416);E.setTimeZone(8.0);(s=>s&&(s.timezone=8.0,require('Storage').write('setting.json',s)))(require('Storage').readJSON('setting.json',1))")

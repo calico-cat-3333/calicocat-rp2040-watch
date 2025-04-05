@@ -19,6 +19,7 @@ class MainActivity(Activity):
                    ]
         self.nid = None
         fll = [('tog ble', self.dummyble_tog),
+               ('bat val', self.set_dummy_bat_value),
                ('GB weather', self.send_dummy_weather),
                ('GB Music', self.send_dummy_music),
                ]
@@ -112,5 +113,11 @@ class MainActivity(Activity):
     def send_dummy_music(self, _):
         hal.ble.rx_line_buf.append('\x10GB({"t":"musicinfo","artist":"\u6d1b\u5929\u4f9d","album":"\u7acb\u6625","track":"\u7acb\u6625","dur":131,"c":-1,"n":1})')
         hal.ble.rx_line_buf.append('\x10GB({"t":"musicstate","state":"play","position":50,"shuffle":-1,"repeat":-1})')
+
+    def set_dummy_bat_value(self, _):
+        def setv(v):
+            hal.battery.fake_adc_value = v
+            log('set fake adc value:', v)
+        NumberInputActivity('Dummy bat', 21845, 30000, setv, 25000).launch()
 
 appmeta = AppMeta('测试器', lv.SYMBOL.FILE, MainActivity)
