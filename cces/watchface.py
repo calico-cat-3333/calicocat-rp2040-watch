@@ -3,7 +3,7 @@ import time
 import gc
 
 from .activity import Activity, REFRESHON, fonts
-from .activity import AskYesNoActivity
+from .activity import QuickSettings
 from .task_scheduler import Task
 from . import gadgetbridge
 from . import hal
@@ -67,15 +67,6 @@ class WatchFaceAtivity(Activity):
         length = (settingsdb.get('step_length', 50) * steps) / 100000
         self.step_label.set_text(fonts.SYMBOL.WALK + ' {:d}  {:.2f} KM'.format(steps, length))
 
-    def yesclick(self):
-        settingsdb.put('do_not_disturb', True)
-        gadgetbridge.send_msg('info', 'DND Enable!')
-
-    def noclickcb(self):
-        settingsdb.put('do_not_disturb', False)
-        gadgetbridge.send_msg('info', 'DND Disable!')
-        hal.buzzer.beep()
-
     def refresh_event_cb(self, event):
         if hal.ble.connected():
             self.ble_label.set_style_text_color(lv.color_hex(0x000000), lv.PART.MAIN | lv.STATE.DEFAULT)
@@ -86,15 +77,7 @@ class WatchFaceAtivity(Activity):
         lv.indev_active().wait_release()
         gesture = lv.indev_active().get_gesture_dir()
         if gesture == lv.DIR.TOP:
-            state = '勿扰已启用\n' if settingsdb.get('do_not_disturb', False) else '勿扰已禁用\n'
-            AskYesNoActivity(title = 'DND',
-                             text = state + '启用请勿打扰?',
-                             on_yes_clicked = self.yesclick,
-                             on_no_clicked = self.noclickcb,
-                             yes_label_text = 'ON',
-                             no_label_text = 'OFF',
-                             exit_anim = lv.SCR_LOAD_ANIM.OVER_BOTTOM
-                             ).launch(lv.SCR_LOAD_ANIM.OVER_TOP)
+            QuickSettings().launch(lv.SCR_LOAD_ANIM.OVER_TOP)
         if gesture == lv.DIR.BOTTOM:
             NotificationCenter().launch(lv.SCR_LOAD_ANIM.OVER_BOTTOM)
         if gesture == lv.DIR.LEFT:
