@@ -10,7 +10,7 @@ from cces.drvs import Device_lv
 # GC9A01 显示屏 lvgl 驱动接口
 
 class GC9A01_lv(Device_lv):
-    def __init__(self, spi, rst, cs, dc, bl, doublebuffer=True):
+    def __init__(self, spi, rst, cs, dc, bl, doublebuffer=False):
         self.width = 240
         self.height = 240
         self.doublebuffer = doublebuffer
@@ -74,7 +74,7 @@ class GC9A01_lv(Device_lv):
     def bl_off(self):
         # 关闭背光
         self.backlight.duty_u16(0)
-        time.sleep_ms(1)
+        time.sleep_ms(2)
         self.backlight.deinit()
 
     def bl_on(self):

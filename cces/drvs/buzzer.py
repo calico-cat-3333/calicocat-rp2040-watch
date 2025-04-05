@@ -27,7 +27,7 @@ class Buzzer(Device):
     def stop_pwm(self):
         # 停止整个 PWM
         self.buzzer.duty_u16(0)
-        time.sleep_ms(1)
+        time.sleep_ms(2)
         self.buzzer.deinit()
 
     def beep(self, freq=4000):
