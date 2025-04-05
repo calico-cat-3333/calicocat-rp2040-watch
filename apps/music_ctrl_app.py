@@ -89,12 +89,14 @@ class MainActivity(Activity):
 
     def refresh_event_cb(self, event):
         if not hal.ble.connected():
-            self.music_info.set_text('蓝牙未连接')
+            title_text = '蓝牙未连接'
         else:
             artist = gadgetbridge.music_info.get('artist', '?')
             track = gadgetbridge.music_info.get('track', '?')
             album = gadgetbridge.music_info.get('album', '?')
-            self.music_info.set_text(track + ' - ' + artist + ' - ' + album)
+            title_text = track + ' - ' + artist + ' - ' + album
+        if self.music_info.get_text() != title_text:
+            self.music_info.set_text(title_text)
         dur = gadgetbridge.music_info.get('dur', 0xffff)
         self.music_progress.set_range(0, dur)
         position = gadgetbridge.music_state.get('position', 0)
