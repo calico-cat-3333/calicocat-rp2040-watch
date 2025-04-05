@@ -1,6 +1,8 @@
 import lvgl as lv
 
-from . import Activity
+from .activity import Activity
+
+# 要求输入一个数字的 Activity
 
 class NumberInputActivity(Activity):
     def __init__(self,

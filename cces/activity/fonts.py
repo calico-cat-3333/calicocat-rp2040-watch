@@ -1,5 +1,7 @@
 import lvgl as lv
 
+# 附加字体的符号表
+
 class SYMBOL:
     CLOCK = ''
     RELOAD = ''

@@ -1,6 +1,8 @@
 import lvgl as lv
 
-from . import Activity
+from .activity import Activity
+
+# 询问是否的 Activity
 
 class AskYesNoActivity(Activity):
     def __init__(self,

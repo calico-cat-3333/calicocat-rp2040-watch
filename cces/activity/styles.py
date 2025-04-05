@@ -1,5 +1,8 @@
 import lvgl as lv
 
+# 部分通用 style 目前有：
+# 透明背景按钮及其按下后样式
+
 transparent_button = None
 white_button = None
 

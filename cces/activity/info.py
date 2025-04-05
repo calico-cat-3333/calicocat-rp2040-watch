@@ -1,6 +1,8 @@
 import lvgl as lv
 
-from . import Activity
+from .activity import Activity
+
+# 显示一条信息的 Activity
 
 class InfoActivity(Activity):
     def __init__(self, title, text, on_ok_clicked=None, ok_label_text='OK', exit_anim=None):

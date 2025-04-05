@@ -1,6 +1,8 @@
 import lvgl as lv
 
-from . import Activity
+from .activity import Activity
+
+# 滑块输入数字的 Activity
 
 class SliderActivity(Activity):
     def __init__(self,
