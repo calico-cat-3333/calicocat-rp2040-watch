@@ -82,7 +82,7 @@ class HRM(Device):
     def fifo_smoothread(self):
         # 使用滑动窗口平均化处理后再放入 buf
         log('fifo smoothread')
-        self.dhr = randint(60, 120)
+        self.dhr = randint(60, 200)
         self.dspo2 = randint(80, 100)
 
     def buf_any(self):
