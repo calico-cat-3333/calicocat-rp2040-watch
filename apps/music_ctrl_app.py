@@ -1,7 +1,7 @@
 import lvgl as lv
 
 from cces.appmgr import AppMeta
-from cces.activity import Activity, REFRESHON, styles
+from cces.activity import Activity, REFRESHON, styles, fonts
 from cces import hal, gadgetbridge
 
 class MainActivity(Activity):
@@ -111,4 +111,4 @@ class MainActivity(Activity):
         if gesture == lv.DIR.RIGHT:
             self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
 
-appmeta = AppMeta('音乐控制', lv.SYMBOL.AUDIO, MainActivity)
+appmeta = AppMeta('音乐控制', fonts.SYMBOL.DISC, MainActivity)

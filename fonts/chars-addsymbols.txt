@@ -16,7 +16,6 @@
  # walk
  # user_cofig
  # shoe print
- # weight
 
 # rain
  #heavy rain
@@ -29,7 +28,14 @@
 
 
 
+ # comment
+
 # v6 solid 900
  # cloud blot
 🌪
- #timer
+ # weight
+
+
+💿
+⏱
+⚀⚁⚂⚃⚄⚅
