@@ -38,9 +38,4 @@ class SYMBOL:
     TOGGLE_OFF = ''
     TOGGLE_ON = ''
     DISC = '💿'
-    DICE_1 = '⚀'
-    DICE_2 = '⚁'
-    DICE_3 = '⚂'
-    DICE_4 = '⚃'
-    DICE_5 = '⚄'
-    DICE_6 = '⚅'
+    DICE = ('⚀', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅')
