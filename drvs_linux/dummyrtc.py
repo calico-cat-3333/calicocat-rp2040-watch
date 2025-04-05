@@ -1,9 +1,12 @@
+from cces.log import log
+import time
+
 class RTC:
     def __init__(self):
         pass
 
     def set_time_unix(self, timestamp):
-        pass
+        log('dummyrtc: set time to:', time.localtime(timestamp))
 
     def set_time(y, m, d, h, mm, s):
-        pass
+        log('dummyrtc: set time to:', y, m, d, h, mm, s)
