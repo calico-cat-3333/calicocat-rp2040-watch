@@ -18,6 +18,12 @@ class MainActivity(Activity):
                    ('GB Info', self.gbinfo),
                    ]
         self.nid = None
+        fll = [('tog ble', self.dummyble_tog),
+               ('GB weather', self.send_dummy_weather),
+               ('GB Music', self.send_dummy_music),
+               ]
+        if sys.platform == 'linux':
+            self.fl.extend(fll)
 
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
@@ -96,5 +102,15 @@ class MainActivity(Activity):
 
     def gbinfo(self, _):
         gadgetbridge.send_msg('info', 'test info')
+
+    def dummyble_tog(self, _):
+        hal.ble.dummyconnect(not hal.ble.connected())
+
+    def send_dummy_weather(self, _):
+        hal.ble.rx_line_buf.append('\x10GB({"t":"weather","temp":288,"hi":292,"lo":284,"hum":21,"rain":0,"uv":0,"code":800,"txt":"\u6674","wind":7.0,"wdir":216,"loc":"\u957f\u6e05\u533a"})')
+
+    def send_dummy_music(self, _):
+        hal.ble.rx_line_buf.append('\x10GB({"t":"musicinfo","artist":"\u6d1b\u5929\u4f9d","album":"\u7acb\u6625","track":"\u7acb\u6625","dur":131,"c":-1,"n":1})')
+        hal.ble.rx_line_buf.append('\x10GB({"t":"musicstate","state":"play","position":50,"shuffle":-1,"repeat":-1})')
 
 appmeta = AppMeta('测试器', lv.SYMBOL.FILE, MainActivity)
