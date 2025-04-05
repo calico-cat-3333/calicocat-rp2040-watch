@@ -53,6 +53,7 @@ class WatchFaceAtivity(Activity):
 
     def on_cover_exit(self):
         self.update_display_task.start()
+        self.refresh_event_cb(0)
 
     def update_display(self):
         lt = time.localtime()
