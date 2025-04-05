@@ -9,12 +9,12 @@ from cces.log import log, ERROR, DEBUG
 # 假装这里有蓝牙
 
 class BLE(Device):
-    def __init__(self):
+    def __init__(self, default_connected = False):
         self.rx_line_buf = []
         self.rx_buf = ''
 
         self.sleeping = None
-        self.dummy_state = False
+        self.dummyconnect(default_connected)
 
     def connected(self):
         return self.dummy_state

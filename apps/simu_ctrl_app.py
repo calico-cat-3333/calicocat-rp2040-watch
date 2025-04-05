@@ -86,4 +86,4 @@ class MainActivity(Activity):
             log('set fake step value:', v)
         NumberInputActivity('Dummy step', 0, 30000, setv, 33).launch()
 
-appmeta = AppMeta('SimuCtrl', lv.SYMBOL.FILE, MainActivity)
+appmeta = AppMeta('SimuCtrl', lv.SYMBOL.KEYBOARD, MainActivity)

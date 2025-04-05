@@ -14,6 +14,6 @@ hal.buzzer = dummybuzzer.Buzzer()
 hal.imu = dummyimu.IMU()
 hal.hartrate = dummyhr.HRM()
 hal.battery = dummybattery.Battery()
-hal.ble = dummyble.BLE()
+hal.ble = dummyble.BLE(True)
 
 system.start()
