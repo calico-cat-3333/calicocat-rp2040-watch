@@ -153,13 +153,15 @@ def music_ctrl(cmd):
         return
     hal.ble.uart_tx(json.dumps({'t':'music', 'n':cmd}))
 
+def find_phone(s):
+    hal.ble.uart_tx(json.dumps({'t':'findPhone', 'n':s}))
+
 def send_status():
     refresh_activity_on(REFRESHON.BLE_CONNECTION)
     if not hal.ble.connected():
         return TASKEXIT
     bat_stat = hal.battery.dump()
     hal.ble.uart_tx(json.dumps({'t':'status', 'bat':round(bat_stat[2], 2), 'volt':bat_stat[0], 'chg':int(bat_stat[3])}))
-
 
 def start():
     global beep_repeat_task
