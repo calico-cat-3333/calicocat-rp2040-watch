@@ -10,6 +10,7 @@ from .. import hal, settingsdb, gadgetbridge, notification
 class QuickSettings(Activity):
     def __init__(self):
         self.btn_map = [fonts.SYMBOL.BELL_DISABLE + ' 请勿打扰', fonts.SYMBOL.COMMENT + ' 清空通知', '\n', fonts.SYMBOL.PHONE + ' 查找手机', fonts.SYMBOL.DICE[0] + ' 随机骰子', '']
+        self.need_save_settings = False
 
     def setup(self):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
@@ -84,6 +85,7 @@ class QuickSettings(Activity):
                 gadgetbridge.send_msg('info', 'DND Enable!')
                 self.btn_map[0] = fonts.SYMBOL.BELL_DISABLE + ' 请勿打扰'
             self.settings_panel.set_map(self.btn_map)
+            self.need_save_settings = not self.need_save_settings
         elif b == 1:
             notification.clear_all()
         elif b == 2:
@@ -104,3 +106,7 @@ class QuickSettings(Activity):
 
     def exit_btn_cb(self, event):
         self.exit(lv.SCR_LOAD_ANIM.OVER_BOTTOM)
+
+    def before_exit(self):
+        if self.need_save_settings:
+            settingsdb.save_settings()
