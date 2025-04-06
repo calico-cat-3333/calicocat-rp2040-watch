@@ -2,7 +2,7 @@ import lvgl as lv
 import sys
 
 from cces.appmgr import AppMeta
-from cces.activity import Activity, InfoActivity, AskYesNoActivity, NumberInputActivity, SliderActivity
+from cces.activity import Activity, InfoActivity, AskYesNoActivity, NumberInputActivity, SliderActivity, fonts
 from cces import hal, gadgetbridge
 from cces import notification
 from cces.log import log
@@ -100,4 +100,4 @@ class MainActivity(Activity):
     def gbinfo(self, _):
         gadgetbridge.send_msg('info', 'test info')
 
-appmeta = AppMeta('测试器', lv.SYMBOL.FILE, MainActivity)
+appmeta = AppMeta('测试器', fonts.SYMBOL.IDE, MainActivity)

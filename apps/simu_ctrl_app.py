@@ -2,7 +2,7 @@ import lvgl as lv
 import sys
 
 from cces.appmgr import AppMeta
-from cces.activity import Activity, InfoActivity, AskYesNoActivity, NumberInputActivity, SliderActivity
+from cces.activity import Activity, InfoActivity, AskYesNoActivity, NumberInputActivity, SliderActivity, fonts
 from cces import hal, gadgetbridge
 from cces import notification
 from cces.log import log
@@ -15,7 +15,7 @@ class MainActivity(Activity):
                        ('real machine', self.exit_btn_cb)
                        ]
         else:
-            self.fl = [('bat val', self.set_dummy_bat_value),
+            self.fl = [('bat adc', self.set_dummy_bat_value),
                        ('set step', self.set_dummy_setp_value),
                        ('tog ble', self.dummyble_tog),
                        ('GB weather', self.send_dummy_weather),
@@ -77,13 +77,13 @@ class MainActivity(Activity):
     def set_dummy_bat_value(self, _):
         def setv(v):
             hal.battery.fake_adc_value = v
-            log('set fake adc value:', v)
+            log('set fake bat adc value:', v)
         NumberInputActivity('Dummy bat', 21845, 30000, setv, 25000).launch()
 
     def set_dummy_setp_value(self, _):
         def setv(v):
             hal.imu.dummy_step = v
             log('set fake step value:', v)
-        NumberInputActivity('Dummy step', 0, 30000, setv, 33).launch()
+        NumberInputActivity('Dummy step', 0, 100000, setv).launch()
 
-appmeta = AppMeta('SimuCtrl', lv.SYMBOL.KEYBOARD, MainActivity)
+appmeta = AppMeta('SimuCtrl', fonts.SYMBOL.TERMINAL, MainActivity)

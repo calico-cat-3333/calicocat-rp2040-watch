@@ -39,3 +39,14 @@ class SYMBOL:
     TOGGLE_ON = ''
     DISC = '💿'
     DICE = ('⚀', '⚁', '⚂', '⚃', '⚄', '⚅')
+    WATER_DROP = ''
+    TERMINAL = ''
+    IDE = ''
+    FIRE = ''
+    CAT = '🐈'
+    DOG = '🐕'
+    OTTER = '🦦' # otter
+    FISH = '🐟'
+    SHRIMP = '🦐' # shrimp
+    WALLET = '' # wallet
+    FAN = '' # fan
