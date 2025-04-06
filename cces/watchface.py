@@ -12,6 +12,8 @@ from .appmgr import Launcher
 
 from .notification import NotificationCenter
 
+_WEEKDAY_NAMES = ('周一', '周二', '周三', '周四', '周五', '周六', '周日')
+
 class WatchFaceAtivity(Activity):
     def __init__(self):
         self.update_display_task = Task(self.update_display, 1000) # update display every 1 secs
@@ -22,8 +24,7 @@ class WatchFaceAtivity(Activity):
         self.sidekey_exit = False
         self.date_label = lv.label(self.scr)
         self.date_label.align(lv.ALIGN.CENTER, 0, -60)
-        self.date_label.set_style_text_font(lv.font_montserrat_16, lv.PART.MAIN | lv.STATE.DEFAULT)
-        self.date_label.set_text('YYYY-MM-DD')
+        self.date_label.set_text('YYYY-MM-DD WW')
 
         self.time_label = lv.label(self.scr)
         self.time_label.align(lv.ALIGN.CENTER, 0, 0)
@@ -57,7 +58,7 @@ class WatchFaceAtivity(Activity):
 
     def update_display(self):
         lt = time.localtime()
-        self.date_label.set_text('{:0>4d}-{:0>2d}-{:0>2d}'.format(*lt[:3]))
+        self.date_label.set_text('{:0>4d}-{:0>2d}-{:0>2d} {}'.format(*lt[:3], _WEEKDAY_NAMES[lt[6]]))
         self.time_label.set_text('{:0>2d}:{:0>2d}:{:0>2d}'.format(*lt[3:6]))
         bat_stat = hal.battery.dump()
         if bat_stat[3]:
