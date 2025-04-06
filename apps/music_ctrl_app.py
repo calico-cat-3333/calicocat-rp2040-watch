@@ -91,9 +91,9 @@ class MainActivity(Activity):
         if not hal.ble.connected():
             title_text = '蓝牙未连接'
         else:
-            artist = gadgetbridge.music_info.get('artist', '?')
-            track = gadgetbridge.music_info.get('track', '?')
-            album = gadgetbridge.music_info.get('album', '?')
+            artist = gadgetbridge.music_info.get('artist', '')
+            track = gadgetbridge.music_info.get('track', '')
+            album = gadgetbridge.music_info.get('album', '')
             title_text = track + ' - ' + artist + ' - ' + album
         if self.music_info.get_text() != title_text:
             self.music_info.set_text(title_text)
