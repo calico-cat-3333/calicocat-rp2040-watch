@@ -95,6 +95,8 @@ class MainActivity(Activity):
             track = gadgetbridge.music_info.get('track', '')
             album = gadgetbridge.music_info.get('album', '')
             title_text = track + ' - ' + artist + ' - ' + album
+            if track == '' and artist == '' and album == '':
+                title_text = '音乐控制'
         if self.music_info.get_text() != title_text:
             self.music_info.set_text(title_text)
         dur = gadgetbridge.music_info.get('dur', 0xffff)
