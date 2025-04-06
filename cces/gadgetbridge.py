@@ -60,10 +60,13 @@ def gb_cmd_parse():
     if not hal.ble.uart_rx_any():
         return
     cmd = hal.ble.uart_rx()
-    if len(cmd) < 10:
-        # 太短的绝对不对
+    if len(cmd) < 10 or '\x10' not in cmd or ')' not in cmd:
+        # 太短的绝对不对，没有 '\x10' 绝对不对，没有 ')' 绝对不对
         log('not vaild cmd:', cmd, level=ERROR)
         return
+    # 排除干扰（不知道是不是反复焊接的关系，现在偶尔会出现收到奇怪的字符的情况）
+    s = cmd.find('\x10')
+    cmd = cmd[s:]
 
     if cmd[:9] == '\x10setTime(' and cmd.endswith(',1))'):
         # 对设置时间的指令特殊处理
