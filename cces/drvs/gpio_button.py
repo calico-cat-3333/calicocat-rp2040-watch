@@ -11,6 +11,7 @@ class GPIOButton(Device_lv):
         self.pin = pin
         self.pin.irq(handler=self.int_pin_read, trigger=Pin.IRQ_FALLING | Pin.IRQ_RISING)
         self.pressed = False
+        self.onwakeup = False
 
     def int_pin_read(self, pin):
         if pin.value():
@@ -31,8 +32,10 @@ class GPIOButton(Device_lv):
             if powermanager.sys_sleeping:
                 powermanager.try_wakeup() # 如果是唤醒，则不进行任何操作
                 data.state = lv.INDEV_STATE.RELEASED
-            else:
+                self.onwakeup = True
+            elif not self.onwakeup:
                 data.state = lv.INDEV_STATE.PRESSED
         else:
+            self.onwakeup = False
             data.state = lv.INDEV_STATE.RELEASED
         data.key = lv.KEY.ESC
