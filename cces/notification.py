@@ -12,9 +12,9 @@ class NotificationCenter(Activity): # 通知中心
         self.scr.remove_flag(lv.obj.FLAG.SCROLLABLE)
 
         self.notify_remove = lv.button(self.scr)
-        self.notify_remove.set_size(40, 240)
+        self.notify_remove.set_size(40, 140)
         self.notify_remove.align(lv.ALIGN.RIGHT_MID, 0, 0)
-        #self.notify_remove.set_style_radius(120, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.notify_remove.set_style_radius(0, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.notify_remove.add_event_cb(self.notify_remove_cb, lv.EVENT.CLICKED, None)
 
         self.notify_remove_label = lv.label(self.notify_remove)
