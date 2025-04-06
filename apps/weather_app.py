@@ -94,7 +94,7 @@ class MainActivity(Activity):
     def code2icon(self, code):
         # 参考 https://openweathermap.org/weather-conditions
         h = (code // 100) - 2
-        isday = time.localtime()[3] >= 6 and time.localtime()[3] <= 18
+        isday = time.localtime()[3] >= 6 and time.localtime()[3] < 18
         if h >= 0 and h <= 6:
             icon = _WEATHER_ICON_MAP[h]
         else:
@@ -112,7 +112,7 @@ class MainActivity(Activity):
     def code2style(self, code):
         # 根据天气代码设置 GUI 背景和文字颜色
         h = (code // 100)
-        isday = time.localtime()[3] >= 6 and time.localtime()[3] <= 18
+        isday = time.localtime()[3] >= 6 and time.localtime()[3] < 18
         scs = (0xF5F5F5, 0xF5F5F5, 0x000000)
         if h == 2: # 雷暴
             scs = _BG_COLOR_MAP[9]
