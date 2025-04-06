@@ -73,6 +73,7 @@ class MainActivity(Activity):
         code = gadgetbridge.weather_data.get('code', 0)
         wind = gadgetbridge.weather_data.get('wind', 0)
         wdir = gadgetbridge.weather_data.get('wdir', 0)
+        uv = gadgetbridge.weather_data.get('uv', 0)
         ts = time.localtime(gadgetbridge.weather_data.get('time', 0))
 
         self.code2style(code)
@@ -86,7 +87,7 @@ class MainActivity(Activity):
                     fonts.SYMBOL.FAN + ' {}  {:.1f}KM/h\n'.format(self.wdir2str(wdir), wind) + \
                     fonts.SYMBOL.WATER_DROP + ' {:d}%  '.format(gadgetbridge.weather_data.get('hum', 0)) + \
                     fonts.SYMBOL.RAIN + ' {:d}%\n'.format(gadgetbridge.weather_data.get('rain', 0)) + \
-                    fonts.SYMBOL.SUN + 'UV {}\n'.format(gadgetbridge.weather_data.get('uv', 0)) + \
+                    fonts.SYMBOL.SUN + 'UV {} {}\n'.format(uv, self.uv2str(uv)) + \
                     fonts.SYMBOL.CLOCK + ' {:0>2d}:{:0>2d}'.format(*ts[3:5])
         self.weather_info.set_text(info_text)
 
@@ -127,14 +128,26 @@ class MainActivity(Activity):
         else:
             if code == 800: # 晴天
                 scs = _BG_COLOR_MAP[0] if isday else _BG_COLOR_MAP[1]
-            elif code == 801 or code == 802:
+            elif code == 801 or code == 802: # 阴天1
                 scs = _BG_COLOR_MAP[2] if isday else _BG_COLOR_MAP[4]
-            elif code == 803 or code == 804:
+            elif code == 803 or code == 804: # 阴天2
                 scs = _BG_COLOR_MAP[3] if isday else _BG_COLOR_MAP[4]
         self.scr.set_style_bg_color(lv.color_hex(scs[0]), lv.PART.MAIN | lv.STATE.DEFAULT)
         self.scr.set_style_bg_grad_color(lv.color_hex(scs[1]), lv.PART.MAIN | lv.STATE.DEFAULT)
         self.location.set_style_text_color(lv.color_hex(scs[2]), lv.PART.MAIN | lv.STATE.DEFAULT)
         self.current_temp.set_style_text_color(lv.color_hex(scs[2]), lv.PART.MAIN | lv.STATE.DEFAULT)
+
+    def uv2str(self, uv):
+        if uv <= 2:
+            return '低'
+        elif uv <= 5:
+            return '中等'
+        elif uv <= 7:
+            return '高'
+        elif uv <= 10:
+            return '很高'
+        else:
+            return '极高'
 
     def wdir2str(self, wdir):
         # 解析风向，原始数据是以正南方为 0 度，顺时针旋转的角度
