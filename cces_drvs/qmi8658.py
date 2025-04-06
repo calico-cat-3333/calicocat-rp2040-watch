@@ -1,7 +1,9 @@
 import time
 import struct
 
-from micropython import const
+from machine import Pin
+
+from micropython import const, schedule
 
 from cces.drvs import Device
 
@@ -113,6 +115,8 @@ class QMI8658(Device):
         self.int2 = int2 # data ready or fifo interrupt
         self.use_fifo = use_fifo # FIFO not work, disable by default
         self.address = address
+        self._steps = 0
+        self.ref_read_step = self.read_step
         time.sleep_ms(5)
 
         whoami, rev = self.chip_info()
@@ -164,8 +168,13 @@ class QMI8658(Device):
 
         self.i2c_write(_QMI8658_CTRL7, 0x03) # Enable Accelerometer and Gyroscope
 
+        # use interrupt to read steps
+        self._steps = 0
+        self.int1.irq(handler=self.int_step_read, trigger=Pin.IRQ_FALLING)
+
     def reset(self):
         # soft reset
+        self._steps = 0
         self.i2c_write(_QMI8658_RESET, 0xB0)
         time.sleep_ms(15)
         if self.i2c_read(0x4D)[0] == 0x80:
@@ -260,8 +269,15 @@ class QMI8658(Device):
 
         self.ctrl9w_cmd(CTRL9_CMD_CONFIGURE_PEDOMETER)
 
+    def read_step(self, _):
+        self._steps = self.i2c_read24(_QMI8658_STEP_CNT_LOW)
+
     def get_step(self):
-        return self.i2c_read24(_QMI8658_STEP_CNT_LOW)
+        return self._steps
 
     def clear_step(self):
+        self._steps = 0
         self.ctrl9w_cmd(CTRL9_CMD_RESET_PEDOMETER)
+
+    def int_step_read(self, _):
+        schedule(self.ref_read_step, 0)
