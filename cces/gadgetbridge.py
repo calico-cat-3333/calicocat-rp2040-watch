@@ -159,6 +159,8 @@ def find_phone(s):
 def send_status():
     refresh_activity_on(REFRESHON.BLE_CONNECTION)
     if not hal.ble.connected():
+        music_info.clear()
+        music_state.clear()
         return TASKEXIT
     bat_stat = hal.battery.dump()
     hal.ble.uart_tx(json.dumps({'t':'status', 'bat':round(bat_stat[2], 2), 'volt':bat_stat[0], 'chg':int(bat_stat[3])}))
