@@ -281,3 +281,11 @@ class QMI8658(Device):
 
     def int_step_read(self, _):
         schedule(self.ref_read_step, 0)
+
+    def on_sleep(self):
+        # disable interrupt
+        self.int1.irq(handler=None, trigger=Pin.IRQ_FALLING)
+
+    def on_wakeup(self):
+        self.read_step()
+        self.int1.irq(handler=self.int_step_read, trigger=Pin.IRQ_FALLING)
