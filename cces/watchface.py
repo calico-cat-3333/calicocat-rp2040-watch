@@ -8,7 +8,7 @@ from .task_scheduler import Task
 from . import gadgetbridge
 from . import hal
 from . import settingsdb
-from .appmgr import Launcher
+from .appmgr import Launcher, launch_app
 
 from .notification import NotificationCenter
 
@@ -84,3 +84,5 @@ class WatchFaceAtivity(Activity):
             NotificationCenter().launch(lv.SCR_LOAD_ANIM.OVER_BOTTOM)
         if gesture == lv.DIR.LEFT:
             Launcher().launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
+        if gesture == lv.DIR.RIGHT:
+            launch_app('apps.calendar_app', lv.SCR_LOAD_ANIM.OVER_RIGHT)

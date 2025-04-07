@@ -1,7 +1,7 @@
 import lvgl as lv
 import sys
 
-from cces.appmgr import AppMeta
+from cces.appmgr import AppMeta, launch_app
 from cces.activity import Activity, InfoActivity, AskYesNoActivity, NumberInputActivity, SliderActivity, fonts
 from cces import hal, gadgetbridge
 from cces import notification
@@ -16,6 +16,7 @@ class MainActivity(Activity):
                    ('input number', self.input_number_example),
                    ('slider', self.slider_example),
                    ('GB Info', self.gbinfo),
+                   ('launch app', lambda _: launch_app('apps.weather_app', lv.SCR_LOAD_ANIM.OVER_LEFT)),
                    ]
         self.nid = None
 

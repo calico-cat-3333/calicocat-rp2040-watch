@@ -79,7 +79,7 @@ class MainActivity(Activity):
         rain = randint(0, 100)
         uv = randint(0, 15)
         wdir = randint(0, 359)
-        wind = randint(0, 7) * 1.0
+        wind = randint(0, 50) * 1.0
         hum = randint(0, 100)
         hal.ble.rx_line_buf.append('\x10GB({' + '"t":"weather","temp":{:d},"hi":{:d},"lo":{:d},"hum":{:d},"rain":{:d},"uv":{:d},"code":{:d},"txt":"{}","wind":{:f},"wdir":{:d},"loc":"\u957f\u6e05\u533a"'.format(ctmp[r] + 273, tmph[r] + 273, tmpl[r] + 273, hum, rain, uv, codes[r], strs[r], wind, wdir) + '})')
 
