@@ -22,6 +22,11 @@ class WatchFaceAtivity(Activity):
         self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
         self.refresh_on = REFRESHON.BLE_CONNECTION
         self.sidekey_exit = False
+        self.img = lv.image(self.scr)
+        self.img.set_src('S:a.png')
+        self.img.set_antialias(False)
+        self.img.set_scale(512)
+        self.img.align(lv.ALIGN.CENTER, 70, 50)
         self.date_label = lv.label(self.scr)
         self.date_label.align(lv.ALIGN.CENTER, 0, -60)
         self.date_label.set_text('YYYY-MM-DD WW')
