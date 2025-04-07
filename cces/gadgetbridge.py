@@ -34,7 +34,7 @@ def set_time(cmd):
     # 发送于 2025 03 19 00:46
     # setTime 后面是 UTC 的 unix 时间戳
     # E.setTimeZone 后面是时区
-    cmds = cmd.split(';')
+    cmds = cmd.split(';', 2)
     utctime = int(cmds[0][9:-1])
     timezone = float(cmds[1][14:-1])
     hal.rtc.set_time_unix(int(utctime + (timezone * 3600)))
@@ -160,6 +160,7 @@ def gb_cmd_parse():
 
     if t not in _HADNLER_DICT:
         log(t, 'is not supported')
+        return
 
     _HADNLER_DICT[t](json_cmd)
 
@@ -190,12 +191,11 @@ def find_phone(s):
     hal.ble.uart_tx(json.dumps({'t':'findPhone', 'n':s}))
 
 def set_gps_active(n):
-    # 设置 gps_power
+    # 设置 gps_power，疑似存在问题，设置为 True 后 gadgetbridge 直接崩溃了
     global gps_active
     gps_active = n
     if not n:
         gps_data.clear()
-
 
 ## 内部服务任务函数
 def send_status():
