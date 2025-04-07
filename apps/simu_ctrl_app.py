@@ -1,7 +1,8 @@
 import lvgl as lv
 import sys
+from random import randint
 
-from cces.appmgr import AppMeta
+from cces.appmgr import AppMeta, launch_app
 from cces.activity import Activity, InfoActivity, AskYesNoActivity, NumberInputActivity, SliderActivity, fonts
 from cces import hal, gadgetbridge
 from cces import notification
@@ -19,6 +20,7 @@ class MainActivity(Activity):
                        ('set step', self.set_dummy_setp_value),
                        ('tog ble', self.dummyble_tog),
                        ('GB weather', self.send_dummy_weather),
+                       ('weather_app', lambda _: launch_app('apps.weather_app')),
                        ('GB Music', self.send_dummy_music),
                        ]
 
@@ -68,7 +70,18 @@ class MainActivity(Activity):
         hal.ble.dummyconnect(not hal.ble.connected())
 
     def send_dummy_weather(self, _):
-        hal.ble.rx_line_buf.append('\x10GB({"t":"weather","temp":288,"hi":292,"lo":284,"hum":21,"rain":0,"uv":0,"code":800,"txt":"\u6674","wind":7.0,"wdir":216,"loc":"\u957f\u6e05\u533a"})')
+        codes = [800, 801, 803, 200, 300, 500, 600, 700, 511, 771, 781]
+        strs = ['晴', '多云', '阴', '雷暴', '小雨', '大雨', '雪', '雾', '冻雨', '狂风', '龙卷风']
+        ctmp = [0, 1, 2, 3, 4, 5, -10, 7, -5, 9, 15]
+        tmpl = [-5, -4, -3, -2, 0, 3, -15, 4, -9, 3, 10]
+        tmph = [5, 6, 7, 8, 9, 10, -1, 11, 0, 14, 20]
+        r = randint(0, len(codes) - 1)
+        rain = randint(0, 100)
+        uv = randint(0, 15)
+        wdir = randint(0, 359)
+        wind = randint(0, 7) * 1.0
+        hum = randint(0, 100)
+        hal.ble.rx_line_buf.append('\x10GB({' + '"t":"weather","temp":{:d},"hi":{:d},"lo":{:d},"hum":{:d},"rain":{:d},"uv":{:d},"code":{:d},"txt":"{}","wind":{:f},"wdir":{:d},"loc":"\u957f\u6e05\u533a"'.format(ctmp[r] + 273, tmph[r] + 273, tmpl[r] + 273, hum, rain, uv, codes[r], strs[r], wind, wdir) + '})')
 
     def send_dummy_music(self, _):
         hal.ble.rx_line_buf.append('\x10GB({"t":"musicinfo","artist":"\u6d1b\u5929\u4f9d","album":"\u7acb\u6625","track":"\u7acb\u6625","dur":131,"c":-1,"n":1})')
