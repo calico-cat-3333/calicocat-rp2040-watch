@@ -287,5 +287,5 @@ class QMI8658(Device):
         self.int1.irq(handler=None, trigger=Pin.IRQ_FALLING)
 
     def on_wakeup(self):
-        self.read_step()
+        self.read_step(0)
         self.int1.irq(handler=self.int_step_read, trigger=Pin.IRQ_FALLING)
