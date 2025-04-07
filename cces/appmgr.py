@@ -26,9 +26,9 @@ class AppMeta:
         log('app', self.name, 'load.')
         app_list.append(self)
 
-    def start(self, *args):
+    def start(self, anim=lv.SCR_LOAD_ANIM.OVER_LEFT):
         log('app:', self.name, 'launch')
-        self.main_activity().launch(lv.SCR_LOAD_ANIM.OVER_LEFT)
+        self.main_activity().launch(anim)
 
     def on_system_start(self):
         if self.on_system_start_cb != None:
@@ -52,7 +52,7 @@ class Launcher(Activity):
         for app in app_list:
             btn = self.applist.add_button(app.icon, app.name)
             btn.set_flex_align(lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.CENTER, lv.FLEX_ALIGN.SPACE_EVENLY)
-            btn.add_event_cb(lambda event, app=app: self.list_obj_click(event, app), lv.EVENT.CLICKED, None)
+            btn.add_event_cb(lambda event, app=app: self.list_obj_click(app), lv.EVENT.CLICKED, None)
             #btn.set_style_pad_ver(15, lv.PART.MAIN | lv.STATE.DEFAULT)
             btn.set_height(50)
             img = btn.get_child(0)
@@ -78,7 +78,7 @@ class Launcher(Activity):
         if gesture == lv.DIR.RIGHT:
             self.exit(lv.SCR_LOAD_ANIM.OVER_RIGHT)
 
-    def list_obj_click(self, event, app):
+    def list_obj_click(self, app):
         app.start()
         self.exit()
 
@@ -108,3 +108,12 @@ def load_apps():
 
     for app in app_list:
         app.on_system_start()
+
+def launch_app(name, anim=None):
+    # 通过形如 apps.settings_app 的包名启动 app
+    if name not in sys.modules:
+        return False
+    if not hasattr(sys.modules[name], 'appmeta'):
+        return False
+    sys.modules[name].appmeta.start(anim=anim)
+    return True
