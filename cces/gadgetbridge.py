@@ -5,7 +5,7 @@ from . import settingsdb
 from . import hal
 from .task_scheduler import Task, TASKEXIT
 from .log import log, ERROR
-from . import notification, steprecord
+from . import notification#, steprecord
 from .activity import refresh_activity_on, REFRESHON
 
 '''
@@ -111,14 +111,26 @@ def set_rtact_report(json_cmd):
         realtime_act_task.stop()
     return
 
+_lstp = 0
 def actfetch_handler(json_cmd):
-    global actfetch_cnt
-    global actfetch_starttime
+    #global actfetch_cnt
+    #global actfetch_starttime
+    global _lstp
     actfetch_cnt = 0
     actfetch_starttime = json_cmd.get('ts', 0) // 1000
-    log('atfetch start')
+    log('actfetch start')
     hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'start'}))
-    actfetch_task.start()
+    #actfetch_task.start()
+    stp = hal.imu.get_step()
+    if _lstp > stp: #处理每日零点计步器归零
+        _lstp = 0
+    stpd = stp - _lstp
+    _lstp = stp
+    if stpd != 0:
+        hal.ble.uart_tx(json.dumps({'t':'act', 'stp':stpd}))
+        actfetch_cnt = 1
+    hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'end', 'count':actfetch_cnt}))
+    log('actfetch done with', actfetch_cnt, 'records transfered')
 
 def dummy_handler(json_cmd):
     log('handler for', json_cmd, 'not supported yet.')
@@ -174,13 +186,6 @@ def gb_cmd_parse():
         return
 
     _HADNLER_DICT[t](json_cmd)
-
-    # if t == 'alarm':
-    #     # set_alarm(json_cmd)
-    #     # 为避免数据不同步，直接忽略来自 gadgetbridge 的闹钟设置，闹钟设置完全在手表上完成
-    #     # 或手表完全不具有设置闹钟的能力，完全使用来自 gadgetbridge 的闹钟配置
-    #     # 或者设置为手机上的设置会完全覆盖手表
-    #     return
 
 ## 暴露在外的 API
 def send_msg(msg_type, text):
@@ -241,28 +246,28 @@ def send_rtact():
         hrm = 0
     hal.ble.uart_tx(json.dumps({'t':'act', 'hrm':hrm, 'stp':stpd, 'rt':1}))
 
-actfetch_cnt = 0
-actfetch_starttime = 0
-def actfetch_func():
-    # 参考 https://github.com/espruino/BangleApps/blob/master/apps/android/lib.js#L209
-    global actfetch_cnt
-    if steprecord.buf_any() == 0:
-        log('atfetch done with send count', actfetch_cnt)
-        hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'end', 'count':actfetch_cnt}))
-        actfetch_cnt = 0
-        return TASKEXIT
-    else:
-        r = steprecord.buf_pop()
-        if r[0] >= actfetch_starttime:
-            hal.ble.uart_tx(json.dumps({'t':'act', 'stp':r[1], 'ts':r[0] * 1000}))
-            actfetch_cnt = actfetch_cnt + 1
+# actfetch_cnt = 0
+# actfetch_starttime = 0
+# def actfetch_func():
+#     # 参考 https://github.com/espruino/BangleApps/blob/master/apps/android/lib.js#L209
+#     global actfetch_cnt
+#     if steprecord.buf_any() == 0:
+#         log('atfetch done with send count', actfetch_cnt)
+#         hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'end', 'count':actfetch_cnt}))
+#         actfetch_cnt = 0
+#         return TASKEXIT
+#     else:
+#         r = steprecord.buf_pop()
+#         if r[0] >= actfetch_starttime:
+#             hal.ble.uart_tx(json.dumps({'t':'act', 'stp':r[1], 'ts':r[0] * 1000}))
+#             actfetch_cnt = actfetch_cnt + 1
 
 def start():
     global beep_repeat_task
     global cmd_parse_task
     global status_report_task
     global realtime_act_task
-    global actfetch_task
+    #global actfetch_task
 
     hal.ble.reset()
 
@@ -275,4 +280,4 @@ def start():
     status_report_task = Task(send_status, 30000)
     realtime_act_task = Task(send_rtact, 10000) # default 10 s
 
-    actfetch_task = Task(actfetch_func, 100) # 每 100 毫秒发送一条记录，极限情况 24*6*0.1 需要 14.4 秒发完一天数据
+    #actfetch_task = Task(actfetch_func, 100) # 每 100 毫秒发送一条记录，极限情况 24*6*0.1 需要 14.4 秒发完一天数据
