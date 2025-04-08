@@ -218,19 +218,18 @@ def send_rtact():
     if not hal.ble.connected():
         _lstp = 0
         return TASKEXIT
-    stp = 0
+    stpd = 0
     hrm = 0
     if rtact_enable[0]:
         stp = hal.imu.get_step()
-        if _lstp > stp:
+        if _lstp > stp: # 处理每日零点计步器归零
             _lstp = 0
-        if _lstp != 0:
-            stp = stp - _lstp
-        _lstp = _lstp + stp
+        stpd = stp - _lstp
+        _lstp = stp
     if rtact_enable[1]:
         # not support now
         hrm = 0
-    hal.ble.uart_tx(json.dumps({'t':'act', 'hrm':hrm, 'stp':stp, 'rt':1}))
+    hal.ble.uart_tx(json.dumps({'t':'act', 'hrm':hrm, 'stp':stpd, 'rt':1}))
 
 def start():
     global beep_repeat_task
