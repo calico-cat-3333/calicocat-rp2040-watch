@@ -22,6 +22,7 @@ class MainActivity(Activity):
                        ('GB weather', self.send_dummy_weather),
                        ('weather_app', lambda _: launch_app('apps.weather_app')),
                        ('GB Music', self.send_dummy_music),
+                       ('GB actfetch', self.send_dummy_actfetch),
                        ]
 
     def setup(self):
@@ -98,5 +99,8 @@ class MainActivity(Activity):
             hal.imu.dummy_step = v
             log('set fake step value:', v)
         NumberInputActivity('Dummy step', 0, 100000, setv).launch()
+
+    def send_dummy_actfetch(self, _):
+        hal.ble.rx_line_buf.append('\x10GB({"t":"actfetch","ts":0})')
 
 appmeta = AppMeta('SimuCtrl', fonts.SYMBOL.TERMINAL, MainActivity)

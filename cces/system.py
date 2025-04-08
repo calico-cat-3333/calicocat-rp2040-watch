@@ -12,6 +12,7 @@ from . import settingsdb
 from . import gadgetbridge
 from . import appmgr
 from . import powermanager
+from . import steprecord
 from .watchface import WatchFaceAtivity
 from .log import log
 from .activity import styles
@@ -32,6 +33,7 @@ def load_system_service():
     gadgetbridge.start()
     styles.start()
     powermanager.start()
+    steprecord.start()
 
 def start():
     log('start system')
