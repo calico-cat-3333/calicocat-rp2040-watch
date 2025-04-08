@@ -16,12 +16,15 @@ step_buf = []
 
 _lstp = 0
 def record_func():
+    global _lstp
     stp = hal.imu.get_step()
     stpd = stp - _lstp
+    _lstp = stp
     if stpd != 0:
         if buf_any() > _MAX_RECORD:
             step_buf.pop(0)
-        step_buf.append((time.time(), stpd))
+        # 算是一点小优化吧，stpd 是 10 分钟内走过的步数，正常人类应该不会超过 0xffff
+        step_buf.append((time.time() << 16) + stpd)
     gc.collect()
 
 def clear_buf():
@@ -32,7 +35,8 @@ def buf_any():
     return len(step_buf)
 
 def buf_pop():
-    return step_buf.pop(0)
+    r = step_buf.pop(0)
+    return (r >> 16, r & 0xffff)
 
 def get_buf():
     return step_buf
