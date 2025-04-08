@@ -99,6 +99,7 @@ def update_gps_data(json_cmd):
 def set_rtact_report(json_cmd):
     # enable realtime act receive
     global rtact_enable
+    global _lstp
     rtact_enable[0] = json_cmd.get('stp', False)
     rtact_enable[1] = json_cmd.get('hrm', False)
     period = json_cmd.get('int', 10) * 1000
@@ -106,6 +107,7 @@ def set_rtact_report(json_cmd):
         realtime_act_task.set_period(period)
         realtime_act_task.start()
     else:
+        _lstp = 0
         realtime_act_task.stop()
     return
 
@@ -207,15 +209,24 @@ def send_status():
     bat_stat = hal.battery.dump()
     hal.ble.uart_tx(json.dumps({'t':'status', 'bat':round(bat_stat[2], 2), 'volt':bat_stat[0], 'chg':int(bat_stat[3])}))
 
+_lstp = 0
 def send_rtact():
+    global _lstp
     if rtact_enable[0] == False and rtact_enable[1] == False:
+        _lstp = 0
         return TASKEXIT
     if not hal.ble.connected():
+        _lstp = 0
         return TASKEXIT
     stp = 0
     hrm = 0
     if rtact_enable[0]:
         stp = hal.imu.get_step()
+        if _lstp > stp:
+            _lstp = 0
+        if _lstp != 0:
+            stp = stp - _lstp
+        _lstp = _lstp + stp
     if rtact_enable[1]:
         # not support now
         hrm = 0
