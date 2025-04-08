@@ -190,16 +190,10 @@ def gb_cmd_parse():
 ## 暴露在外的 API
 def send_msg(msg_type, text):
     # 发送信息，类型为 info/warn/error, text 为字符串
-    if msg_type not in ['info', 'warn', 'error']:
-        log('invalid msg type:', msg_type, level=ERROR)
-        return
     hal.ble.uart_tx(json.dumps({'t':msg_type, 'msg':text}))
 
 def music_ctrl(cmd):
     # 发送音乐控制命令
-    if cmd not in ['play', 'pause', 'next', 'previous', 'volumeup', 'volumedown']:
-        log('invalid music ctrl cmd:', cmd, level=ERROR)
-        return
     hal.ble.uart_tx(json.dumps({'t':'music', 'n':cmd}))
 
 def find_phone(s):
