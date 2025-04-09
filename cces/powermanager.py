@@ -6,6 +6,7 @@ from micropython import const, schedule
 from . import hal, settingsdb
 from .log import log
 from .task_scheduler import Task
+from .activity import current_activity
 
 sys_sleeping = False
 allow_sleep = True
@@ -19,10 +20,12 @@ def check_sleep():
             log('system sleep')
             sys_sleeping = True
             hal.on_sleep()
+            current_activity().on_covered()
     else:
         if sys_sleeping:
             log('system wakeup')
             sys_sleeping = False
+            current_activity().on_cover_exit()
             hal.on_wakeup()
 
 def try_wakeup():
@@ -33,6 +36,7 @@ def try_wakeup():
         log('system wakeup')
         lv.display_get_default().trigger_activity()
         sys_sleeping = False
+        current_activity().on_cover_exit()
         hal.on_wakeup()
 
 def prevent_sleep(v=None):
