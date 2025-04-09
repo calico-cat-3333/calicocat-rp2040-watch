@@ -32,7 +32,6 @@ class MainActivity(Activity):
         self.title_label = lv.label(self.scr)
         self.title_label.align(lv.ALIGN.TOP_MID, 0, 10)
         self.title_label.set_text('计时器')
-        self.timer_running = False
 
         if running_timer != -1 and timer_stop == -1:
             self.update_display_task.start()
