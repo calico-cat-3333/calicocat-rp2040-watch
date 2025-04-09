@@ -24,10 +24,16 @@ class MainActivity(Activity):
         self.heartrate.set_style_text_font(lv.font_number72, lv.PART.MAIN | lv.STATE.DEFAULT)
         self.heartrate.set_text('---')
 
-        self.spo2 = lv.label(self.scr)
-        self.spo2.set_style_text_align(lv.TEXT_ALIGN.RIGHT, lv.PART.MAIN | lv.STATE.DEFAULT)
-        self.spo2.align(lv.ALIGN.CENTER, 70, -40)
-        self.spo2.set_text("SpO2\n---%")
+        # self.spo2 = lv.label(self.scr)
+        # self.spo2.set_style_text_align(lv.TEXT_ALIGN.RIGHT, lv.PART.MAIN | lv.STATE.DEFAULT)
+        # self.spo2.align(lv.ALIGN.CENTER, 70, -40)
+        # self.spo2.set_text("SpO2\n---%")
+
+        self.heart_label = lv.label(self.scr)
+        self.heart_label.set_style_text_align(lv.TEXT_ALIGN.RIGHT, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.heart_label.align(lv.ALIGN.CENTER, 40, -50)
+        self.heart_label.set_style_text_font(lv.font_extra_symbols, lv.PART.MAIN | lv.STATE.DEFAULT)
+        self.heart_label.set_text(fonts.SYMBOL.HEART_RATE)
 
         self.hr_history_range_high = 140
 
@@ -58,7 +64,7 @@ class MainActivity(Activity):
 
     def update_display(self):
         hr = hal.hartrate.calculate_hr()
-        spo2 = hal.hartrate.calculate_spo2()
+        #spo2 = hal.hartrate.calculate_spo2()
         if hr != -1:
             self.heartrate.set_text('{: >3d}'.format(hr))
             #self.hr_history.set_next_value(self.hr_history_hrdata, hr)
@@ -73,8 +79,8 @@ class MainActivity(Activity):
                 self.hr_history_range_high = ((max(self.hr_list) // 10) + 1) * 10
                 self.hr_history.set_range(lv.chart.AXIS.PRIMARY_Y, 50, self.hr_history_range_high)
                 self.hr_history_Yaxis1.set_range(50, self.hr_history_range_high)
-        if spo2 != -1:
-            self.spo2.set_text('SpO2\n{: >3d}%'.format(spo2))
+        # if spo2 != -1:
+        #     self.spo2.set_text('SpO2\n{: >3d}%'.format(spo2))
 
     def before_exit(self):
         self.update_task.stop()
