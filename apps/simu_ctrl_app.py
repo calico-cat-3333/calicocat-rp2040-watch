@@ -20,6 +20,7 @@ class MainActivity(Activity):
                        ('set step', self.set_dummy_setp_value),
                        ('tog ble', self.dummyble_tog),
                        ('GB weather', self.send_dummy_weather),
+                       ('GB notify', self.send_dummy_notify),
                        ('weather_app', lambda _: launch_app('apps.weather_app')),
                        ('GB Music', self.send_dummy_music),
                        ('GB actfetch', self.send_dummy_actfetch),
@@ -102,5 +103,8 @@ class MainActivity(Activity):
 
     def send_dummy_actfetch(self, _):
         hal.ble.rx_line_buf.append('\x10GB({"t":"actfetch","ts":0})')
+
+    def send_dummy_notify(self, _):
+        hal.ble.rx_line_buf.append('\x10GB({"t":"notify","id":1744169092,"src":"Gadgetbridge","title":"","subject":"Test","body":"Test","sender":"Test","tel":"Test"})')
 
 appmeta = AppMeta('SimuCtrl', fonts.SYMBOL.TERMINAL, MainActivity)

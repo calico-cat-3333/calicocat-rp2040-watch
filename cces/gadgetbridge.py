@@ -53,7 +53,7 @@ def send_notify(json_cmd):
     if json_cmd['title'] != '':
         ntitle = ntitle + ': ' + json_cmd['title']
     ntext = json_cmd['body']
-    notification.send(ntitle, ntext, nid)
+    notification.send(ntitle, ntext, nid, popup=True)
 
 def remove_notify(json_cmd):
     notification.remove(json_cmd['id'])

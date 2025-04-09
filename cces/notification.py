@@ -1,8 +1,8 @@
 import time
 import lvgl as lv
 
-from .activity import Activity, REFRESHON, refresh_activity_on, styles
-from . import hal
+from .activity import Activity, REFRESHON, refresh_activity_on, styles, current_activity
+from . import hal, powermanager
 from . import settingsdb
 
 class NotificationCenter(Activity): # 通知中心
@@ -67,6 +67,10 @@ class NotificationCenter(Activity): # 通知中心
         self.current_notify = len(_notify_id_list) - 1
         self.update_display()
 
+    def show_latest(self):
+        self.current_notify = len(_notify_id_list) - 1
+        self.update_display()
+
     def gesture_event_cb(self, _):
         lv.indev_active().wait_release()
         gesture = lv.indev_active().get_gesture_dir()
@@ -121,6 +125,9 @@ class NotificationCenter(Activity): # 通知中心
             clear_all(False)
         self.update_display()
 
+    def on_covered(self):
+        self.exit()
+
 _notify_storage = {}
 _notify_id_list = []
 _notify_id_max = 0
@@ -132,7 +139,7 @@ def _new_nid():
     _notify_id_max = _notify_id_max - 1
     return _notify_id_max
 
-def send(title, text, nid = None):
+def send(title, text, nid=None, *, popup=False):
     # send a Notification
     # return notification id
     # beep when dnd is off
@@ -140,11 +147,20 @@ def send(title, text, nid = None):
     notify = {'title':title, 'text':text, 'time':time.time()}
     if nid == None:
         nid = _new_nid()
+    if nid in _notify_id_list:
+        return None
     _notify_id_list.append(nid)
     _notify_storage[nid] = notify
     if not settingsdb.get('do_not_disturb', False):
         hal.buzzer.beep()
     refresh_activity_on(REFRESHON.NOTIFICATION)
+    if popup:
+        powermanager.try_wakeup()
+        c = current_activity()
+        if isinstance(c, NotificationCenter):
+            c.show_latest()
+        else:
+            NotificationCenter().launch()
     return nid
 
 def remove(nid, need_refresh=True):
