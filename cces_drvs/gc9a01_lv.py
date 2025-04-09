@@ -10,10 +10,11 @@ from cces.drvs import Device_lv
 # GC9A01 显示屏 lvgl 驱动接口
 
 class GC9A01_lv(Device_lv):
-    def __init__(self, spi, rst, cs, dc, bl, doublebuffer=False):
+    def __init__(self, spi, rst, cs, dc, bl, doublebuffer=False, buf_size_factor=4):
         self.width = 240
         self.height = 240
         self.doublebuffer = doublebuffer
+        self.factor = buf_size_factor
 
         self.tft_drv = gc9a01.GC9A01(
             spi,
@@ -38,7 +39,6 @@ class GC9A01_lv(Device_lv):
     def after_lvgl_init(self):
         self.color_format = lv.COLOR_FORMAT.RGB565
         self.pixel_size = lv.color_format_get_size(self.color_format)
-        self.factor = 4
 
         self.draw_buf1 = lv.draw_buf_create(self.width, self.height // self.factor, self.color_format, 0)
         self.draw_buf2 = lv.draw_buf_create(self.width, self.height // self.factor, self.color_format, 0) if self.doublebuffer else None

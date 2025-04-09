@@ -9,7 +9,7 @@ import extboard
 
 log.setlevel(log.INFO)
 
-hal.dispdev = gc9a01_lv.GC9A01_lv(board.lcd_spi, board.lcd_rst, board.lcd_cs, board.lcd_dc, board.lcd_bl, False)
+hal.dispdev = gc9a01_lv.GC9A01_lv(board.lcd_spi, board.lcd_rst, board.lcd_cs, board.lcd_dc, board.lcd_bl, False, 6)
 hal.indev_list.append(cst816s_lv.CST816S_lv(board.i2c1, board.tp_int, board.tp_rst))
 hal.indev_list.append(gpio_button.GPIOButton(extboard.btn))
 
