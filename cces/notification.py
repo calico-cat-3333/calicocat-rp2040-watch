@@ -127,6 +127,8 @@ class NotificationCenter(Activity): # 通知中心
 
     def on_covered(self):
         self.exit()
+        # 需要特殊处理，不然会出问题
+        current_activity().on_covered()
 
 _notify_storage = {}
 _notify_id_list = []
