@@ -12,7 +12,7 @@ from . import settingsdb
 from . import gadgetbridge
 from . import appmgr
 from . import powermanager
-from . import steprecord
+#from . import steprecord
 from .watchface import WatchFaceAtivity
 from .log import log
 from .activity import styles

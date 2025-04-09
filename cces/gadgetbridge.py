@@ -24,8 +24,6 @@ from .activity import refresh_activity_on, REFRESHON
 weather_data = {}
 music_info = {}
 music_state = {}
-# gps_active = False
-# gps_data = {}
 rtact_enable = [False, False] # step, hr
 
 # 内部处理函数，外部不得调用
@@ -86,16 +84,6 @@ def update_music_state(json_cmd):
     music_state['time'] = time.time()
     refresh_activity_on(REFRESHON.GB_MUSIC)
 
-# def update_gps_data(json_cmd):
-#     # untesetd
-#     global gps_data
-#     if not gps_active:
-#         gps_data.clear()
-#         hal.ble.uart_tx(json.dumps({'t':'gps_power', 'status':gps_active}))
-#         return
-#     gps_data = json_cmd
-#     log('gps data received:', gps_data)
-
 def set_rtact_report(json_cmd):
     # enable realtime act receive
     global rtact_enable
@@ -111,26 +99,16 @@ def set_rtact_report(json_cmd):
         realtime_act_task.stop()
     return
 
-_lstp = 0
 def actfetch_handler(json_cmd):
-    #global actfetch_cnt
-    #global actfetch_starttime
+    # global actfetch_cnt
+    # global actfetch_starttime
     global _lstp
     actfetch_cnt = 0
     actfetch_starttime = json_cmd.get('ts', 0) // 1000
     log('actfetch start')
     hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'start'}))
-    #actfetch_task.start()
-    stp = hal.imu.get_step()
-    if _lstp > stp: #处理每日零点计步器归零
-        _lstp = 0
-    stpd = stp - _lstp
-    _lstp = stp
-    if stpd != 0:
-        hal.ble.uart_tx(json.dumps({'t':'act', 'stp':stpd}))
-        actfetch_cnt = 1
-    hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'end', 'count':actfetch_cnt}))
-    log('actfetch done with', actfetch_cnt, 'records transfered')
+    hal.ble.uart_tx(json.dumps({'t':'act', 'stp':0, 'ts':(time.time() - 60) * 1000}))
+    actfetch_task.start()
 
 def dummy_handler(json_cmd):
     log('handler for', json_cmd, 'not supported yet.')
@@ -200,13 +178,6 @@ def find_phone(s):
     # 发送查找手机指令
     hal.ble.uart_tx(json.dumps({'t':'findPhone', 'n':s}))
 
-# def set_gps_active(n):
-#     # 设置 gps_power，疑似存在问题，设置为 True 后 gadgetbridge 直接崩溃了
-#     global gps_active
-#     gps_active = n
-#     if not n:
-#         gps_data.clear()
-
 ## 内部服务任务函数
 def send_status():
     global _lstp
@@ -240,28 +211,27 @@ def send_rtact():
         hrm = 0
     hal.ble.uart_tx(json.dumps({'t':'act', 'hrm':hrm, 'stp':stpd, 'rt':1}))
 
-# actfetch_cnt = 0
-# actfetch_starttime = 0
-# def actfetch_func():
-#     # 参考 https://github.com/espruino/BangleApps/blob/master/apps/android/lib.js#L209
-#     global actfetch_cnt
-#     if steprecord.buf_any() == 0:
-#         log('atfetch done with send count', actfetch_cnt)
-#         hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'end', 'count':actfetch_cnt}))
-#         actfetch_cnt = 0
-#         return TASKEXIT
-#     else:
-#         r = steprecord.buf_pop()
-#         if r[0] >= actfetch_starttime:
-#             hal.ble.uart_tx(json.dumps({'t':'act', 'stp':r[1], 'ts':r[0] * 1000}))
-#             actfetch_cnt = actfetch_cnt + 1
+_lstp = 0
+def actfetch_func():
+    global _lstp
+    stp = hal.imu.get_step()
+    if _lstp > stp: #处理每日零点计步器归零
+        _lstp = 0
+    stpd = stp - _lstp
+    _lstp = stp
+    actfetch_cnt = 1
+    if stpd != 0:
+        hal.ble.uart_tx(json.dumps({'t':'act', 'stp':stpd}))
+        actfetch_cnt = 2
+    hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'end', 'count':actfetch_cnt}))
+    log('actfetch done with', actfetch_cnt, 'records transfered')
 
 def start():
     global beep_repeat_task
     global cmd_parse_task
     global status_report_task
     global realtime_act_task
-    #global actfetch_task
+    global actfetch_task
 
     hal.ble.reset()
 
@@ -274,4 +244,4 @@ def start():
     status_report_task = Task(send_status, 30000)
     realtime_act_task = Task(send_rtact, 10000) # default 10 s
 
-    #actfetch_task = Task(actfetch_func, 100) # 每 100 毫秒发送一条记录，极限情况 24*6*0.1 需要 14.4 秒发完一天数据
+    actfetch_task = Task(actfetch_func, 500, oneshot=True)
