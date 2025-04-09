@@ -193,7 +193,7 @@ def send_msg(msg_type, text):
     hal.ble.uart_tx(json.dumps({'t':msg_type, 'msg':text}))
 
 def music_ctrl(cmd):
-    # 发送音乐控制命令
+    # 发送音乐控制命令 'play', 'pause', 'next', 'previous', 'volumeup', 'volumedown'
     hal.ble.uart_tx(json.dumps({'t':'music', 'n':cmd}))
 
 def find_phone(s):

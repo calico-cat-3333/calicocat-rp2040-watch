@@ -33,7 +33,7 @@ def load_system_service():
     gadgetbridge.start()
     styles.start()
     powermanager.start()
-    steprecord.start()
+    #steprecord.start()
 
 def start():
     log('start system')
