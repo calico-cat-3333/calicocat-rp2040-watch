@@ -99,8 +99,9 @@ def reschedule_all():
     # call after set time
     log('reschedule all dailytask')
     for t in daily_tasks_list:
-        t.stop()
-        t.start()
+        if t.enabled:
+            t.stop()
+            t.start()
 
 def start():
     global daily_scheduler_task
