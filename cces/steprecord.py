@@ -3,7 +3,7 @@ from micropython import const
 import gc
 
 from .log import log
-from . import hal
+from . import hal, settingsdb
 from .task_scheduler import Task
 
 _RECORD_PERIOD = const(10 * 60 * 1000) # 暂定每 10 分钟记录一次
@@ -23,8 +23,10 @@ def record_func():
     if stpd != 0:
         if buf_any() > MAX_RECORD:
             step_buf.pop(0)
+        # 算的是 UTC 时间
+        t = int(time.time() - (settingsdb.get('timezone', 0) * 3600))
         # 算是一点小优化吧，stpd 是 10 分钟内走过的步数，正常人类应该不会超过 0xffff
-        step_buf.append((time.time() << 16) + stpd)
+        step_buf.append((t << 16) + stpd)
     gc.collect()
 
 def clear_buf():

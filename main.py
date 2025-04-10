@@ -6,6 +6,7 @@ from cces import log
 
 import board
 import extboard
+import machine
 
 log.setlevel(log.INFO)
 
@@ -20,4 +21,7 @@ hal.hartrate = max30102.MAX30102(extboard.si2c)
 hal.battery = battery.Battery(board.bat_pin)
 hal.ble = e104ble.E104BLE(extboard.rx, extboard.tx, extboard.si2c)
 
-system.start()
+try:
+    system.start()
+except MemoryError as e:
+    machine.reset()

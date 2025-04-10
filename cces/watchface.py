@@ -67,9 +67,9 @@ class WatchFaceAtivity(Activity):
         self.time_label.set_text('{:0>2d}:{:0>2d}:{:0>2d}'.format(*lt[3:6]))
         bat_stat = hal.battery.dump()
         if bat_stat[3]:
-            self.bat_label.set_text(lv.SYMBOL.CHARGE + str(bat_stat[1]))
+            self.bat_label.set_text(lv.SYMBOL.CHARGE)
         else:
-            self.bat_label.set_text('{:>3d}%'.format(bat_stat[2]) + str(bat_stat[1]))
+            self.bat_label.set_text('{:>3d}%'.format(bat_stat[2]))
         steps = hal.imu.get_step()
         length = (settingsdb.get('step_length', 50) * steps) / 100000
         self.step_label.set_text(fonts.SYMBOL.WALK + ' {:d}  {:.2f} KM'.format(steps, length))

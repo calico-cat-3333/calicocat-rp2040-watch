@@ -108,6 +108,12 @@ def actfetch_handler(json_cmd):
     hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'start'}))
     actfetch_task.start()
 
+def call_handler(json_cmd):
+    global current_call
+    if json_cmd.get('cmd', '') == 'incoming':
+        ntext = json_cmd.get('name', '') + '\n' + json_cmd.get('number', '')
+        notification.send('电话', ntext, popup=True)
+
 def dummy_handler(json_cmd):
     log('handler for', json_cmd, 'not supported yet.')
 
@@ -122,7 +128,7 @@ _HADNLER_DICT = {
     'act': set_rtact_report,
     'actfetch': actfetch_handler,
     'alarm': dummy_handler,
-    'call': dummy_handler,
+    'call': call_handler,
     'gps': dummy_handler,
     }
 
