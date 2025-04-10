@@ -7,9 +7,9 @@ from . import hal
 from .task_scheduler import Task
 
 RECORD_PERIOD = const(10 * 60 * 1000) # 暂定每 10 分钟记录一次
-_MAX_RECORD = const(144)
+MAX_RECORD = const(144 * 2)
 
-# 简易步数记录，暂时不写存储功能了先，只记录一天的步数
+# 简易步数记录，暂时不写存储功能了先，只记录两天的步数
 # 用来同步数据到手机，之后也可以在别的地方用
 
 step_buf = []
@@ -21,7 +21,7 @@ def record_func():
     stpd = stp - _lstp
     _lstp = stp
     if stpd != 0:
-        if buf_any() > _MAX_RECORD:
+        if buf_any() > MAX_RECORD:
             step_buf.pop(0)
         # 算是一点小优化吧，stpd 是 10 分钟内走过的步数，正常人类应该不会超过 0xffff
         step_buf.append((time.time() << 16) + stpd)

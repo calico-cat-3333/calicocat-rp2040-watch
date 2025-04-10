@@ -4,7 +4,7 @@ import sys
 from cces.appmgr import AppMeta, launch_app
 from cces.activity import Activity, InfoActivity, AskYesNoActivity, NumberInputActivity, SliderActivity, fonts
 from cces import hal, gadgetbridge
-from cces import notification#, steprecord
+from cces import notification, steprecord
 from cces.log import log
 
 class MainActivity(Activity):
@@ -17,7 +17,7 @@ class MainActivity(Activity):
                    ('slider', self.slider_example),
                    ('GB Info', self.gbinfo),
                    ('launch app', lambda _: launch_app('apps.weather_app', lv.SCR_LOAD_ANIM.OVER_LEFT)),
-                   #('record step', lambda _: steprecord.record_func())
+                   ('record step', lambda _: steprecord.record_func())
                    ]
         self.nid = None
 

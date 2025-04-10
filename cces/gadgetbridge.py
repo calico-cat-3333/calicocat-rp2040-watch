@@ -5,7 +5,7 @@ from . import settingsdb
 from . import hal
 from .task_scheduler import Task, TASKEXIT
 from .log import log, ERROR
-from . import notification#, steprecord
+from . import notification, steprecord
 from .activity import refresh_activity_on, REFRESHON
 
 '''
@@ -100,9 +100,8 @@ def set_rtact_report(json_cmd):
     return
 
 def actfetch_handler(json_cmd):
-    # global actfetch_cnt
-    # global actfetch_starttime
-    global _lstp
+    global actfetch_cnt
+    global actfetch_starttime
     actfetch_cnt = 0
     actfetch_starttime = json_cmd.get('ts', 0) // 1000
     log('actfetch start')
@@ -211,20 +210,21 @@ def send_rtact():
         hrm = 0
     hal.ble.uart_tx(json.dumps({'t':'act', 'hrm':hrm, 'stp':stpd, 'rt':1}))
 
-_lstp = 0
+actfetch_cnt = 0
+actfetch_starttime = 0
 def actfetch_func():
-    global _lstp
-    stp = hal.imu.get_step()
-    if _lstp > stp: #处理每日零点计步器归零
-        _lstp = 0
-    stpd = stp - _lstp
-    _lstp = stp
-    actfetch_cnt = 1
-    if stpd != 0:
-        hal.ble.uart_tx(json.dumps({'t':'act', 'stp':stpd}))
-        actfetch_cnt = 2
-    hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'end', 'count':actfetch_cnt}))
-    log('actfetch done with', actfetch_cnt, 'records transfered')
+    # 参考 https://github.com/espruino/BangleApps/blob/master/apps/android/lib.js#L209
+    global actfetch_cnt
+    if steprecord.buf_any() == 0:
+        log('atfetch done with send count', actfetch_cnt)
+        hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'end', 'count':actfetch_cnt}))
+        actfetch_cnt = 0
+        return TASKEXIT
+    else:
+        r = steprecord.buf_pop()
+        if r[0] >= actfetch_starttime:
+            hal.ble.uart_tx(json.dumps({'t':'act', 'stp':r[1], 'ts':r[0] * 1000}))
+            actfetch_cnt = actfetch_cnt + 1
 
 def start():
     global beep_repeat_task
@@ -244,4 +244,4 @@ def start():
     status_report_task = Task(send_status, 30000)
     realtime_act_task = Task(send_rtact, 10000) # default 10 s
 
-    actfetch_task = Task(actfetch_func, 500, oneshot=True)
+    actfetch_task = Task(actfetch_func, 200)
