@@ -106,7 +106,6 @@ def actfetch_handler(json_cmd):
     actfetch_starttime = json_cmd.get('ts', 0) // 1000
     log('actfetch start')
     hal.ble.uart_tx(json.dumps({'t':'actfetch', 'state':'start'}))
-    hal.ble.uart_tx(json.dumps({'t':'act', 'stp':0, 'ts':(time.time() - 60) * 1000}))
     actfetch_task.start()
 
 def dummy_handler(json_cmd):
@@ -124,6 +123,7 @@ _HADNLER_DICT = {
     'actfetch': actfetch_handler,
     'alarm': dummy_handler,
     'call': dummy_handler,
+    'gps': dummy_handler,
     }
 
 def gb_cmd_parse():
@@ -222,6 +222,8 @@ def actfetch_func():
         return TASKEXIT
     else:
         r = steprecord.buf_pop()
+        while steprecord.buf_any() and r[0] < actfetch_starttime:
+            r = steprecord.buf_pop()
         if r[0] >= actfetch_starttime:
             hal.ble.uart_tx(json.dumps({'t':'act', 'stp':r[1], 'ts':r[0] * 1000}))
             actfetch_cnt = actfetch_cnt + 1
@@ -244,4 +246,5 @@ def start():
     status_report_task = Task(send_status, 30000)
     realtime_act_task = Task(send_rtact, 10000) # default 10 s
 
-    actfetch_task = Task(actfetch_func, 200)
+    # 极限情况下，一天的数据总计 144 条，全部传输完成耗时 144 * 100 / 1000 = 14.4 秒
+    actfetch_task = Task(actfetch_func, 100)

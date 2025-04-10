@@ -6,7 +6,7 @@ from .log import log
 from . import hal
 from .task_scheduler import Task
 
-RECORD_PERIOD = const(10 * 60 * 1000) # 暂定每 10 分钟记录一次
+_RECORD_PERIOD = const(10 * 60 * 1000) # 暂定每 10 分钟记录一次
 MAX_RECORD = const(144 * 2)
 
 # 简易步数记录，暂时不写存储功能了先，只记录两天的步数
@@ -43,5 +43,5 @@ def get_buf():
 
 def start():
     global record_task
-    record_task = Task(record_func, RECORD_PERIOD)
+    record_task = Task(record_func, _RECORD_PERIOD)
     record_task.start()
