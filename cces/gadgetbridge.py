@@ -5,7 +5,7 @@ from . import settingsdb
 from . import hal
 from .task_scheduler import Task, TASKEXIT
 from .log import log, ERROR
-from . import notification, steprecord
+from . import notification, steprecord, daily_scheduler
 from .activity import refresh_activity_on, REFRESHON
 
 '''
@@ -39,6 +39,7 @@ def set_time(cmd):
     log('set time to', time.localtime())
     settingsdb.put('timezone', timezone)
     settingsdb.save_settings()
+    daily_scheduler.reschedule_all()
 
 def find_device(json_cmd):
     if json_cmd.get('n', False):

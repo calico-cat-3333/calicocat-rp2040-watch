@@ -95,6 +95,13 @@ def sys_dailytask_zeroclock():
     hal.imu.clear_step()
     refresh_activity_on(REFRESHON.ZERO_CLOCK)
 
+def reschedule_all():
+    # call after set time
+    log('reschedule all dailytask')
+    for t in daily_tasks_list:
+        t.stop()
+        t.start()
+
 def start():
     global daily_scheduler_task
     daily_scheduler_task = Task(check_loop, 10000)
