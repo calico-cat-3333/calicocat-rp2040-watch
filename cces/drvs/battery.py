@@ -7,9 +7,9 @@ from . import Device
 # 很显然，直接用 ADC 读电池电压的方法来判断电池容量和状态准度非常差
 # 但是没办法，成本限制在这了
 
-_MVFULL = const(4000)
-_MVEMPTY = const(3300)
-_MVCHARGE = const(4100)
+_MVFULL = const(3950)
+_MVEMPTY = const(3400)
+_MVCHARGE = const(4000)
 _MVCHARGE_DONE = const(4300)
 _ADC_DIVISOR = const(3)
 _U16FULL = int((_MVFULL * 65535) / (_ADC_DIVISOR * 3300))
