@@ -8,7 +8,7 @@ import board
 import extboard
 import machine
 
-log.setlevel(log.INFO)
+log.setlevel(log.NOLOG)
 
 hal.dispdev = gc9a01_lv.GC9A01_lv(board.lcd_spi, board.lcd_rst, board.lcd_cs, board.lcd_dc, board.lcd_bl, False, 4)
 hal.indev_list.append(cst816s_lv.CST816S_lv(board.i2c1, board.tp_int, board.tp_rst))
@@ -23,5 +23,7 @@ hal.ble = e104ble.E104BLE(extboard.rx, extboard.tx, extboard.si2c)
 
 try:
     system.start()
-except MemoryError as e:
+except KeyboardInterrupt as e:
+    print(e)
+except:
     machine.reset()
