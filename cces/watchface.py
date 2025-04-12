@@ -72,7 +72,7 @@ class WatchFaceAtivity(Activity):
             self.bat_label.set_text('{:>3d}%'.format(bat_stat[2]))
         steps = hal.imu.get_step()
         length = (settingsdb.get('step_length', 50) * steps) / 100000
-        self.step_label.set_text(fonts.SYMBOL.WALK + ' {:d}  {:.2f} KM'.format(steps, length))
+        self.step_label.set_text(fonts.SYMBOL.WALK + ' {:d}\n   {:.2f} KM'.format(steps, length))
 
     def refresh_event_cb(self, event):
         if hal.ble.connected():
