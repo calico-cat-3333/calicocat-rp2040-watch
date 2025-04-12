@@ -99,7 +99,7 @@ class MainActivity(Activity):
         def setv(v):
             hal.imu.dummy_step = v
             log('set fake step value:', v)
-        NumberInputActivity('Dummy step', 0, 100000, setv).launch()
+        NumberInputActivity('Dummy step', 0, 3000, setv).launch()
 
     def send_dummy_actfetch(self, _):
         hal.ble.rx_line_buf.append('\x10GB({"t":"actfetch","ts":0})')
