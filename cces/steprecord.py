@@ -11,7 +11,7 @@ import struct
 _RECORD_PERIOD_MINUTE = const(10) # 暂定每 10 分钟记录一次
 MAX_RECORD = const(144 * 2)
 
-# 简易步数记录，暂时不写存储功能了先，有蓝牙连接就实时发送，否则缓存等待发送，最多缓存两天的数据
+# 简易步数记录，暂时不写存储功能了先，最多缓存两天，有蓝牙连接就直接发送
 # 用来同步数据到手机，之后也可以在别的地方用
 
 step_buf = []
@@ -42,7 +42,6 @@ def record_push(step, mov, ts):
     # 否则保存到缓冲区
     if hal.ble.connected():
         gadgetbridge.send_act(step, 0, mov, ts=ts)
-        return
     step_buf.append(struct.pack('>iHB', ts, step, mov))
 
 def buf_pop():
