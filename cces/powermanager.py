@@ -7,6 +7,7 @@ from . import hal, settingsdb
 from .log import log
 from .task_scheduler import Task
 from .activity import current_activity
+import machine
 
 sys_sleeping = False
 allow_sleep = True
@@ -27,6 +28,14 @@ def check_sleep():
             sys_sleeping = False
             current_activity().on_cover_exit()
             hal.on_wakeup()
+
+    ps_timeout = settingsdb.get('powersave_timeout', 10)
+    if settingsdb.get('powersave', False) and sys_sleeping and hal.dispdev.disp_drv.get_inactive_time() >= ps_timeout:
+        try:
+            log('system powersave')
+            machine.lightsleep(1000)
+        except:
+            time.sleep(1)
 
 def try_wakeup():
     # 程序中尝试主动唤醒显示器
