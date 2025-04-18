@@ -30,12 +30,26 @@ def check_sleep():
             hal.on_wakeup()
 
     ps_timeout = settingsdb.get('powersave_timeout', 10)
-    if settingsdb.get('powersave', False) and sys_sleeping and hal.dispdev.disp_drv.get_inactive_time() >= ps_timeout:
+    if settingsdb.get('powersave', False) and sys_sleeping and hal.dispdev.disp_drv.get_inactive_time() >= ps_timeout and unwear():
         try:
             log('system powersave')
             machine.lightsleep(1000)
         except:
             time.sleep(1)
+
+la = [0, 0, 0]
+def unwear():
+    global la
+    i = hal.imu.get_accel_xyz()
+    while i == None:
+        i = hal.imu.get_accel_xyz()
+    dx = (i[0]-la[0]) * 100
+    dy = (i[1]-la[1]) * 100
+    dz = (i[2]-la[2]) * 100
+    la = i
+    d = int(dx*dx + dy*dy + dz*dz)
+    return d <= 1
+
 
 def try_wakeup():
     # 程序中尝试主动唤醒显示器
