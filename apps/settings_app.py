@@ -21,7 +21,7 @@ class MainActivity(Activity):
                         '关于我',
                         ('身高(cm)', fonts.SYMBOL.USER_CONFIG, 'i', self.set_input_number_obj, ('user_height', 0, None, '身高(cm):', 1, 300)),
                         ('体重(kg)', fonts.SYMBOL.WEIGHT, 'i', self.set_input_number_obj, ('user_weight', 0, None, '体重(kg):', 1, 300)),
-                        ('步长(cm)', fonts.SYMBOL.SHOE_PRINT, 'i', self.set_input_number_obj, ('user_step_length', 50, None, '步长(cm):', 1, 200)),
+                        ('步长(cm)', fonts.SYMBOL.SHOE_PRINT, 'i', self.set_input_number_obj, ('step_length', 50, None, '步长(cm):', 1, 200)),
                         '高级',
                         ('关于', fonts.SYMBOL.CHIP, None, self.about_info, None),
                         ('重启', lv.SYMBOL.POWER, None, self.machine_reset, None),
