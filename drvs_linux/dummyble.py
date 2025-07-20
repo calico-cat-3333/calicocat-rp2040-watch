@@ -1,6 +1,7 @@
 import micropython
 import time
 import json
+import sys
 import os
 
 from . import Device
@@ -65,10 +66,12 @@ class BLE(Device):
             return
         t = a.get('t')
         if t == 'findPhone':
-            os.system('notify-send -u low -t 2000 "findPhone ' + str(a.get('n')) + '"')
+            if hasattr(os, 'system'):
+                os.system('notify-send -u low -t 2000 "findPhone ' + str(a.get('n')) + '"')
             log('dummyble gb respons: findPhone', a.get('n'), 'received')
         if t == 'music':
-            os.system('notify-send -u low -t 1000 "music ' + a.get('n') + '"')
+            if hasattr(os, 'system'):
+                os.system('notify-send -u low -t 1000 "music ' + a.get('n') + '"')
             log('dummyble gb respons: music', a.get('n'), 'received')
             self.rx_line_buf.append('\x10GB({"t":"musicinfo","artist":"\u6d1b\u5929\u4f9d","album":"\u7acb\u6625","track":"\u7acb\u6625","dur":131,"c":-1,"n":1})')
             if a.get('n') == 'pause':
@@ -77,7 +80,8 @@ class BLE(Device):
                 self.rx_line_buf.append('\x10GB({"t":"musicstate","state":"play","position":60,"shuffle":-1,"repeat":-1})')
         if t in ['info', 'warn', 'error']:
             log('dummyble gb respons: msg:', a.get('msg'), 'received')
-            os.system('notify-send -u low -t 2000 "send ' + t + ' ' + a.get('msg') + '"')
+            if hasattr(os, 'system'):
+                os.system('notify-send -u low -t 2000 "send ' + t + ' ' + a.get('msg') + '"')
 
     def dummyconnect(self, s):
         self.dummy_state = s
