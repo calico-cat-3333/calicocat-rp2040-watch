@@ -26,6 +26,10 @@ Todo.
 
 [Activity](activity.md)
 
+[AppManager](appmgr.md)
+
+[Gadgetbridge Service](gadgetbridge_api.md)
+
 Todo.
 
 ### [编写扩展应用](create_app.md)

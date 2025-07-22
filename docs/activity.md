@@ -4,7 +4,7 @@
 
 我们通过类和继承来实现 Activity：每个界面都需要继承 Activity, 然后实现 setup \_\_init\_\_ on_covered 等关键函数，这些函数会绘制界面并在特定条件下执行。与 Activity 相关的业务逻辑也需要在该类中实现。
 
-通过 `Activity().launch()` 可以启动 Activity, 在 Activity 内调用 self.exit() 可以退出 Activity, 退出后，Activity 实例自动销毁。
+通过 `Activity().launch()` 可以启动 Activity, 在 Activity 内调用 `self.exit()` 可以退出 Activity, 退出后，Activity 实例自动销毁。
 
 同时提供预先设计的几个 Activity 模板, 例如 InfoActivity 用于弹出提示信息，以便使用。
 

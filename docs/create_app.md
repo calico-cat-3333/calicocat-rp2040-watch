@@ -21,7 +21,9 @@ from cces import hal
 appmeta = AppMeta('蜂鸣器琴', lv.SYMBOL.AUDIO, MainActivity)
 ```
 
-第二个参数应用图标可以接受 lv.image_dsc_t 或字符串，字符串会作为图像显示出来，可以是 LVGL SYMBOL 字符。第四个参数可选，如果应用不需要在系统启动时自动执行某些任务，则不需要。
+第二个参数应用图标可以是 lv.SYMOBL.xxx 或者 lv.img_dsc_t (理论上说，任何 lv.image.set_scr() 函数可以接受的参数都可以) 。
+
+第四个参数可选，如果应用不需要在系统启动时自动执行某些任务，则不需要。
 
 ## 编写主界面 Activity
 
