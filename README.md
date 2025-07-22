@@ -68,16 +68,16 @@
 
 编译 lv_micropython、扩展应用开发、移植等相关内容：[查看文档](docs/README.md#开发文档)
 
-## todo
+## Todo
 
-完善文档
+- [ ] 完善文档
 
-重构 HAL
+- [ ] 重构 HAL
 
-完善 powermanager
+- [ ] 完善 powermanager
 
-完善血氧饱和度算法
+- [ ] 完善血氧饱和度算法
 
-编写更多扩展应用
+- [ ] 编写更多扩展应用
 
-向更多设备移植：RP2350 ESP32 等等
+- [ ] 向更多设备移植：RP2350 ESP32 + ST7735 ST7789 等等
