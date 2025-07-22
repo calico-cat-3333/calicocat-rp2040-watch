@@ -24,9 +24,7 @@ Todo.
 
 Todo.
 
-### 编写扩展应用
-
-Todo.
+### [编写扩展应用](create_app.md)
 
 ### 移植 CCES 到其他设备
 

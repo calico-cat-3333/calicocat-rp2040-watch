@@ -28,6 +28,10 @@ class MainActivity(Activity):
         self.title_label = lv.label(self.scr)
         self.title_label.align(lv.ALIGN.TOP_MID, 0, 10)
         self.title_label.set_text('蜂鸣器琴')
+        self.scr.add_event_cb(self.gesture_event_cb, lv.EVENT.GESTURE, None)
+
+    def before_exit(self):
+        hal.buzzer.beep(4000)
 
     def bm_click_cb(self, _):
         n = self.keys.get_selected_button()

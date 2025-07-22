@@ -61,7 +61,7 @@ make -j -C ports/rp2 BOARD=RP2040-TOUCH-LCD-128 USER_C_MODULES=../../../bind.cma
 sudo apt-get install build-essential libreadline-dev libffi-dev git pkg-config libsdl2-2.0-0 libsdl2-dev python3 parallel
 ```
 
-2. 克隆此储存库和 lv_micropython储存库。
+2. 克隆此储存库和 lv_micropython 储存库。
 
 ```
 git clone https://github.com/calico-cat-3333/calicocat-rp2040-watch.git
