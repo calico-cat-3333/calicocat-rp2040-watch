@@ -18,7 +18,7 @@ Todo.
 
 [RP2040-Touch-LCD-1.28](compile.md#RP2040-Touch-LCD-1.28)
 
-[Linux 模拟器](compile.md#Linux 模拟器)
+[Linux 模拟器](compile.md#Linux-模拟器)
 
 ### 系统 API
 
