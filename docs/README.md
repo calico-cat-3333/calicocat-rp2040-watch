@@ -30,6 +30,12 @@ Todo.
 
 [Gadgetbridge Service](gadgetbridge_api.md)
 
+[log 日志系统](log.md)
+
+[Notification 通知](notification.md)
+
+[PowerManager 电源管理](powermanager.md)
+
 Todo.
 
 ### [编写扩展应用](create_app.md)
