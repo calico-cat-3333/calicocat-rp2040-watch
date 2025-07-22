@@ -28,13 +28,25 @@ Todo.
 
 [AppManager](appmgr.md)
 
+[Daily Task 每日任务]() - Todo.
+
+[Device Driver 硬件驱动程序]() - Todo.
+
 [Gadgetbridge Service](gadgetbridge_api.md)
+
+[HAL 硬件抽象层]() - Todo
 
 [log 日志系统](log.md)
 
 [Notification 通知](notification.md)
 
 [PowerManager 电源管理](powermanager.md)
+
+[SettingsDB 设置存储](settingsdb.md)
+
+[Task Scheduler 任务调度器]() - Todo.
+
+[Utils 实用函数](utils.md)
 
 Todo.
 
