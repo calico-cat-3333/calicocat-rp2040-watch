@@ -1,5 +1,7 @@
 # CalicoCat's Extendable Smartwatch system
 
+暂简称为 CCES
+
 我的毕业设计项目-基于 RP2040 的智能穿戴设备 的软件部分代码。
 
 整体使用 Micropython + LVGL 开发。
