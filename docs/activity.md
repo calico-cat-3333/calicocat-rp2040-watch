@@ -172,3 +172,11 @@ self.refresh_on = REFRESHON.GB_MUSIC | REFRESHON.BLE_CONNECTION
 参数 yes_label_text 和 no_label_text 都是字符串，分别表示是和否按钮上的文字，必须只有字母数字和符号。
 
 参数 exit_anim 为退出动画，请参考 lv_screen_load_anim_t 文档。（注意：C 转写成 micropython 如下：`LV_SCR_LOAD_ANIM_MOVE_LEFT` 对应 `lv.SCR_LOAD_ANIM.MOVE_LEFT`）
+
+## 附加符号字体字符表和附加样式
+
+附加的符号字体的枚举和附加的默认样式，请参考源代码：
+
+[符号字符枚举](../cces/activity/fonts.py)
+
+[附加样式](../cces/activity/styles.py)
