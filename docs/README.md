@@ -6,6 +6,8 @@
 
 [CCES 系统使用](cces_useage.md)
 
+[连接 Gadgetbridge](gadgetbridge_useage.md)
+
 [内置应用使用说明](apps.md)
 
 [应用管理说明](appmanagement.md)
