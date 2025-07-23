@@ -1,4 +1,4 @@
-# `daily_scheduler` 每日任务
+# `daily_scheduler` - 每日任务
 
 在每天的固定时间执行任务。
 

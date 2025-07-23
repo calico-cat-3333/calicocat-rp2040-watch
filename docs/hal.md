@@ -4,7 +4,11 @@
 
 这里规定了规定硬件接口标准。
 
-这里将这些固定的变量赋值为 None, 在 main.py 中与实际的硬件驱动实例进行关联。
+这里将这些固定的变量赋值为 None, 在 main.py 中与实际的硬件驱动实例进行关联，例如可以通过如下语句添加显示屏。
+
+```
+hal.dispdev = gc9a01_lv.GC9A01_lv(board.lcd_spi, board.lcd_rst, board.lcd_cs, board.lcd_dc, board.lcd_bl, False, 4)
+```
 
 使用时，使用 `hal.设备.函数` 的格式调用。
 
