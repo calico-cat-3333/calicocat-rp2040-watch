@@ -24,29 +24,31 @@ Todo.
 
 ### 系统 API
 
-[Activity](activity.md)
+`cces.`
 
-[AppManager](appmgr.md)
+- [`acitvity` - Activity](activity.md)
 
-[Daily Task 每日任务]() - Todo.
+- [`appmgr` - AppManager](appmgr.md)
 
-[Device Driver 硬件驱动程序]() - Todo.
+- [`daiyl_scheduler` - 每日任务](dailytask.md)
 
-[Gadgetbridge Service](gadgetbridge_api.md)
+- [`drvs` - 硬件驱动程序]() - Todo.
 
-[HAL 硬件抽象层]() - Todo
+- [`gadgetbridge` - Gadgetbridge 服务](gadgetbridge_api.md)
 
-[log 日志系统](log.md)
+- [`hal` - 硬件抽象层](hal.md)
 
-[Notification 通知](notification.md)
+- [`log` - 日志系统](log.md)
 
-[PowerManager 电源管理](powermanager.md)
+- [`notification` - 通知](notification.md)
 
-[SettingsDB 设置存储](settingsdb.md)
+- [`powermanager` - 电源管理](powermanager.md)
 
-[Task Scheduler 任务调度器]() - Todo.
+- [`settingsdb` - 设置存储](settingsdb.md)
 
-[Utils 实用函数](utils.md)
+- [`task_scheduler` - 任务调度器]() - Todo.
+
+- [`utils` - 实用函数](utils.md)
 
 Todo.
 

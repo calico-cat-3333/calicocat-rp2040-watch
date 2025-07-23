@@ -1,4 +1,4 @@
-# AppManager
+# `appmgr` - AppManager
 
 负责加载和管理应用程序，提供 Launcher UI
 

@@ -1,4 +1,4 @@
-# PowerManager 电源管理
+# `powermanager` - 电源管理
 
 无操作自动熄屏，并提供熄屏控制能力。
 

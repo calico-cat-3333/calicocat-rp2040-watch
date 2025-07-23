@@ -1,4 +1,4 @@
-# Activity
+# `activity` - Activity
 
 这里参考安卓系统 Activity 的概念，设计了 Activity 系统，CCES 的每个单独的界面都是 Activity, 由此实现对界面的统一管理。
 
@@ -14,7 +14,7 @@
 
 ### scr
 
-本 Activity 的 LVGL screen. setup() 函数中，将组建创建函数的父控件设置为 `self.scr` 即可在该 Activity 上绘制控件。
+本 Activity 的 LVGL screen. setup() 函数中，将控件创建时父控件设置为 `self.scr` 即可在该 Activity 上绘制控件。
 
 ### __init__(self)
 

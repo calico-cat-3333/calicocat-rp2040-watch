@@ -1,4 +1,4 @@
-## Notification 通知
+## `notification` - 通知
 
 负责通知中心 UI 和管理通知。
 

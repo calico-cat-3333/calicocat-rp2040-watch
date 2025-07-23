@@ -1,4 +1,4 @@
-# Gadgetbridge 服务
+# `gadgetbridge` - Gadgetbridge 服务
 
 解析 Gadgetbridge 通信协议数据，与 Gadgetbridge 应用通信。
 

@@ -1,4 +1,4 @@
-# Utils 实用函数
+# `utils` - 实用函数
 
 几个 Micropython 没有官方实现的常用函数。
 
