@@ -6,7 +6,7 @@
 
 整体使用 Micropython + LVGL 开发。
 
-硬件使用了 RP2040-Touch-LCD-1.28 开发板 + 自制扩展板（扩展板设计文件见 hardware 文件夹）。
+硬件使用了 RP2040-Touch-LCD-1.28 开发板 + 自制扩展板（扩展板设计文件见 hardware 文件夹或 [OSHWHUB](https://oshwhub.com/calico-cat-3333/watch-baseboard-v1)）。
 
 外壳使用 FreeCAD 设计，设计文件见 case 文件夹。
 
