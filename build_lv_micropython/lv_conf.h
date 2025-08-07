@@ -639,7 +639,7 @@ extern void mp_lv_deinit_gc();
 #define LV_FONT_CUSTOM_DECLARE LV_FONT_DECLARE(lv_font_unifont_zh_16) LV_FONT_DECLARE(lv_font_unifont_16) LV_FONT_DECLARE(lv_font_chinese_calendar) LV_FONT_DECLARE(lv_font_extra_symbols) LV_FONT_DECLARE(lv_font_number72) LV_FONT_DECLARE(lv_font_number90)
 
 /** Always set a default font */
-#define LV_FONT_DEFAULT &lv_font_montserrat_14
+#define LV_FONT_DEFAULT &lv_font_unifont_zh_16
 
 /** Enable handling large font and/or fonts with a lot of characters.
  *  The limit depends on the font size, font face and bpp.
