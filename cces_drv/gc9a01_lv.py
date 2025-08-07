@@ -1,4 +1,3 @@
-import board
 import gc9a01
 import lvgl as lv
 import time

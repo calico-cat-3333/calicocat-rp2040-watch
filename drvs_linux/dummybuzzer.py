@@ -47,7 +47,8 @@ class Buzzer(Device):
         cmd = 'notify-send -u low -t 1000 "beep: '
         if len(self.freq_list) == 0:
             cmd = cmd + 'stop"'
-            os.system(cmd)
+            if hasattr(os, 'system'):
+                os.system(cmd)
             return TASKEXIT
         freq = self.freq_list.pop(0)
         if freq == 0:
@@ -55,5 +56,6 @@ class Buzzer(Device):
         else:
             cmd = cmd + str(freq) + ' volume: ' + str(self.volume) + '"'
         log('dummybuzzer: beep at freq:', freq, 'volume:', self.volume)
-        os.system(cmd)
+        if hasattr(os, 'system'):
+            os.system(cmd)
 
