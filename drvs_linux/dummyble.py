@@ -4,7 +4,7 @@ import json
 import sys
 import os
 
-from . import Device
+from cces.drvs import Device
 from cces.log import log, ERROR, DEBUG
 
 # 假装这里有蓝牙

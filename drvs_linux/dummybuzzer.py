@@ -1,7 +1,7 @@
 import time
 import os
 
-from . import Device
+from cces.drvs import Device
 from cces.task_scheduler import Task, TASKEXIT
 from cces.log import log
 

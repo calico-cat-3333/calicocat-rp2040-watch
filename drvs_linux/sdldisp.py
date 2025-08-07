@@ -1,5 +1,5 @@
 import lvgl as lv
-from . import Device_lv
+from cces.drvs import Device_lv
 from cces.log import log
 
 class SDLdisp(Device_lv):

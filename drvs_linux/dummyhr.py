@@ -1,4 +1,4 @@
-from .device import Device
+from cces.drvs import Device
 # 假装这里有心率传感器
 from cces.log import log
 from cces.task_scheduler import Task

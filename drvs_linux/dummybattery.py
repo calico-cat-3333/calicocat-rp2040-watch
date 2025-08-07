@@ -1,6 +1,6 @@
 from micropython import const
 
-from . import Device
+from cces.drvs import Device
 
 # 假装这里有电池
 

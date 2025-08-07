@@ -1,4 +1,4 @@
-from .device import Device
+from cces.drvs import Device
 # 假装这里有 IMU
 
 class IMU(Device):
