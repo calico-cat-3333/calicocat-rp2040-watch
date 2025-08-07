@@ -34,10 +34,12 @@ cp font/*.c lv_micropython/user_modules/lv_binding_micropython/lvgl/src/font
 cp lv_conf.h lv_micropython/user_modules/lv_binding_micropython/lv_conf.h
 ```
 
-5. 添加冻结 CCES
+5. 添加冻结 CCES 及 lv_utils, fs_driver
 
 ```
 echo 'include("$(MPY_DIR)/../../manifest.py")' >> lv_micropython/ports/rp2/boards/mainifest.py
+echo 'module("lv_utils.py", base_path="../../../user_modules/lv_binding_micropython/lib")' >> lv_micropython/ports/rp2/boards/mainifest.py
+echo 'module("fs_driver.py", base_path="../../../user_modules/lv_binding_micropython/lib")' >> lv_micropython/ports/rp2/boards/mainifest.py
 ```
 
 6. 编译
