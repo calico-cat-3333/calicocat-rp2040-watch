@@ -48,13 +48,13 @@ class SetAlarm(Activity):
         self.hour.set_options("00\n01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23")
         self.hour.set_width(60)
         self.hour.align(lv.ALIGN.TOP_MID, -40, 45)
-        self.hour.set_selected(self.alarm_pair[0]['h'], False)
+        self.hour.set_selected(self.alarm_pair[0]['h'])
 
         self.minute = lv.dropdown(self.scr)
         self.minute.set_options("00\n01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59")
         self.minute.set_width(60)
         self.minute.align(lv.ALIGN.TOP_MID, 40, 45)
-        self.minute.set_selected(self.alarm_pair[0]['m'], False)
+        self.minute.set_selected(self.alarm_pair[0]['m'])
 
         self.title = lv.label(self.scr)
         self.title.set_text("设置闹钟")

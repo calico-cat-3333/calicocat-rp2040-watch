@@ -42,7 +42,7 @@ class MainActivity(Activity):
         self.hr_history.align(lv.ALIGN.BOTTOM_MID, 10, -30)
         self.hr_history.set_type(lv.chart.TYPE.BAR)
         self.hr_history.set_point_count(_CHART_POINT_COUNT)
-        self.hr_history.set_range(lv.chart.AXIS.PRIMARY_Y, 60, self.hr_history_range_high)
+        self.hr_history.set_axis_range(lv.chart.AXIS.PRIMARY_Y, 60, self.hr_history_range_high)
 
         self.hr_history_Yaxis1 = lv.scale(self.scr)
         self.hr_history_Yaxis1.set_mode(lv.scale.MODE.VERTICAL_LEFT)
@@ -56,7 +56,7 @@ class MainActivity(Activity):
         self.hr_history_hrdata = self.hr_history.add_series(lv.color_hex(0xFF0000), lv.chart.AXIS.PRIMARY_Y)
         #self.hr_history.set_all_values(self.hr_history_hrdata, 0)
         self.hr_list = [0] * _CHART_POINT_COUNT
-        self.hr_history.set_ext_y_array(self.hr_history_hrdata, self.hr_list)
+        self.hr_history.set_series_ext_y_array(self.hr_history_hrdata, self.hr_list)
 
         hal.hartrate.start_measure()
         powermanager.prevent_sleep(True)
@@ -73,11 +73,11 @@ class MainActivity(Activity):
                 self.hr_list.append(hr)
             else:
                 self.hr_list[self.hr_list.index(0)] = hr
-            self.hr_history.set_ext_y_array(self.hr_history_hrdata, self.hr_list)
+            self.hr_history.set_series_ext_y_array(self.hr_history_hrdata, self.hr_list)
             vmax = max(self.hr_list)
             if vmax > self.hr_history_range_high or (vmax > 50 and vmax < self.hr_history_range_high - 10):
                 self.hr_history_range_high = ((max(self.hr_list) // 10) + 1) * 10
-                self.hr_history.set_range(lv.chart.AXIS.PRIMARY_Y, 50, self.hr_history_range_high)
+                self.hr_history.set_axis_range(lv.chart.AXIS.PRIMARY_Y, 50, self.hr_history_range_high)
                 self.hr_history_Yaxis1.set_range(50, self.hr_history_range_high)
         # if spo2 != -1:
         #     self.spo2.set_text('SpO2\n{: >3d}%'.format(spo2))
