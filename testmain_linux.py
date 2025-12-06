@@ -6,7 +6,7 @@ from cces import log
 
 log.setlevel(log.INFO)
 
-hal.dispdev = sdldisp.SDLdisp(240, 240)
+hal.dispdev = sdldisp.SDLdisp(240, 240, 2)
 hal.indev_list.append(sdlindev.SDLindev())
 
 hal.rtc = dummyrtc.RTC()
